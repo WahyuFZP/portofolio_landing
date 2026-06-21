@@ -5,18 +5,18 @@
     "projects": "Proyek"
   },
   "hero": {
-    "greeting": "Halo, Saya",
-    "role": "Fullstack Developer",
-    "tagline": "Membangun aplikasi web yang fungsional, interaktif, dan berpusat pada pengalaman pengguna.",
+    "greeting": "Halo, saya",
+    "role": "Software Engineer",
+    "tagline": "Membangun aplikasi web yang fungsional, interaktif, dan berpusat pada pengguna.",
     "ctaProjects": "Lihat Proyek",
     "ctaContact": "Hubungi Saya"
   },
   "about": {
-    "sectionTitle": "ABOUT ME",
+    "sectionTitle": "TENTANG SAYA",
     "greeting": "SAYA",
-    "name": "DEFT VALIAN",
-    "role": "FULLSTACK DEVELOPER",
-    "bio": "Sebagai lulusan Sistem Informasi dan Software Engineer, saya berfokus mengubah kebutuhan bisnis yang kompleks menjadi aplikasi web yang efisien.\n\nDari digitalisasi alur kerja operasional hingga perancangan arsitektur frontend, saya menikmati proses membangun solusi full-stack dari nol yang terukur dan memberikan dampak nyata.",
+    "name": "Wahyu Fikri",
+    "role": "Software Engineer",
+    "bio": "Sebagai mahasiswa Teknik Informatika dan Software Engineer, saya memiliki semangat yang tak pernah padam untuk terus belajar dan merealisasikan ide menjadi solusi digital yang nyata.\n\nBagi saya, keberhasilan sebuah proyek tidak hanya diukur dari fungsinya, tetapi juga dari keamanannya. Oleh karena itu, saya selalu mengedepankan standar pengembangan perangkat lunak yang baik dan proses pengujian (QA) yang teliti untuk menghasilkan aplikasi yang fungsional, terukur, dan berkualitas tinggi.",
     "downloadCv": "UNDUH CV"
   },
   "skills": {
@@ -29,30 +29,27 @@
     "technologiesLabel": "Teknologi yang Digunakan",
     "list": [
       {
-        "company": "PT Advics Manufacturing Indonesia",
-        "role": "Fullstack Developer",
-        "period": "Aug 2025 - Feb 2026",
-        "location": "Karawang, Indonesia",
+        "company": "CV. Maju Sukses Perkasa",
+        "role": "Helper Gudang",
+        "period": "Nov 2021 - Jul 2022",
+        "location": "Madiun, Indonesia",
         "description": [
-          "Menggantikan proses manual dengan membangun Sistem NG Scanning (integrasi QR) dan otomatisasi pipeline dokumen Scrap Evidence.",
-          "Membangun aplikasi inti yang scalable (Sistem Warehouse, Manajemen Aset IT, dan Help Desk) menggunakan ekosistem Laravel dan ReactJS.",
-          "Mengelola ribuan data secara konkuren dengan kecepatan tinggi menggunakan teknik seperti lazy loading pada lingkungan sistem yang berat.",
-          "Merombak antarmuka lama menggunakan Tailwind CSS, menciptakan aplikasi yang responsif dan intuitif bagi eksekutif kantor maupun staf lapangan."
+          "Mencatat, menyortir, dan melakukan pengecekan berkala barang-barang di gudang.",
+          "Menyiapkan barang-barang yang akan didistribusikan."
         ],
-        "technologies": ["Laravel", "ReactJS", "Tailwind CSS", "MySQL", "PostgreSQL"]
+        "technologies": ["Excel"]
       },
       {
-        "company": "Vocasia",
-        "role": "Frontend Developer",
-        "period": "Jan 2025 - Jun 2025",
-        "location": "Remote",
+        "company": "Dinas Lingkungan Hidup Kota Madiun",
+        "role": "IT Staff (Magang)",
+        "period": "Mei 2025 – Juni 2025",
+        "location": "Madiun, Indonesia",
         "description": [
-          "Mengubah desain kompleks menjadi komponen web yang responsif, mobile-first, dan kompatibel di berbagai browser.",
-          "Menyelesaikan 8+ tugas frontend berskala besar menggunakan framework modern untuk meningkatkan fitur dan kapabilitas platform.",
-          "Terlibat aktif dalam sprint teknis mingguan dan rapat sinkronisasi untuk menyelaraskan alur pengembangan dengan target bisnis.",
-          "Meraih Sertifikat Penghargaan atas konsistensi dalam menghasilkan kode yang bersih (clean code) dan selesai lebih cepat dari tenggat waktu."
+          "Melakukan Redesign UI/UX website Dinas Lingkungan Hidup Kota Madiun untuk meningkatkan tampilan dan pengalaman pengguna.",
+          "Menangani Troubleshooting perangkat komputer dan software guna memastikan sistem berjalan optimal.",
+          "Bertugas sebagai administrator website, termasuk melakukan pembaruan konten dan informasi terbaru di situs resmi instansi."
         ],
-        "technologies": ["NextJS", "TypeScript", "Tailwind CSS", "Gitlab", "Figma"]
+        "technologies": ["Excel", "HTML", "CSS", "JavaScript", "PHP", "WordPress"]
       }
     ]
   },
@@ -61,20 +58,20 @@
     "accent": "Penghargaan"
   },
   "projects": {
-    "title": "Karya",
-    "accent": "Terbaik",
-    "subtitle": "Kumpulan proyek yang telah saya bangun, mulai dari desain antarmuka hingga sistem backend yang kompleks.",
+    "title": "Proyek",
+    "accent": "Pilihan",
+    "subtitle": "Kumpulan proyek yang telah saya bangun, mulai dari antarmuka pengguna hingga sistem backend yang kompleks.",
     "drawer": {
       "close": "Tutup",
       "techStack": "Teknologi yang Digunakan",
-      "viewLive": "Lihat Proyek Asli",
+      "viewLive": "Lihat Proyek Langsung",
       "sourceCode": "Kode Sumber"
     }
   },
   "contact": {
     "title": "Hubungi",
     "accent": "Saya",
-    "subtitle": "Punya ide proyek, pertanyaan, atau sekadar ingin menyapa? Jangan ragu untuk mengirimkan pesan. Saya selalu terbuka untuk peluang kolaborasi baru.",
+    "subtitle": "Punya ide proyek, pertanyaan, atau sekadar ingin menyapa? Jangan ragu untuk mengirim pesan. Saya selalu terbuka untuk peluang kolaborasi baru.",
     "name": "Nama Lengkap",
     "namePlaceholder": "Masukkan nama Anda",
     "email": "Alamat Email",

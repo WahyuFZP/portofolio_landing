@@ -32,7 +32,7 @@ export default function About({ dict }: AboutProps) {
           {/* Frame Foto Utama */}
           <div className="relative aspect-[4/5] bg-white rounded-[32px] shadow-xl border border-brand-text/5 overflow-hidden z-10">
             <img
-              src="/images/about.jpg"
+              src="/images/about.png"
               alt="Profil"
               className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
             />

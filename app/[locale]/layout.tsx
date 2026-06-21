@@ -13,22 +13,22 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://deftvalian.vercel.app"),
   title: {
-    default: "Deft Valian Exanova | Fullstack Developer",
-    template: "%s | Deft Valian Exanova",
+    default: "Wahyu Fikri | Software Engineer",
+    template: "%s | Wahyu Fikri",
   },
   description:
-    "Website portofolio personal Fullstack Developer yang colorful dan interaktif.",
+    "Website portofolio personal Software Engineer yang colorful dan interaktif.",
   openGraph: {
-    title: "Deft Valian Exanova | Fullstack Developer",
-    description: "Portofolio interaktif dan modern dari seorang Fullstack Developer.",
+    title: "Wahyu Fikri | Software Engineer",
+    description: "Portofolio interaktif dan modern dari seorang Software Engineer.",
     url: "/",
-    siteName: "Deft Valian Exanova",
+    siteName: "Wahyu Fikri",
     images: [
       {
         url: "/images/hero.webp",
         width: 1200,
         height: 630,
-        alt: "Deft Valian Exanova Portfolio Thumbnail",
+        alt: "Wahyu Fikri Portfolio Thumbnail",
       },
     ],
     locale: "id_ID",
@@ -36,8 +36,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Deft Valian Exanova | Fullstack Developer",
-    description: "Portofolio interaktif dan modern dari seorang Fullstack Developer.",
+    title: "Wahyu Fikri | Software Engineer",
+    description: "Portofolio interaktif dan modern dari seorang Software Engineer.",
     images: ["/images/hero.webp"],
   },
 };

@@ -85,8 +85,8 @@ export default function Contact({ dict }: ContactProps) {
                 </div>
                 <div>
                   <p className="text-sm font-bold text-brand-text/60 uppercase tracking-wide">Email</p>
-                  <a href="mailto:deftvalian2411@gmail.com" className="text-lg font-black text-brand-text hover:text-brand-purple transition-colors">
-                    deftvalian2411@gmail.com
+                  <a href="mailto:wfzputra@gmail.com" className="text-lg font-black text-brand-text hover:text-brand-purple transition-colors">
+                    wfzputra@gmail.com
                   </a>
                 </div>
               </div>
@@ -98,7 +98,7 @@ export default function Contact({ dict }: ContactProps) {
                 <div>
                   <p className="text-sm font-bold text-brand-text/60 uppercase tracking-wide">Lokasi</p>
                   <p className="text-lg font-black text-brand-text">
-                    Bekasi, Indonesia
+                    Kota Madiun, Indonesia
                   </p>
                 </div>
               </div>
