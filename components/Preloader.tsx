@@ -29,8 +29,16 @@ const colors = [
 export default function Preloader() {
   const [index, setIndex] = useState(0);
   const [isVisible, setIsVisible] = useState(true);
+  const [mounted, setMounted] = useState(false);
+
+  // Tandai bahwa komponen sudah di-mount di client
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
+    if (!mounted) return;
+    
     // Jika sudah sampai kata terakhir, hentikan loop dan tutup loading
     if (index === words.length - 1) {
       const timeout = setTimeout(() => {
@@ -45,7 +53,7 @@ export default function Preloader() {
     }, 200);
 
     return () => clearInterval(interval);
-  }, [index]);
+  }, [index, mounted]);
 
   useEffect(() => {
     // Kunci scrollbar browser selama loading aktif agar user tidak bisa scroll
@@ -59,6 +67,21 @@ export default function Preloader() {
     };
   }, [isVisible]);
 
+  // 🔧 RENDER STATIS UNTUK SERVER — tidak pakai framer-motion sama sekali
+  if (!mounted) {
+    return (
+      <div className="fixed inset-0 bg-[#F3F0FF] z-[9999] flex items-center justify-center">
+        <div className="overflow-hidden h-24 flex items-center justify-center">
+          <p className="text-5xl md:text-7xl font-black tracking-tight text-brand-blue">
+            {words[0]}
+            <span className="text-brand-text">.</span>
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  // 🎬 RENDER ANIMASI UNTUK CLIENT — hanya setelah hydrated
   return (
     <AnimatePresence>
       {isVisible && (

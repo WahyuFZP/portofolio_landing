@@ -55,6 +55,7 @@ export default async function RootLayout({
   return (
     <html lang={locale}>
       <body
+        suppressHydrationWarning
         className={`${plusJakartaSans.className} bg-brand-bg text-brand-text antialiased selection:bg-brand-pink selection:text-white `}
       >
         <Preloader />
