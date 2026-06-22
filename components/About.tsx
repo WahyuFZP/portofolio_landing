@@ -27,10 +27,10 @@ export default function About({ dict }: AboutProps) {
           className="relative w-full max-w-xs md:max-w-sm shrink-0"
         >
           {/* Aksen Background Solid */}
-          <div className="absolute inset-0 bg-brand-amber/15 rounded-[32px] transform translate-x-4 translate-y-4 -rotate-3" />
+          <div className="absolute inset-0 bg-brand-amber/15 rounded-4xl transform translate-x-4 translate-y-4 -rotate-3" />
 
           {/* Frame Foto Utama */}
-          <div className="relative aspect-[4/5] bg-white rounded-[32px] shadow-xl border border-brand-text/5 overflow-hidden z-10">
+          <div className="relative aspect-4/5 bg-white rounded-4xl shadow-xl border border-brand-text/5 overflow-hidden z-10">
             <img
               src="/images/about.png"
               alt="Profil"
