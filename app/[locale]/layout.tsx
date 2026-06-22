@@ -11,7 +11,7 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://deftvalian.vercel.app"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://wahyufikri.vercel.app"),
   title: {
     default: "Wahyu Fikri | Software Engineer",
     template: "%s | Wahyu Fikri",
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Wahyu Fikri | Software Engineer",
     description: "Portofolio interaktif dan modern dari seorang Software Engineer.",
-    images: ["/images/hero.webp"],
+    images: ["/images/hero.jpeg"],
   },
 };
 
