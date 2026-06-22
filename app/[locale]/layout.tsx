@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Wahyu Fikri | Software Engineer",
     description: "Portofolio interaktif dan modern dari seorang Software Engineer.",
-    images: ["/images/hero.webp"],
+    images: ["/images/hero.jpeg"],
   },
 };
 
