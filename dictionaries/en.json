@@ -7,7 +7,7 @@
   "hero": {
     "greeting": "Hello, I am",
     "role": "Software Engineer",
-"tagline": "Continuously learning, building, and refining web applications with strict quality standards and reliable security.",
+    "tagline": "Continuously learning, building, and refining web applications with strict quality standards and reliable security.",
     "ctaProjects": "View Projects",
     "ctaContact": "Contact Me"
   },
