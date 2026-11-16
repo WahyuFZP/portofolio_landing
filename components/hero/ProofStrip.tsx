@@ -15,7 +15,7 @@ export default function ProofStrip({ dict, caseStudies }: { dict: Dictionary["pr
             </a>
           </li>
           <li className={item} style={{ "--i": 5 } as React.CSSProperties}>
-            <span className="text-accent">{proof.a11yScore}</span> {dict.a11y}
+            <span className="text-accent">{proof.axeViolations}</span> {dict.a11y}
           </li>
         </>
       )}

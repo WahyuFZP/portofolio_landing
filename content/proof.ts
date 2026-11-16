@@ -1,10 +1,9 @@
-// Numbers shown in the hero proof strip.
-// shortcut: hand-maintained; update after `npm run test:e2e` / Lighthouse runs (see docs/baseline-v1.md).
+// Numbers shown in the hero proof strip. Both come from one public GitHub Actions run, linked below,
+// so a visitor can check them. Update all three together after a newer green run.
 export const proof = {
-  e2ePassing: 99, // `npm run test:e2e`, 2026-11-16: 99 passed, 5 skipped (device-specific)
-  a11yScore: 100,
+  e2ePassing: 99, // "Playwright Run Summary" annotation of the run: 99 passed, 5 skipped (device-specific)
+  axeViolations: 0, // tests/e2e/a11y.spec.ts in the same run: light + dark, desktop + mobile
   workflowUrl: "https://github.com/WahyuFZP/portofolio_landing/actions",
-  // URL of a passing GitHub Actions run. While empty, the two numbers above stay hidden:
-  // a visitor must be able to verify them (set this after the first green run on GitHub).
-  ciRunUrl: "",
+  // While empty, the two numbers stay hidden.
+  ciRunUrl: "https://github.com/WahyuFZP/portofolio_landing/actions/runs/43797273821",
 };

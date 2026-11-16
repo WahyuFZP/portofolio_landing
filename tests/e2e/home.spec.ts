@@ -58,8 +58,10 @@ test.describe("hero", () => {
     await expect(proof).toBeInViewport();
     await expect(proof).toContainText("QA Engineer @ Exodrinks");
     await expect(proof).toContainText("3 case studies");
-    // Test and a11y numbers stay hidden until a public CI run can back them (content/proof.ts).
-    await expect(proof).not.toContainText("tests passing");
+    // The numbers link to the public CI run that produced them (content/proof.ts).
+    const run = proof.getByRole("link", { name: /E2E tests passing/ });
+    await expect(run).toHaveAttribute("href", /github\.com\/WahyuFZP\/portofolio_landing\/actions\/runs\/\d+$/);
+    await expect(proof).toContainText("0 axe accessibility violations");
   });
 });
 

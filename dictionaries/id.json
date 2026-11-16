@@ -25,7 +25,7 @@
   "proof": {
     "label": "Ringkasan test run",
     "tests": "tes E2E lulus",
-    "a11y": "skor aksesibilitas",
+    "a11y": "pelanggaran aksesibilitas axe",
     "caseStudies": "studi kasus",
     "status": "QA Engineer @ Exodrinks"
   },

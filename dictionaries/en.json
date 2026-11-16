@@ -25,7 +25,7 @@
   "proof": {
     "label": "Test run summary",
     "tests": "E2E tests passing",
-    "a11y": "accessibility score",
+    "a11y": "axe accessibility violations",
     "caseStudies": "case studies",
     "status": "QA Engineer @ Exodrinks"
   },
