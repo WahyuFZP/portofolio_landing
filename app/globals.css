@@ -3,20 +3,21 @@
 /* Design tokens. Follows the OS by default; the navbar toggle sets html[data-theme] and wins. */
 :root {
   color-scheme: light;
-  --bg: #fafafa;
+  --bg: #f8fafc;
   --surface: #ffffff;
-  --text: #18181b;
-  --muted: #52525b; /* 7.4:1 on --bg */
-  --border: #d4d4d8;
-  --accent: #047857; /* emerald-700, 5.4:1 on white */
-  --accent-soft: #ecfdf5;
+  --text: #0f172a;
+  --muted: #475569; /* 7.2:1 on --bg */
+  --border: #cbd5e1;
+  --accent: #2563eb; /* blue-600, 5.2:1 on white */
+  --accent-soft: #eff6ff;
   --accent-fg: #ffffff;
   --danger: #b91c1c;
   /* Constellation palette (read by the 3D scene and the SVG poster) */
-  --node-1: #047857;
-  --node-2: #0f766e;
-  --node-3: #3f3f46;
-  --edge: #a1a1aa;
+  --node-1: #2563eb;
+  --node-2: #0e7490;
+  --node-3: #475569;
+  --edge: #94a3b8;
+  --warm: #b45309; /* one warm planet and UFO lights */
   --show-light: inline-block;
   --show-dark: none;
   --field-alpha: 0.45; /* deep-field background strength */
@@ -25,19 +26,20 @@
 /* Dark values are listed twice on purpose: once for the explicit toggle, once for "OS dark, no choice made". */
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --bg: #09090b;
-  --surface: #18181b;
-  --text: #fafafa;
-  --muted: #a1a1aa; /* 7.6:1 on --bg */
-  --border: #3f3f46;
-  --accent: #34d399; /* emerald-400 */
-  --accent-soft: #052e22;
-  --accent-fg: #052e22;
+  --bg: #070b14;
+  --surface: #0f1626;
+  --text: #f1f5f9;
+  --muted: #94a3b8; /* 7.7:1 on --bg */
+  --border: #283548;
+  --accent: #60a5fa; /* blue-400 */
+  --accent-soft: #0c1f3d;
+  --accent-fg: #06122b;
   --danger: #f87171;
-  --node-1: #34d399;
-  --node-2: #5eead4;
-  --node-3: #d4d4d8;
-  --edge: #52525b;
+  --node-1: #60a5fa;
+  --node-2: #22d3ee;
+  --node-3: #cbd5e1;
+  --edge: #3b4a63;
+  --warm: #fbbf24;
   --show-light: none;
   --show-dark: inline-block;
   --field-alpha: 1;
@@ -45,19 +47,20 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     color-scheme: dark;
-    --bg: #09090b;
-    --surface: #18181b;
-    --text: #fafafa;
-    --muted: #a1a1aa;
-    --border: #3f3f46;
-    --accent: #34d399;
-    --accent-soft: #052e22;
-    --accent-fg: #052e22;
+    --bg: #070b14;
+    --surface: #0f1626;
+    --text: #f1f5f9;
+    --muted: #94a3b8;
+    --border: #283548;
+    --accent: #60a5fa;
+    --accent-soft: #0c1f3d;
+    --accent-fg: #06122b;
     --danger: #f87171;
-    --node-1: #34d399;
-    --node-2: #5eead4;
-    --node-3: #d4d4d8;
-    --edge: #52525b;
+    --node-1: #60a5fa;
+    --node-2: #22d3ee;
+    --node-3: #cbd5e1;
+    --edge: #3b4a63;
+  --warm: #fbbf24;
     --show-light: none;
     --show-dark: inline-block;
   --field-alpha: 1;

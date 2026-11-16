@@ -33,7 +33,7 @@ function Laptop({ project, sizes }: { project: CardProject; sizes: string }) {
         <div className="flex h-6 items-center gap-1.5 bg-zinc-800 px-2">
           <span className="h-1.5 w-1.5 bg-zinc-500" />
           <span className="h-1.5 w-1.5 bg-zinc-500" />
-          <span className="h-1.5 w-1.5 bg-emerald-400" />
+          <span className="h-1.5 w-1.5 bg-sky-400" />
           <span className="ml-2 min-w-0 flex-1 truncate bg-zinc-900 px-2 font-mono text-[11px] leading-4 text-zinc-300">{address}</span>
         </div>
         <div className="dither overflow-hidden">
@@ -47,7 +47,7 @@ function Laptop({ project, sizes }: { project: CardProject; sizes: string }) {
               className="aspect-[16/10] w-full object-cover object-top transition-[object-position] duration-[5000ms] ease-linear group-hover:object-bottom group-focus-within:object-bottom"
             />
           ) : (
-            <div className="flex aspect-[16/10] items-end bg-zinc-950 p-5 font-pixel text-lg text-emerald-400">~/{project.slug}</div>
+            <div className="flex aspect-[16/10] items-end bg-zinc-950 p-5 font-pixel text-lg text-sky-400">~/{project.slug}</div>
           )}
         </div>
       </div>
