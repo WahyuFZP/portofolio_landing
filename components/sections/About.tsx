@@ -10,8 +10,8 @@ export default function About({ dict }: { dict: Dictionary["about"] }) {
 
       <div className="grid gap-10 md:grid-cols-[auto_1fr]">
         <div className="reveal mx-auto md:mx-0">
-          <div className="h-[120px] w-[120px] overflow-hidden bg-surface pixel-border pixel-border-accent">
-            <Image src={profile.photo} alt={dict.photoAlt} width={240} height={240} sizes="120px" className="h-full w-full object-cover object-top" />
+          <div className="w-44 overflow-hidden bg-surface pixel-border pixel-border-accent sm:w-52">
+            <Image src={profile.aboutPhoto} alt={dict.photoAlt} width={720} height={900} sizes="(min-width: 640px) 208px, 176px" className="aspect-[4/5] w-full object-cover" />
           </div>
         </div>
         <div>
