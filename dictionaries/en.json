@@ -204,5 +204,35 @@
   "marquee": {
     "pause": "Pause motion",
     "play": "Resume motion"
+  },
+  "bugHunt": {
+    "title": "Bug Hunt",
+    "subtitle": "My day job in 20 seconds: catch every bug before it escapes to production.",
+    "idle": "Bugs appear at random and escape after a moment. Click, tap, or Tab + Enter to catch them.",
+    "start": "Start the hunt",
+    "again": "Run again",
+    "time": "Time left",
+    "caught": "Caught",
+    "bug": "Catch this bug",
+    "reportTitle": "Test report",
+    "found": "Found",
+    "missed": "Escaped",
+    "accuracy": "Catch rate",
+    "verdicts": {
+      "high": "Ready to ship.",
+      "mid": "A few bugs reached production.",
+      "low": "Release blocked. Hunt again?"
+    }
+  },
+  "music": {
+    "title": "On repeat",
+    "subtitle": "What I listen to while testing, straight from my Spotify.",
+    "loading": "Loading from Spotify…",
+    "error": "Could not reach Spotify right now.",
+    "nothing": "Nothing to show yet.",
+    "nowPlaying": "Now playing",
+    "lastPlayed": "Last played",
+    "top": "Top tracks this month",
+    "setup": "Spotify is not connected. Follow docs/spotify-setup.md. Visitors do not see this section until it is."
   }
 }

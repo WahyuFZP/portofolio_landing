@@ -204,5 +204,35 @@
   "marquee": {
     "pause": "Jeda gerakan",
     "play": "Lanjutkan gerakan"
+  },
+  "bugHunt": {
+    "title": "Bug Hunt",
+    "subtitle": "Pekerjaan saya dalam 20 detik: tangkap setiap bug sebelum lolos ke production.",
+    "idle": "Bug muncul acak dan kabur setelah sesaat. Klik, ketuk, atau Tab + Enter untuk menangkapnya.",
+    "start": "Mulai berburu",
+    "again": "Ulangi",
+    "time": "Sisa waktu",
+    "caught": "Tertangkap",
+    "bug": "Tangkap bug ini",
+    "reportTitle": "Laporan tes",
+    "found": "Ditemukan",
+    "missed": "Lolos",
+    "accuracy": "Tingkat tangkap",
+    "verdicts": {
+      "high": "Siap dirilis.",
+      "mid": "Beberapa bug lolos ke production.",
+      "low": "Rilis ditahan. Berburu lagi?"
+    }
+  },
+  "music": {
+    "title": "Sedang sering diputar",
+    "subtitle": "Yang saya dengarkan saat menguji, langsung dari Spotify saya.",
+    "loading": "Memuat dari Spotify…",
+    "error": "Spotify belum bisa dihubungi saat ini.",
+    "nothing": "Belum ada yang bisa ditampilkan.",
+    "nowPlaying": "Sedang diputar",
+    "lastPlayed": "Terakhir diputar",
+    "top": "Lagu teratas bulan ini",
+    "setup": "Spotify belum terhubung. Ikuti docs/spotify-setup.md. Pengunjung tidak melihat section ini sampai terhubung."
   }
 }

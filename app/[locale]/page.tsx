@@ -3,6 +3,8 @@ import Hero from "@/components/sections/Hero";
 import Projects from "@/components/sections/Projects";
 import StackMarquee from "@/components/sections/StackMarquee";
 import Skills from "@/components/sections/Skills";
+import BugHunt from "@/components/sections/BugHunt";
+import Music from "@/components/sections/Music";
 import Experience from "@/components/sections/Experience";
 import About from "@/components/sections/About";
 import Contact from "@/components/sections/Contact";
@@ -30,8 +32,10 @@ export default async function Home({ params }: PageProps<"/[locale]">) {
       <StackMarquee dict={dict.marquee} />
       <Projects locale={locale} projects={projects} dict={dict.projects} />
       <Skills dict={dict.skills} usage={usage} />
+      <BugHunt dict={dict.bugHunt} />
       <Experience locale={locale} dict={dict.experience} />
       <About dict={dict.about} />
+      <Music dict={dict.music} />
       <Contact dict={dict.contact} />
     </>
   );

@@ -69,7 +69,8 @@ test.describe("home sections", () => {
   test("sections follow the QA-first order", async ({ page }) => {
     await page.goto("/en");
     const ids = await page.locator("main section[id]").evaluateAll((els) => els.map((e) => e.id));
-    expect(ids).toEqual(["home", "projects", "skills", "experience", "about", "contact"]);
+    // #music appears only once Spotify is connected.
+    expect(ids).toEqual(["home", "projects", "skills", "bug-hunt", "experience", "about", "contact"]);
   });
 
   test("old #certificates anchor still exists", async ({ page }) => {

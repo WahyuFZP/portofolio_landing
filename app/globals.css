@@ -17,7 +17,8 @@
   --node-2: #0e7490;
   --node-3: #475569;
   --edge: #94a3b8;
-  --warm: #b45309; /* one warm planet and UFO lights */
+  --warm: #b45309; /* one warm planet and ship lights */
+  --star: #64748b; /* background dust */
   --show-light: inline-block;
   --show-dark: none;
   --field-alpha: 0.45; /* deep-field background strength */
@@ -26,11 +27,11 @@
 /* Dark values are listed twice on purpose: once for the explicit toggle, once for "OS dark, no choice made". */
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --bg: #070b14;
-  --surface: #0f1626;
+  --bg: #03050a; /* space black */
+  --surface: #0a0f1a;
   --text: #f1f5f9;
-  --muted: #94a3b8; /* 7.7:1 on --bg */
-  --border: #283548;
+  --muted: #94a3b8; /* 8.1:1 on --bg */
+  --border: #1e293b;
   --accent: #60a5fa; /* blue-400 */
   --accent-soft: #0c1f3d;
   --accent-fg: #06122b;
@@ -40,6 +41,7 @@
   --node-3: #cbd5e1;
   --edge: #3b4a63;
   --warm: #fbbf24;
+  --star: #e2e8f0;
   --show-light: none;
   --show-dark: inline-block;
   --field-alpha: 1;
@@ -47,11 +49,11 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     color-scheme: dark;
-    --bg: #070b14;
-    --surface: #0f1626;
+    --bg: #03050a; /* space black */
+    --surface: #0a0f1a;
     --text: #f1f5f9;
     --muted: #94a3b8;
-    --border: #283548;
+    --border: #1e293b;
     --accent: #60a5fa;
     --accent-soft: #0c1f3d;
     --accent-fg: #06122b;
@@ -61,6 +63,7 @@
     --node-3: #cbd5e1;
     --edge: #3b4a63;
   --warm: #fbbf24;
+  --star: #e2e8f0;
     --show-light: none;
     --show-dark: inline-block;
   --field-alpha: 1;
