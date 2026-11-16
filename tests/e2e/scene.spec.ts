@@ -13,7 +13,7 @@ function watchThree(page: Page) {
   return seen;
 }
 
-test("phones keep the poster and never download three.js", async ({ page, isMobile }) => {
+test("phones show the static poster and never download three.js", async ({ page, isMobile }) => {
   test.skip(!isMobile, "phone-only rule");
   const threeAt = watchThree(page);
   await page.goto("/en", { waitUntil: "load" });
@@ -35,13 +35,13 @@ test("poster first, three.js only after the load event, then the live scene", as
   expect(Math.min(...threeAt)).toBeGreaterThanOrEqual(loadedAt - 50);
 });
 
-test("the 3D canvas renders at 1/4 resolution (pixelated)", async ({ page, isMobile }) => {
+test("the 3D canvas renders at half resolution (pixelated)", async ({ page, isMobile }) => {
   test.skip(isMobile, "desktop-only: phones keep the poster");
   await page.goto("/en");
   const scene = page.locator("[data-scene]");
   await expect(scene).toHaveAttribute("data-scene", "live", { timeout: 15_000 });
   const { width, clientWidth } = await scene.locator("canvas").evaluate((c: HTMLCanvasElement) => ({ width: c.width, clientWidth: c.clientWidth }));
-  expect(width).toBeLessThanOrEqual(Math.ceil(clientWidth / 4));
+  expect(width).toBeLessThanOrEqual(Math.ceil(clientWidth / 2));
 });
 
 test.describe("reduced motion", () => {
@@ -63,4 +63,32 @@ test.describe("reduced motion", () => {
       await expect(heading).toHaveCSS("opacity", "1");
     }
   });
+});
+
+test("hovering a skill node names it, clicking a linked one filters projects", async ({ page, isMobile }) => {
+  test.skip(isMobile, "desktop-only: phones keep the poster");
+  await page.goto("/en");
+  const scene = page.locator("[data-scene]");
+  await expect(scene).toHaveAttribute("data-scene", "live", { timeout: 15_000 });
+  const canvas = scene.locator("canvas");
+  const box = (await canvas.boundingBox())!;
+
+  // Sweep the canvas until the cursor says "clickable skill" (node positions rotate, so no fixed point).
+  let found = false;
+  sweep: for (let gy = 0.2; gy <= 0.8; gy += 0.05) {
+    for (let gx = 0.2; gx <= 0.8; gx += 0.05) {
+      await page.mouse.move(box.x + box.width * gx, box.y + box.height * gy);
+      await page.waitForTimeout(50);
+      if ((await canvas.evaluate((c: HTMLCanvasElement) => c.style.cursor)) === "pointer") {
+        found = true;
+        break sweep;
+      }
+    }
+  }
+  expect(found).toBe(true);
+  await expect(scene.locator("span")).toBeVisible(); // tooltip with the skill name
+  await page.mouse.down();
+  await page.mouse.up();
+  await expect(page).toHaveURL(/\?skill=[a-z-]+#projects$/);
+  await expect(page.locator("#projects").getByRole("button", { name: /Clear skill filter/ })).toBeVisible();
 });

@@ -143,11 +143,12 @@ body {
 
 /* ---------- Motion ----------
    Scroll-linked and CSS-only: no JS, and nothing is hidden where the feature is unsupported.
-   No opacity fades on text, so contrast holds mid-animation. */
+   No opacity fades or clip-paths on text, so contrast and click targets hold mid-animation. */
 
+/* Transform only: clip-path broke hit-testing on links inside animated blocks, and opacity breaks contrast. */
 @keyframes rise {
-  from { transform: translateY(28px); clip-path: inset(0 0 100% 0); }
-  to { transform: none; clip-path: inset(-1rem); }
+  from { transform: translateY(48px) scale(0.97); }
+  to { transform: none; }
 }
 @keyframes word-up {
   from { transform: translateY(115%); }
@@ -162,8 +163,8 @@ body {
   to { transform: scaleY(1); }
 }
 @keyframes boot {
-  from { clip-path: inset(0 100% 0 0); transform: translateY(8px); }
-  to { clip-path: inset(-1rem); transform: none; }
+  from { transform: translateY(14px); }
+  to { transform: none; }
 }
 @keyframes lid-open {
   from { transform: rotateX(-55deg); }

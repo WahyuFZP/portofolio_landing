@@ -108,7 +108,7 @@ export function startConstellation(canvas: HTMLCanvasElement, data: Constellatio
   const v = new Vector3();
 
   const findHovered = () => {
-    if (!mouse || drag) return -1;
+    if (!mouse || (drag && drag.moved >= 5)) return -1; // a press without movement is a click, keep the target
     let best = -1;
     let bestD = HOVER_RADIUS;
     for (let i = 0; i < n; i++) {

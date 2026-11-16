@@ -45,8 +45,8 @@ export default function Hero({ dict, proofDict, constellation, caseStudies }: Pr
           </div>
         </div>
 
-        {/* Mobile: faint, behind the text. Desktop: its own column. Fixed box = no layout shift. */}
-        <div className="pointer-events-none absolute inset-x-0 top-0 -z-0 mx-auto aspect-square max-h-[420px] w-full max-w-[420px] opacity-25 md:pointer-events-auto md:static md:opacity-100">
+        {/* Desktop: live scene in its own column. Fixed box = no layout shift. */}
+        <div className="mx-auto hidden aspect-square max-h-[420px] w-full max-w-[420px] md:block">
           <HeroScene data={constellation} hint={dict.sceneHint}>
             <ConstellationPoster data={constellation} />
           </HeroScene>
@@ -55,6 +55,11 @@ export default function Hero({ dict, proofDict, constellation, caseStudies }: Pr
 
       <div className="mt-10">
         <ProofStrip dict={proofDict} caseStudies={caseStudies} />
+      </div>
+
+      {/* Phones: static poster below the content, never behind text (keeps text contrast clean). */}
+      <div aria-hidden className="mx-auto mt-10 aspect-square w-full max-w-[300px] md:hidden">
+        <ConstellationPoster data={constellation} />
       </div>
     </section>
   );

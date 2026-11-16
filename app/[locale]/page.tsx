@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import Hero from "@/components/sections/Hero";
 import Projects from "@/components/sections/Projects";
+import StackMarquee from "@/components/sections/StackMarquee";
 import Skills from "@/components/sections/Skills";
 import Experience from "@/components/sections/Experience";
 import About from "@/components/sections/About";
@@ -26,6 +27,7 @@ export default async function Home({ params }: PageProps<"/[locale]">) {
   return (
     <>
       <Hero dict={dict.hero} proofDict={dict.proof} constellation={constellation} caseStudies={projects.length} />
+      <StackMarquee />
       <Projects locale={locale} projects={projects} dict={dict.projects} />
       <Skills dict={dict.skills} usage={usage} />
       <Experience locale={locale} dict={dict.experience} />

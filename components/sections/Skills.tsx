@@ -20,7 +20,7 @@ export default function Skills({ dict, usage }: { dict: Dictionary["skills"]; us
             open
             className={`reveal group/cat bg-surface/40 p-5 pixel-border ${ci === 0 ? "md:col-span-2 [--pb:var(--accent)]" : ""}`}
           >
-            <summary className="flex cursor-pointer list-none items-center justify-between font-pixel text-lg [&::-webkit-details-marker]:hidden">
+            <summary className="flex cursor-pointer list-none items-center justify-between text-lg font-semibold tracking-tight [&::-webkit-details-marker]:hidden">
               <span className={ci === 0 ? "text-accent" : ""}>{dict.categories[cat]}</span>
               <span className="text-muted group-open/cat:rotate-90" aria-hidden>▸</span>
             </summary>

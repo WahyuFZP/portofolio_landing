@@ -12,7 +12,8 @@ import { profile } from "@/content/profile";
 
 // display "optional": no late font swap, so the text LCP is not pushed back on slow networks.
 const sans = Geist({ subsets: ["latin"], variable: "--font-geist-sans", display: "optional" });
-const mono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono", display: "optional", preload: false });
+// swap, not optional: mono is only used for small labels, and "optional" left them on the Arial-based fallback.
+const mono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono", display: "swap", preload: false });
 const pixel = Pixelify_Sans({ subsets: ["latin"], weight: ["500", "700"], variable: "--font-pixelify", display: "swap" });
 
 export const dynamicParams = false;

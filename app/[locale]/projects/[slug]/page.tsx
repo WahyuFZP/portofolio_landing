@@ -56,7 +56,7 @@ export default async function CaseStudy({ params }: PageProps<"/[locale]/project
       </Link>
 
       <header className="mt-8">
-        <h1 className="font-pixel text-3xl tracking-tight sm:text-5xl">{meta.title}</h1>
+        <h1 className="text-3xl font-semibold tracking-tight sm:text-5xl">{meta.title}</h1>
         <p className="mt-4 text-lg text-muted">{meta.description}</p>
 
         <dl className="mt-8 grid gap-6 border-y border-border py-6 sm:grid-cols-3">
@@ -105,7 +105,7 @@ export default async function CaseStudy({ params }: PageProps<"/[locale]/project
           height={1080}
           priority
           sizes="(min-width: 768px) 768px, 100vw"
-          className="mt-10 aspect-[16/10] w-full object-cover pixel-border"
+          className="mt-10 aspect-[16/10] w-full object-cover object-top pixel-border"
         />
       )}
 
@@ -121,7 +121,7 @@ export default async function CaseStudy({ params }: PageProps<"/[locale]/project
         >
           <span>
             <span className="block font-mono text-xs uppercase tracking-wide text-muted">{dict.caseStudy.next}</span>
-            <span className="mt-1 block font-pixel text-lg">{next.meta.title}</span>
+            <span className="mt-1 block text-lg font-semibold tracking-tight">{next.meta.title}</span>
           </span>
           <ArrowRight className="h-5 w-5 text-accent" aria-hidden />
         </Link>
