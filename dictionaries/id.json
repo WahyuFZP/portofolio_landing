@@ -226,14 +226,10 @@
   },
   "music": {
     "title": "Sedang sering diputar",
-    "subtitle": "Yang saya dengarkan saat menguji, langsung dari Spotify saya.",
-    "loading": "Memuat dari Spotify…",
-    "error": "Spotify belum bisa dihubungi saat ini.",
-    "nothing": "Belum ada yang bisa ditampilkan.",
-    "nowPlaying": "Sedang diputar",
-    "lastPlayed": "Terakhir diputar",
-    "top": "Lagu teratas bulan ini",
-    "setup": "Spotify belum terhubung. Ikuti docs/spotify-setup.md. Pengunjung tidak melihat section ini sampai terhubung.",
-    "premium": "Spotify menolak permintaan: akun pemilik aplikasi ini perlu langganan Premium aktif. Pengunjung tidak melihat section ini sampai itu beres."
+    "subtitle": "Playlist yang menemani saya saat menguji.",
+    "load": "Muat pemutar Spotify",
+    "note": "Pemutar ini berasal dari Spotify. Tidak ada yang dimuat dari Spotify sebelum Anda menekan tombol.",
+    "open": "Buka di Spotify",
+    "frameTitle": "Pemutar Spotify: playlist"
   }
 }

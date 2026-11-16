@@ -1,8 +1,6 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Album covers in the Music section.
-  images: { remotePatterns: [{ protocol: "https", hostname: "i.scdn.co" }] },
   async headers() {
     return [
       {

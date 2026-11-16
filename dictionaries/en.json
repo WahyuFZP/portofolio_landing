@@ -226,14 +226,10 @@
   },
   "music": {
     "title": "On repeat",
-    "subtitle": "What I listen to while testing, straight from my Spotify.",
-    "loading": "Loading from Spotify…",
-    "error": "Could not reach Spotify right now.",
-    "nothing": "Nothing to show yet.",
-    "nowPlaying": "Now playing",
-    "lastPlayed": "Last played",
-    "top": "Top tracks this month",
-    "setup": "Spotify is not connected. Follow docs/spotify-setup.md. Visitors do not see this section until it is.",
-    "premium": "Spotify refused the request: the account that owns this app needs an active Premium subscription. Visitors do not see this section until that is fixed."
+    "subtitle": "The playlist I test to.",
+    "load": "Load Spotify player",
+    "note": "The player comes from Spotify. Nothing is loaded from Spotify until you press the button.",
+    "open": "Open in Spotify",
+    "frameTitle": "Spotify player: playlist"
   }
 }
