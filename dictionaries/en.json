@@ -1,83 +1,202 @@
 {
-  "navbar": {
-    "home": "Home",
+  "meta": {
+    "title": "Wahyu Fikri | Software QA Engineer: Automation, API & Security",
+    "description": "Wahyu Fikri Zeni Putra is a software QA engineer in Bandung, Indonesia, focused on Playwright test automation, API testing, and security testing, with a fullstack web background.",
+    "ogLocale": "en_US"
+  },
+  "nav": {
+    "projects": "Projects",
+    "skills": "Skills",
+    "experience": "Experience",
     "about": "About",
-    "projects": "Projects"
+    "contact": "Contact",
+    "skip": "Skip to content",
+    "menu": "Menu",
+    "switchLanguage": "Ganti ke Bahasa Indonesia",
+    "theme": "Switch between light and dark theme"
   },
   "hero": {
-    "greeting": "Hello, I am",
-    "role": "Software Engineer",
-    "tagline": "Continuously learning, building, and refining web applications with strict quality standards and reliable security.",
-    "ctaProjects": "View Projects",
-    "ctaContact": "Contact Me"
+    "eyebrow": "Software QA Engineer · Automation, API & Security",
+    "tagline": "I break software before your users do: end-to-end automation with Playwright, API testing with Postman, and a security mindset mapped to the OWASP Top 10.",
+    "ctaProjects": "View projects",
+    "ctaCv": "Download CV",
+    "sceneHint": "Drag to rotate. Click a skill to see its projects."
   },
-  "about": {
-    "sectionTitle": "ABOUT ME",
-    "greeting": "I AM",
-    "name": "Wahyu Fikri",
-    "role": "Software Engineer",
-    "bio": "As an Informatics Engineering student and Software Engineer, I have an endless drive to continuously learn and turn ideas into tangible digital solutions.\n\nTo me, the success of a project is measured not just by its functionality, but by its security and reliability. Therefore, I always prioritize strong software development standards and meticulous quality testing (QA) to deliver functional, scalable, and high-quality applications.",
-    "downloadCv": "DOWNLOAD CV"
+  "proof": {
+    "label": "Test run summary",
+    "tests": "E2E tests passing",
+    "a11y": "accessibility score",
+    "caseStudies": "case studies",
+    "status": "QA Engineer @ Exodrinks"
+  },
+  "projects": {
+    "title": "Projects",
+    "subtitle": "Case studies from shipped systems, QA work, and this site.",
+    "filterLabel": "Filter projects",
+    "all": "All",
+    "categories": {
+      "fullstack": "Fullstack",
+      "qa": "QA"
+    },
+    "status": {
+      "shipped": "shipped",
+      "qa-project": "QA project",
+      "this-site": "this site"
+    },
+    "showing": "Showing",
+    "clearSkill": "Clear skill filter",
+    "more": "more",
+    "readCaseStudy": "Read case study",
+    "caseStudy": {
+      "back": "All projects",
+      "year": "Year",
+      "role": "Role",
+      "stack": "Stack",
+      "demo": "Live demo",
+      "source": "Source code",
+      "report": "Test report",
+      "next": "Next project"
+    }
   },
   "skills": {
-    "title": "Tech",
-    "accent": "Skills"
+    "title": "Skills",
+    "subtitle": "QA first. Select a skill to see the projects that use it.",
+    "levels": {
+      "proficient": "Proficient",
+      "familiar": "Familiar",
+      "learning": "Learning"
+    },
+    "categories": {
+      "qa": "QA & Testing",
+      "security": "Security",
+      "frontend": "Frontend",
+      "backend": "Backend & API",
+      "database": "Database",
+      "devops": "Cloud, DevOps & Monitoring",
+      "ai": "AI Tooling",
+      "design": "Design"
+    },
+    "projectCount": "projects"
   },
   "experience": {
-    "title": "Work",
-    "accent": "Experience",
-    "technologiesLabel": "Technologies Used",
+    "title": "Experience",
+    "credentialsTitle": "Credentials",
+    "issued": "Issued",
+    "credentialId": "Credential ID",
+    "verify": "Verify",
     "list": [
       {
-        "company": "CV. Maju Sukses Perkasa",
-        "role": "Warehouse Assistant",
-        "period": "Nov 2021 - Jul 2022",
-        "location": "Madiun, Indonesia",
+        "role": "Software Quality Assurance Engineer",
+        "company": "PT Exodrinks Indonesia Prestige",
+        "type": "Contract",
+        "period": "Jul 2026 – Present",
+        "location": "Bandung, West Java · On-site",
+        "kind": "tech",
         "description": [
-          "Recorded, sorted, and conducted periodic inspections of warehouse inventory.",
-          "Prepared and assembled goods for outgoing distribution"
+          "Test the quality, reliability, and security of internal systems: POS, Backoffice, and Inventory Management.",
+          "Run end-to-end manual tests on POS transactions, including dynamic online/offline pricing, promo codes, and payment validation.",
+          "Build and maintain Playwright UI automation suites for regression testing on every release.",
+          "Test APIs with Postman: payloads, status codes, and business rules.",
+          "Found a Cross-Site Scripting (XSS) flaw in a WebView search input that could cause a client-side DoS.",
+          "Trace defect root causes through backend logs and metrics in Grafana, and design load tests for race conditions and database bottlenecks."
         ],
-        "technologies": ["Excel"]
+        "tags": [
+          "Playwright",
+          "Postman",
+          "Grafana",
+          "Jira",
+          "Notion",
+          "Security Testing",
+          "Load Testing"
+        ]
       },
       {
+        "role": "IT Staff",
         "company": "Dinas Lingkungan Hidup Kota Madiun",
-        "role": "IT Staff (Internship)",
-        "period": "May 2025 – June 2025",
-        "location": "Madiun, Indonesia",
+        "type": "Apprenticeship",
+        "period": "May 2025 – Jun 2025",
+        "location": "Madiun, East Java · On-site",
+        "kind": "tech",
         "description": [
-          "Redesigned the UI/UX of the official website to enhance visual aesthetics and improve user experience.",
-          "Troubleshot hardware and software issues to ensure optimal and reliable system performance.",
-          "Managed website administration, including updating content and publishing the latest agency information."
+          "Redesigned the UI/UX of the agency's WordPress website for consistent visuals and easier navigation.",
+          "Published and updated content, announcements, and public information.",
+          "Troubleshot hardware and software issues on staff workstations."
         ],
-        "technologies": ["Excel", "HTML", "CSS", "JavaScript", "PHP", "WordPress"]
+        "tags": [
+          "WordPress",
+          "HTML",
+          "CSS",
+          "Web Development"
+        ]
+      },
+      {
+        "role": "Warehouse Assistant",
+        "company": "CV. Maju Sukses Perkasa",
+        "type": "Full-time",
+        "period": "Nov 2021 – Jul 2022",
+        "location": "Madiun, East Java · On-site",
+        "kind": "other",
+        "description": [],
+        "tags": []
       }
     ]
   },
-  "certificates": {
-    "title": "Certificates &",
-    "accent": "Awards"
-  },
-  "projects": {
-    "title": "Featured",
-    "accent": "Works",
-    "subtitle": "A collection of projects I've built, ranging from user interfaces to complex backend systems.",
-    "drawer": {
-      "close": "Close",
-      "techStack": "Technologies Used",
-      "viewLive": "View Live Project",
-      "sourceCode": "Source Code"
-    }
+  "about": {
+    "title": "About",
+    "photoAlt": "Portrait of Wahyu Fikri Zeni Putra",
+    "bio": "I am a software QA engineer and a recent Information Technology graduate. I build end-to-end tests with Playwright, validate REST APIs for functionality, data integrity, and error handling with Postman, and test for broken authentication, access control, and input-validation flaws.\n\nBefore QA, I built web apps with Laravel and Next.js. That fullstack background helps me read code, talk with developers, and write bug reports they can act on quickly. I am growing my cybersecurity skills and exploring how AI can make testing faster.",
+    "facts": [
+      {
+        "label": "Based in",
+        "value": "Bandung · from Madiun, Indonesia"
+      },
+      {
+        "label": "Education",
+        "value": "B.Tech Information Technology, Universitas Darul Ulum Jombang, 2026 · GPA 3.80"
+      },
+      {
+        "label": "Focus",
+        "value": "QA automation, API & security testing"
+      }
+    ],
+    "howTitle": "How I work",
+    "how": [
+      {
+        "title": "Test before ship",
+        "body": "Every feature gets an automated check before release, so regressions are caught by CI, not by users."
+      },
+      {
+        "title": "Security-minded testing",
+        "body": "I test inputs, sessions, and access rules against the OWASP Top 10, not only the happy path."
+      },
+      {
+        "title": "Document decisions",
+        "body": "Clear test cases, reproducible bug reports, and written plans that a team can review."
+      }
+    ]
   },
   "contact": {
-    "title": "Get In",
-    "accent": "Touch",
-    "subtitle": "Have a project idea, a question, or just want to say hi? Feel free to drop a message. I'm always open to new collaborative opportunities.",
-    "name": "Full Name",
-    "namePlaceholder": "Enter your name",
-    "email": "Email Address",
-    "emailPlaceholder": "name@email.com",
+    "title": "Contact",
+    "subtitle": "Have a role, a project, or a question? Send a message and I will reply by email.",
+    "emailLabel": "Email",
+    "locationLabel": "Location",
+    "name": "Full name",
+    "email": "Email address",
     "message": "Message",
-    "messagePlaceholder": "Tell me about your project or idea...",
-    "send": "Send Message"
+    "send": "Send message",
+    "sending": "Sending…",
+    "success": "Message sent. Thank you, I will reply soon.",
+    "error": "Failed to send the message. Please try again or email me directly."
+  },
+  "footer": {
+    "explore": "Explore",
+    "connect": "Connect",
+    "site": "Site",
+    "built": "Built with Next.js and Three.js, tested with Playwright.",
+    "source": "Source code",
+    "ci": "Test runs",
+    "sitemap": "Sitemap",
+    "cv": "Download CV",
+    "top": "Back to top"
   }
 }

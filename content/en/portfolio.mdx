@@ -1,0 +1,27 @@
+---
+title: "This Portfolio: Tested Like a Product"
+description: "My personal site, rebuilt with Next.js 16 and covered by a Playwright end-to-end suite that runs on every push."
+tags: ["playwright", "github-actions", "nextjs", "typescript", "threejs", "tailwind", "vercel", "claude-code"]
+year: "2026"
+role: "Design, development & QA"
+order: "3"
+categories: ["fullstack", "qa"]
+status: "this-site"
+github: "https://github.com/WahyuFZP/portofolio_landing"
+---
+
+## Problem
+
+The first version looked fine but had real defects: project detail pages did not work, English pages showed Indonesian text, and a preloader delayed content on every visit. Mobile Lighthouse Performance was 56.
+
+## Approach
+
+Before redesigning anything, I wrote an end-to-end suite against the old site. Known bugs were recorded as expected failures, so each fix turns a test from red-expected to green.
+
+- Playwright tests on desktop and an emulated Pixel 7.
+- axe-core accessibility scan as part of the suite.
+- GitHub Actions runs lint, type checking, build, and E2E on every push.
+
+## Result
+
+The redesign shipped with the same suite as a regression safety net. Each known bug is now a passing test.

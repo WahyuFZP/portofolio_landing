@@ -1,71 +1,87 @@
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans } from "next/font/google";
+import { notFound } from "next/navigation";
+import { Geist, Geist_Mono, Pixelify_Sans } from "next/font/google";
 import "@/app/globals.css";
-import Navbar from "@/components/Navbar";
-import Preloader from "@/components/Preloader";
-import { Locale } from "@/lib/dictionary";
+import Navbar from "@/components/layout/Navbar";
+import Footer from "@/components/layout/Footer";
+import MotionProvider from "@/components/motion/MotionProvider";
+import { themeScript } from "@/components/layout/ThemeToggle";
+import { getDictionary } from "@/lib/dictionary";
+import { isLocale, locales } from "@/lib/i18n";
+import { profile } from "@/content/profile";
 
-const plusJakartaSans = Plus_Jakarta_Sans({
-  subsets: ["latin"],
-  weight: ["400", "500", "700", "800"],
-});
+// display "optional": no late font swap, so the text LCP is not pushed back on slow networks.
+const sans = Geist({ subsets: ["latin"], variable: "--font-geist-sans", display: "optional" });
+const mono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono", display: "optional", preload: false });
+const pixel = Pixelify_Sans({ subsets: ["latin"], weight: ["500", "700"], variable: "--font-pixelify", display: "swap" });
 
-export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://wahyufikri.vercel.app"),
-  title: {
-    default: "Wahyu Fikri | Software Engineer",
-    template: "%s | Wahyu Fikri",
-  },
-  description:
-    "Website portofolio personal Software Engineer yang colorful dan interaktif.",
-  openGraph: {
-    title: "Wahyu Fikri | Software Engineer",
-    description: "Portofolio interaktif dan modern dari seorang Software Engineer.",
-    url: "/",
-    siteName: "Wahyu Fikri",
-    images: [
-      {
-        url: "/images/hero.webp",
-        width: 1200,
-        height: 630,
-        alt: "Wahyu Fikri Portfolio Thumbnail",
-      },
-    ],
-    locale: "id_ID",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Wahyu Fikri | Software Engineer",
-    description: "Portofolio interaktif dan modern dari seorang Software Engineer.",
-    images: ["/images/hero.jpeg"],
-  },
-};
+export const dynamicParams = false;
+export const generateStaticParams = () => locales.map((locale) => ({ locale }));
 
-export default async function RootLayout({
-  children,
-  params,
-}: {
-  children: React.ReactNode;
-  // 1. PERUBAHAN DISINI: 'Locale' diganti jadi 'string' agar Next.js tidak marah
-  params: Promise<{ locale: string }>;
-}) {
+export async function generateMetadata({ params }: LayoutProps<"/[locale]">): Promise<Metadata> {
   const { locale } = await params;
+  if (!isLocale(locale)) return {};
+  const { meta } = await getDictionary(locale);
+
+  return {
+    metadataBase: new URL(profile.siteUrl),
+    title: { default: meta.title, template: `%s | ${profile.shortName}` },
+    description: meta.description,
+    alternates: {
+      canonical: `/${locale}`,
+      languages: Object.fromEntries(locales.map((l) => [l, `/${l}`])),
+    },
+    openGraph: {
+      title: meta.title,
+      description: meta.description,
+      url: `/${locale}`,
+      siteName: profile.shortName,
+      locale: meta.ogLocale,
+      type: "website",
+      images: [{ url: profile.photo, width: 1063, height: 1417, alt: profile.name }],
+    },
+    twitter: { card: "summary", title: meta.title, description: meta.description, images: [profile.photo] },
+  };
+}
+
+export default async function LocaleLayout({ children, params }: LayoutProps<"/[locale]">) {
+  const { locale } = await params;
+  if (!isLocale(locale)) notFound();
+  const dict = await getDictionary(locale);
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: profile.name,
+    jobTitle: profile.jobTitle,
+    url: profile.siteUrl,
+    email: `mailto:${profile.email}`,
+    address: { "@type": "PostalAddress", addressLocality: "Bandung", addressCountry: "ID" },
+    alumniOf: "Universitas Darul Ulum Jombang",
+    worksFor: { "@type": "Organization", name: "PT Exodrinks Indonesia Prestige" },
+    sameAs: [profile.github, profile.linkedin],
+  };
 
   return (
-    <html lang={locale}>
-      <body
-        suppressHydrationWarning
-        className={`${plusJakartaSans.className} bg-brand-bg text-brand-text antialiased selection:bg-brand-pink selection:text-white `}
-      >
-        <Preloader />
-
-        {/* 2. PERUBAHAN DISINI: Tambahkan 'as Locale' agar komponen Navbar tetap aman */}
-        <Navbar locale={locale as Locale} />
-
-        <main className="pt-14 min-h-screen px-6 md:px-12 max-w-6xl mx-auto w-full overflow-x-hidden">
-          {children}
-        </main>
+    <html lang={locale} className={`${sans.variable} ${mono.variable} ${pixel.variable}`} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
+      <body className="font-sans antialiased">
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:bg-accent focus:px-4 focus:py-2 focus:text-accent-fg"
+        >
+          {dict.nav.skip}
+        </a>
+        <MotionProvider>
+          <Navbar locale={locale} dict={dict.nav} />
+          <main id="main" className="mx-auto w-full max-w-5xl px-4 sm:px-6">
+            {children}
+          </main>
+          <Footer locale={locale} dict={dict.footer} nav={dict.nav} />
+        </MotionProvider>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       </body>
     </html>
   );
