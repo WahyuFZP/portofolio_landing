@@ -58,6 +58,8 @@ test.describe("hero", () => {
     await expect(proof).toBeInViewport();
     await expect(proof).toContainText("QA Engineer @ Exodrinks");
     await expect(proof).toContainText("3 case studies");
+    // Test and a11y numbers stay hidden until a public CI run can back them (content/proof.ts).
+    await expect(proof).not.toContainText("tests passing");
   });
 });
 
@@ -103,6 +105,7 @@ test.describe("home sections", () => {
     await expect(roles).toHaveCount(3);
     await expect(roles.first()).toContainText("Software Quality Assurance Engineer");
     await expect(roles.first()).toContainText("PT Exodrinks Indonesia Prestige");
+    await expect(page.locator("main")).not.toContainText("—"); // no em dashes in visible copy
   });
 
   test("English page has no Indonesian UI text", async ({ page }) => {
@@ -149,6 +152,16 @@ test.describe("projects", () => {
 
     await page.getByRole("button", { name: /Clear skill filter/ }).click();
     await expect(cards).toHaveCount(3);
+  });
+
+  test("filters with no match show an empty state with a reset", async ({ page }) => {
+    await page.goto("/en?category=qa&skill=laravel#projects");
+    const section = page.locator("#projects");
+    await expect(section.locator("article")).toHaveCount(0);
+    await expect(section.getByText("No projects match these filters.")).toBeVisible();
+    await section.getByRole("button", { name: "Show all projects" }).click();
+    await expect(section.locator("article")).toHaveCount(3);
+    await expect(page).toHaveURL(/\/en#projects$/);
   });
 
   test("unknown ?skill and ?category show all projects", async ({ page }) => {

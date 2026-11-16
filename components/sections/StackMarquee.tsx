@@ -1,4 +1,6 @@
 import { skills, type Skill } from "@/content/skills";
+import type { Dictionary } from "@/lib/dictionary";
+import MarqueePause from "./MarqueePause";
 
 // Two lanes of the tech stack running in opposite directions, cut into a slanted band. Decorative: the Skills section carries the same data.
 const testing = skills.filter((s) => ["qa", "security", "devops", "ai"].includes(s.category));
@@ -27,15 +29,16 @@ function Row({ items, chip }: { items: Skill[]; chip: string }) {
   );
 }
 
-export default function StackMarquee() {
+export default function StackMarquee({ dict }: { dict: Dictionary["marquee"] }) {
   // Slanted silhouette comes from clip-path on the wrapper, not from rotating the lanes:
   // a rotated 8000px strip gets a bounding box hundreds of px tall, which contrast tools then
   // treat as the backdrop of unrelated text above and below it.
   const lane = "marquee-band overflow-hidden";
   return (
+    <MarqueePause pause={dict.pause} play={dict.play}>
     <div
       aria-hidden
-      className="relative left-1/2 my-8 w-screen -translate-x-1/2"
+      className="relative left-1/2 w-screen -translate-x-1/2"
       style={{ clipPath: "polygon(0 22px, 100% 0, 100% calc(100% - 22px), 0 100%)" }}
     >
       <div className={`${lane} bg-accent pb-3 pt-8 text-accent-fg`}>
@@ -49,5 +52,6 @@ export default function StackMarquee() {
         </div>
       </div>
     </div>
+    </MarqueePause>
   );
 }

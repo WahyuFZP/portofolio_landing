@@ -204,7 +204,8 @@ body {
   .marquee-rev {
     animation-direction: reverse;
   }
-  .marquee-band:hover .marquee {
+  .marquee-band:hover .marquee,
+  [data-paused="true"] .marquee {
     animation-play-state: paused;
   }
 

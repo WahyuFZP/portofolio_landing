@@ -1,6 +1,7 @@
 import { defineConfig, devices } from "@playwright/test";
 
-const PORT = 3000;
+// PW_PORT lets the suite run beside a dev server that already holds port 3000.
+const PORT = Number(process.env.PW_PORT ?? 3000);
 
 export default defineConfig({
   testDir: "tests/e2e",

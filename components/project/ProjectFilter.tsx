@@ -76,6 +76,15 @@ export default function ProjectFilter({ locale, projects, dict }: Props) {
         {visible.length} / {projects.length}
       </p>
 
+      {visible.length === 0 && (
+        <div className="bg-surface p-8 text-center pixel-border">
+          <p className="text-muted">{dict.empty}</p>
+          <button type="button" onClick={() => go({ category: null, skill: null })} className={`${chip} ${off} mt-4`}>
+            {dict.reset}
+          </button>
+        </div>
+      )}
+
       <m.ul layout className="grid gap-8 md:grid-cols-2">
         <AnimatePresence initial={false} mode="popLayout">
           {visible.map((p, i) => {

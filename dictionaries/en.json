@@ -56,7 +56,9 @@
       "source": "Source code",
       "report": "Test report",
       "next": "Next project"
-    }
+    },
+    "empty": "No projects match these filters.",
+    "reset": "Show all projects"
   },
   "skills": {
     "title": "Skills",
@@ -198,5 +200,9 @@
     "sitemap": "Sitemap",
     "cv": "Download CV",
     "top": "Back to top"
+  },
+  "marquee": {
+    "pause": "Pause motion",
+    "play": "Resume motion"
   }
 }

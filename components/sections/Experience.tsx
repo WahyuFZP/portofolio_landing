@@ -29,7 +29,7 @@ export default function Experience({ locale, dict }: Props) {
               </p>
               {job.kind === "other" ? (
                 <h3 className="mt-1 text-base">
-                  {job.role} <span className="text-muted">— {job.company}</span>
+                  {job.role}, <span className="text-muted">{job.company}</span>
                 </h3>
               ) : (
                 <>

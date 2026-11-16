@@ -49,6 +49,22 @@ test.describe("footer", () => {
 });
 
 test.describe("layout", () => {
+  test("stack marquee can be paused and resumed without a mouse", async ({ page }) => {
+    await page.goto("/en");
+    const strip = page.locator(".marquee").first();
+    const state = () => strip.evaluate((el) => getComputedStyle(el).animationPlayState);
+    expect(await state()).toBe("running");
+
+    const button = page.getByRole("button", { name: "Pause motion" });
+    await button.focus();
+    await page.keyboard.press("Enter");
+    await expect(page.getByRole("button", { name: "Resume motion" })).toHaveAttribute("aria-pressed", "true");
+    expect(await state()).toBe("paused");
+
+    await page.keyboard.press("Enter");
+    expect(await state()).toBe("running");
+  });
+
   test("stack marquee is decorative and the page never scrolls sideways", async ({ page }) => {
     await page.goto("/en");
     await expect(page.locator(".marquee-band").first()).toBeVisible();
@@ -60,6 +76,6 @@ test.describe("layout", () => {
   test("project cards show the site inside a laptop frame", async ({ page }) => {
     await page.goto("/en#projects");
     await expect(page.locator("#projects article .laptop-lid")).toHaveCount(3);
-    await expect(page.locator("#projects article", { hasText: "This Portfolio" }).locator(".laptop-lid")).toContainText("wahyufikri.vercel.app");
+    await expect(page.locator("#projects article", { hasText: "This Portfolio" }).locator(".laptop-lid")).toContainText("This Portfolio"); // no live URL claimed until v2 is deployed
   });
 });

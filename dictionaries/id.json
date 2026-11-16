@@ -56,7 +56,9 @@
       "source": "Kode sumber",
       "report": "Laporan pengujian",
       "next": "Proyek berikutnya"
-    }
+    },
+    "empty": "Tidak ada proyek yang cocok dengan filter ini.",
+    "reset": "Tampilkan semua proyek"
   },
   "skills": {
     "title": "Keahlian",
@@ -198,5 +200,9 @@
     "sitemap": "Sitemap",
     "cv": "Unduh CV",
     "top": "Kembali ke atas"
+  },
+  "marquee": {
+    "pause": "Jeda gerakan",
+    "play": "Lanjutkan gerakan"
   }
 }
