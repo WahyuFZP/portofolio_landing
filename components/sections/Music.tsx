@@ -31,15 +31,18 @@ export default function Music({ dict }: { dict: Dictionary["music"] }) {
   }, []);
 
   const data = state.status === "ready" ? state.data : null;
-  // Not connected yet: visitors see no section at all; in development it shows how to connect.
-  if (data && !data.configured && process.env.NODE_ENV === "production") return null;
+  // Not usable yet (no credentials, or Spotify blocks the app): visitors see no section at all;
+  // in development it says what is missing.
+  const blocked = data?.configured && data.error && data.reason === "premium";
+  if (data && (!data.configured || blocked) && process.env.NODE_ENV === "production") return null;
 
   return (
     <section id="music" className="py-20">
       <SectionHeading title={dict.title} subtitle={dict.subtitle} />
 
       {state.status === "loading" && <p className="font-pixel text-sm text-muted" role="status">{dict.loading}</p>}
-      {(state.status === "error" || (data?.configured && data.error)) && <p className="text-muted" role="status">{dict.error}</p>}
+      {(state.status === "error" || (data?.configured && data.error && !blocked)) && <p className="text-muted" role="status">{dict.error}</p>}
+      {blocked && <p className="bg-surface p-4 font-mono text-sm text-muted pixel-border">{dict.premium}</p>}
       {data && !data.configured && <p className="bg-surface p-4 font-mono text-sm text-muted pixel-border">{dict.setup}</p>}
 
       {data?.configured && !data.error && (

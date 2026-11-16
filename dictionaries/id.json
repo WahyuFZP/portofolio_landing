@@ -233,6 +233,7 @@
     "nowPlaying": "Sedang diputar",
     "lastPlayed": "Terakhir diputar",
     "top": "Lagu teratas bulan ini",
-    "setup": "Spotify belum terhubung. Ikuti docs/spotify-setup.md. Pengunjung tidak melihat section ini sampai terhubung."
+    "setup": "Spotify belum terhubung. Ikuti docs/spotify-setup.md. Pengunjung tidak melihat section ini sampai terhubung.",
+    "premium": "Spotify menolak permintaan: akun pemilik aplikasi ini perlu langganan Premium aktif. Pengunjung tidak melihat section ini sampai itu beres."
   }
 }

@@ -233,6 +233,7 @@
     "nowPlaying": "Now playing",
     "lastPlayed": "Last played",
     "top": "Top tracks this month",
-    "setup": "Spotify is not connected. Follow docs/spotify-setup.md. Visitors do not see this section until it is."
+    "setup": "Spotify is not connected. Follow docs/spotify-setup.md. Visitors do not see this section until it is.",
+    "premium": "Spotify refused the request: the account that owns this app needs an active Premium subscription. Visitors do not see this section until that is fixed."
   }
 }

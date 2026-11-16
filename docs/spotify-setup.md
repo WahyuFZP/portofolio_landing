@@ -24,7 +24,7 @@ SPOTIFY_REFRESH_TOKEN=
 node --env-file=.env.local scripts/spotify-token.mjs
 ```
 
-Open the printed URL, approve, then copy the `SPOTIFY_REFRESH_TOKEN=...` line from the terminal into `.env.local`. Restart `npm run dev`.
+Open the printed URL and approve. The script saves `SPOTIFY_REFRESH_TOKEN` into `.env.local` by itself (it is never printed). Restart `npm run dev`.
 
 ## 4. Vercel
 
@@ -33,6 +33,6 @@ Project → Settings → Environment Variables: add the same three names and val
 ## Notes
 
 - Never paste the client secret or refresh token into chat, issues, or commits. If one leaks, rotate the secret in the Spotify dashboard and run step 3 again.
-- The app is in Spotify "Development mode". That is enough here, because only your own account is read.
+- The app is in Spotify "Development mode". Only your own account is read, **but Spotify requires the app owner to have an active Premium subscription**. Without it every call returns 403 and the section stays hidden.
 - The refresh token lasts as long as the app keeps access (the dashboard shows the lifetime). If the section shows "Could not reach Spotify", run step 3 again.
 - The API response is cached for 30 seconds, so "now playing" can lag by that much.

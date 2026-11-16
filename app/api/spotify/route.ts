@@ -21,7 +21,7 @@ export interface Track {
 }
 export type MusicData =
   | { configured: false }
-  | { configured: true; error: true }
+  | { configured: true; error: true; reason?: "premium" } // "premium": Spotify refuses the app until its owner has Premium
   | { configured: true; error: false; isPlaying: boolean; current: Track | null; top: Track[] };
 
 // Only pass through links and images that really point at Spotify.
@@ -60,6 +60,12 @@ export async function GET() {
 
     const [nowRes, topRes] = await Promise.all([get("/player/currently-playing"), get("/top/tracks?limit=5&time_range=short_term")]);
 
+    // A refusal is not "nothing playing": report it, so the page never shows an empty list for a blocked app.
+    if (!topRes.ok) {
+      const body = await topRes.text().catch(() => ""); // plain text for this refusal, JSON for others: match either
+      return json({ configured: true, error: true, ...(topRes.status === 403 && /premium/i.test(body) ? { reason: "premium" as const } : {}) }, 502);
+    }
+
     // 204 = nothing playing right now.
     const now = nowRes.status === 200 ? ((await nowRes.json()) as { is_playing: boolean; item: SpotifyTrack | null }) : null;
     let current = toTrack(now?.item);
@@ -68,7 +74,7 @@ export async function GET() {
       const recentRes = await get("/player/recently-played?limit=1");
       if (recentRes.ok) current = toTrack(((await recentRes.json()) as { items: { track: SpotifyTrack }[] }).items[0]?.track);
     }
-    const top = topRes.ok ? ((await topRes.json()) as { items: SpotifyTrack[] }).items.map(toTrack).filter((t): t is Track => !!t) : [];
+    const top = ((await topRes.json()) as { items: SpotifyTrack[] }).items.map(toTrack).filter((t): t is Track => !!t);
 
     return json({ configured: true, error: false, isPlaying, current, top });
   } catch {
