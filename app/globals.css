@@ -19,6 +19,7 @@
   --edge: #a1a1aa;
   --show-light: inline-block;
   --show-dark: none;
+  --field-alpha: 0.45; /* deep-field background strength */
 }
 
 /* Dark values are listed twice on purpose: once for the explicit toggle, once for "OS dark, no choice made". */
@@ -39,6 +40,7 @@
   --edge: #52525b;
   --show-light: none;
   --show-dark: inline-block;
+  --field-alpha: 1;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
@@ -58,6 +60,7 @@
     --edge: #52525b;
     --show-light: none;
     --show-dark: inline-block;
+  --field-alpha: 1;
   }
 }
 

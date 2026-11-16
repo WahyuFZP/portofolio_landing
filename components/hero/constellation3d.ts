@@ -13,6 +13,7 @@ import {
   WebGLRenderer,
 } from "three";
 import type { ConstellationData } from "@/lib/constellation";
+import { onThemeChange } from "@/lib/scene";
 
 const PIXEL = 2; // render at 1/2 resolution, upscaled with image-rendering: pixelated (fine pixels)
 const BASE_Z = 3.1;
@@ -20,7 +21,7 @@ const BASE_ROT_X = 0.35;
 const BASE_ROT_Y = 0.6; // matches the SVG poster's starting angle
 const HOVER_RADIUS = 22; // CSS px
 
-const cssColor = (name: string) =>
+export const cssColor = (name: string) =>
   new Color(getComputedStyle(document.documentElement).getPropertyValue(name).trim() || "#888888");
 
 interface Options {
@@ -104,7 +105,7 @@ export function startConstellation(canvas: HTMLCanvasElement, data: Constellatio
   let parallaxY = 0;
   let dragYaw = 0;
   let dragPitch = 0;
-  let drag: { x: number; y: number; moved: number } | null = null;
+  let drag: { x: number; y: number; moved: number; target: number } | null = null; // target = node under the cursor at press
   const v = new Vector3();
 
   const findHovered = () => {
@@ -145,19 +146,20 @@ export function startConstellation(canvas: HTMLCanvasElement, data: Constellatio
     if (drag) {
       const dx = e.clientX - drag.x;
       const dy = e.clientY - drag.y;
-      drag = { x: e.clientX, y: e.clientY, moved: drag.moved + Math.abs(dx) + Math.abs(dy) };
+      drag = { ...drag, x: e.clientX, y: e.clientY, moved: drag.moved + Math.abs(dx) + Math.abs(dy) };
       dragYaw += dx * 0.008;
       dragPitch = Math.max(-1, Math.min(1, dragPitch + dy * 0.008));
     }
   };
   const onDown = (e: PointerEvent) => {
-    drag = { x: e.clientX, y: e.clientY, moved: 0 };
+    drag = { x: e.clientX, y: e.clientY, moved: 0, target: hovered };
     canvas.setPointerCapture(e.pointerId);
   };
   const onUp = () => {
-    const wasClick = drag && drag.moved < 5;
+    // The node is judged at press time: the scene keeps easing, so it may drift off the cursor before release.
+    const picked = drag && drag.moved < 5 ? drag.target : -1;
     drag = null;
-    if (wasClick && hovered >= 0 && data.nodes[hovered].linked) onPick(data.nodes[hovered].id);
+    if (picked >= 0 && data.nodes[picked].linked) onPick(data.nodes[picked].id);
   };
   const onLeave = () => {
     mouse = null;
@@ -203,11 +205,7 @@ export function startConstellation(canvas: HTMLCanvasElement, data: Constellatio
   io.observe(canvas);
   const ro = new ResizeObserver(resize);
   ro.observe(canvas);
-  // Theme can change from the OS or from the navbar toggle (html[data-theme]).
-  const scheme = window.matchMedia("(prefers-color-scheme: dark)");
-  scheme.addEventListener("change", applyTheme);
-  const mo = new MutationObserver(applyTheme);
-  mo.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+  const offTheme = onThemeChange(applyTheme);
 
   window.addEventListener("pointermove", onWindowPointer, { passive: true });
   window.addEventListener("scroll", onScroll, { passive: true });
@@ -223,8 +221,7 @@ export function startConstellation(canvas: HTMLCanvasElement, data: Constellatio
     cancelAnimationFrame(frame);
     io.disconnect();
     ro.disconnect();
-    mo.disconnect();
-    scheme.removeEventListener("change", applyTheme);
+    offTheme();
     window.removeEventListener("pointermove", onWindowPointer);
     window.removeEventListener("scroll", onScroll);
     document.removeEventListener("visibilitychange", kick);

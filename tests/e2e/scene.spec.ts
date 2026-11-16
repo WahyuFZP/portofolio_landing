@@ -92,3 +92,23 @@ test("hovering a skill node names it, clicking a linked one filters projects", a
   await expect(page).toHaveURL(/\?skill=[a-z-]+#projects$/);
   await expect(page.locator("#projects").getByRole("button", { name: /Clear skill filter/ })).toBeVisible();
 });
+
+test("deep-field background starts after load on desktop and stays behind the content", async ({ page, isMobile }) => {
+  test.skip(isMobile, "desktop-only: phones get no WebGL");
+  await page.goto("/en");
+  const bg = page.locator("canvas[data-deepfield]");
+  await expect(bg).toHaveAttribute("data-deepfield", "live", { timeout: 15_000 });
+  await expect(bg).toHaveAttribute("aria-hidden", "true");
+  // It must never swallow clicks: the primary CTA still works with the canvas covering the viewport.
+  await page.locator("#home").getByRole("link", { name: /View projects/ }).click();
+  await expect(page).toHaveURL(/#projects$/);
+});
+
+test("deep-field background stays off under reduced motion", async ({ browser }) => {
+  const ctx = await browser.newContext({ reducedMotion: "reduce" });
+  const page = await ctx.newPage();
+  await page.goto("/en", { waitUntil: "load" });
+  await page.waitForTimeout(4000); // longer than the idle fallback
+  await expect(page.locator("canvas[data-deepfield]")).toHaveAttribute("data-deepfield", "off");
+  await ctx.close();
+});

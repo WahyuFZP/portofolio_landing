@@ -2,42 +2,9 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { ConstellationData } from "@/lib/constellation";
+import { afterLoadIdle, canRun3D } from "@/lib/scene";
 
 type Mode = "poster" | "live";
-
-function canRun3D(): boolean {
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return false;
-  const conn = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
-  if (conn?.saveData) return false;
-  // Phones keep the poster: the scene sits faded behind the text there, so live 3D is cost without benefit.
-  if (window.innerWidth < 768) return false;
-  try {
-    const c = document.createElement("canvas");
-    return !!(c.getContext("webgl2") || c.getContext("webgl"));
-  } catch {
-    return false;
-  }
-}
-
-// Calls `fn` once the page has loaded and the main thread is idle, so 3D never competes with LCP.
-function afterLoadIdle(fn: () => void): () => void {
-  let cancelled = false;
-  const hasIdle = typeof window.requestIdleCallback === "function"; // missing in Safari
-  let idleId: number | undefined;
-  const schedule = () => {
-    if (cancelled) return;
-    idleId = hasIdle ? window.requestIdleCallback(fn, { timeout: 3000 }) : window.setTimeout(fn, 1500);
-  };
-  if (document.readyState === "complete") schedule();
-  else window.addEventListener("load", schedule, { once: true });
-  return () => {
-    cancelled = true;
-    window.removeEventListener("load", schedule);
-    if (idleId === undefined) return;
-    if (hasIdle) window.cancelIdleCallback(idleId);
-    else window.clearTimeout(idleId);
-  };
-}
 
 // Same URL the Skills chips use; ProjectFilter reads it through useSearchParams.
 function showProjectsFor(skillId: string) {
