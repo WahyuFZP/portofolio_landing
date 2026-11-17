@@ -49,14 +49,14 @@ export default function HowIWork({ items }: { items: Dictionary["about"]["how"] 
       )}
 
       {/* Without the scene above, the cards need their own gap from the heading. */}
-      <ol className={`grid gap-6 md:grid-cols-3 ${EXTRA_SCENES ? "" : "md:mt-6"}`}>
+      <ol data-stagger className={`grid gap-6 md:grid-cols-3 ${EXTRA_SCENES ? "" : "md:mt-6"}`}>
         {items.map((h, i) => {
           const lit = live && (stage === i || stage === 3);
           return (
             <li
               key={h.title}
               data-lit={lit || undefined}
-              className="corners reveal bg-surface p-6 pixel-border transition-transform duration-300 data-[lit]:-translate-y-1 data-[lit]:[--pb:var(--accent)]"
+              className="corners bg-surface p-6 pixel-border data-[lit]:[--pb:var(--accent)]"
             >
               <span className="flex h-10 w-10 items-center justify-center border-2 border-accent text-accent" aria-hidden>
                 <PixelIcon name={ICONS[i] ?? "check"} className="h-5 w-5" />

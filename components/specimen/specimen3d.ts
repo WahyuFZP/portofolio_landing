@@ -23,6 +23,7 @@ import {
   WireframeGeometry,
 } from "three";
 
+const PIXEL = 3; // render at 1/3 resolution; the canvas is upscaled with image-rendering: pixelated
 const HALF_H = Math.tan((35 / 2) * (Math.PI / 180)) * 8; // world units from centre to top edge at the camera distance
 const SCAN_REACH = 1.0; // the scan plane travels this far above and below the specimen's centre
 
@@ -40,8 +41,8 @@ const v3 = (x: number, y: number, z: number) => new Vector3(x, y, z);
  * Returns a cleanup function.
  */
 export function startSpecimen(canvas: HTMLCanvasElement): () => void {
-  const renderer = new WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: "low-power" });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  const renderer = new WebGLRenderer({ canvas, antialias: false, alpha: true, powerPreference: "low-power" });
+  renderer.setPixelRatio(1);
   const scene = new Scene();
   const camera = new PerspectiveCamera(35, 1, 0.1, 50);
   camera.position.z = 8;
@@ -177,7 +178,7 @@ export function startSpecimen(canvas: HTMLCanvasElement): () => void {
   const resize = () => {
     const w = canvas.clientWidth || 1;
     const h = canvas.clientHeight || 1;
-    renderer.setSize(w, h, false);
+    renderer.setSize(Math.ceil(w / PIXEL), Math.ceil(h / PIXEL), false);
     camera.aspect = w / h;
     camera.updateProjectionMatrix();
     halfW = HALF_H * camera.aspect;

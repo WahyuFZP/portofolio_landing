@@ -85,7 +85,8 @@ export default function ProjectFilter({ locale, projects, dict }: Props) {
         </div>
       )}
 
-      <m.ul layout className="grid gap-8 md:grid-cols-2">
+      {/* The cards (not the <li>s, which motion moves on filter changes) step in one by one: see PixelMotion. */}
+      <m.ul layout data-stagger=":scope > li > *" className="grid gap-8 md:grid-cols-2">
         <AnimatePresence initial={false} mode="popLayout">
           {visible.map((p, i) => {
             const featured = i === 0 && visible.length !== 2; // keep the grid without an orphan card

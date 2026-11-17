@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import Hero from "@/components/sections/Hero";
+import { PixelDivider } from "@/components/motion/PixelMotion";
 import Projects from "@/components/sections/Projects";
 import Skills from "@/components/sections/Skills";
 import BugHunt from "@/components/sections/BugHunt";
@@ -26,12 +27,18 @@ export default async function Home({ params }: PageProps<"/[locale]">) {
   return (
     <>
       <Hero dict={dict.hero} proofDict={dict.proof} caseStudies={projects.length} />
+      <PixelDivider />
       <Projects locale={locale} projects={projects} dict={dict.projects} />
+      <PixelDivider />
       <Skills dict={dict.skills} pause={dict.marquee} usage={usage} />
+      <PixelDivider />
       <BugHunt dict={dict.bugHunt} />
+      <PixelDivider />
       <Experience locale={locale} dict={dict.experience} />
+      <PixelDivider />
       <About dict={dict.about} />
       <Music dict={dict.music} />
+      <PixelDivider />
       <Contact dict={dict.contact} />
     </>
   );

@@ -34,7 +34,7 @@ export default function Specimen() {
       ref={ref}
       aria-hidden
       data-specimen={live ? "live" : "off"}
-      className={`pointer-events-none fixed inset-0 -z-10 h-full w-full transition-opacity duration-1000 ${live ? "opacity-100" : "opacity-0"}`}
+      className={`pointer-events-none fixed inset-0 -z-10 h-full w-full transition-opacity duration-1000 [image-rendering:pixelated] ${live ? "opacity-100" : "opacity-0"}`}
     />
   );
 }

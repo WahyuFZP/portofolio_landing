@@ -3,6 +3,7 @@ import { profile } from "@/content/profile";
 import { btnPrimary, btnSecondary } from "@/components/ui/styles";
 import PixelIcon from "@/components/ui/PixelIcon";
 import ProofStrip from "@/components/hero/ProofStrip";
+import ScrambleText from "@/components/motion/ScrambleText";
 
 interface Props {
   dict: Dictionary["hero"];
@@ -17,7 +18,9 @@ export default function Hero({ dict, proofDict, caseStudies }: Props) {
     <section id="home" className="py-20 sm:py-28">
       <p className="boot mb-5 font-mono text-sm text-accent" style={i(0)}>{dict.eyebrow}</p>
       {/* H1 is the LCP element: no opacity animation on it. */}
-      <h1 className="text-4xl font-semibold leading-[1.08] tracking-tight sm:text-6xl">{profile.name}</h1>
+      <h1 aria-label={profile.name} className="text-4xl font-semibold leading-[1.08] tracking-tight sm:text-6xl">
+        <ScrambleText text={profile.name} />
+      </h1>
       <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted">{dict.tagline}</p>
 
       <div className="boot mt-9 flex flex-wrap gap-4" style={i(2)}>

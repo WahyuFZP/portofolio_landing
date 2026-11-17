@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { animate, AnimatePresence, m } from "motion/react";
+import { AnimatePresence, m } from "motion/react";
+import { animate, createDrawable, steps } from "animejs";
 import type { Dictionary } from "@/lib/dictionary";
 import { tag } from "@/components/ui/styles";
 
@@ -44,9 +45,37 @@ export default function ExperienceTimeline({ jobs, label }: { jobs: Job[]; label
     };
     const target = STOPS[active].at;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return place(target);
-    const run = animate(at.current, target, { duration: 1.1, ease: [0.45, 0, 0.2, 1], onUpdate: place });
-    return () => run.stop();
+    const run = animate(at, { current: target, duration: 1100, ease: "inOutQuad", onUpdate: () => place(at.current) });
+    return () => {
+      run.cancel();
+    };
   }, [active]);
+
+  // The road draws itself, in steps, the first time it scrolls into view; the markings follow.
+  const roadRef = useRef<SVGGElement>(null);
+  useEffect(() => {
+    const road = roadRef.current;
+    if (!road || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const body = createDrawable(road.querySelectorAll("[data-road-body]"));
+    const marks = road.querySelectorAll<SVGElement>("[data-road-mark]");
+    body.forEach((b) => b.setAttribute("draw", "0 0"));
+    marks.forEach((el) => (el.style.opacity = "0"));
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        io.disconnect();
+        animate(body, { draw: ["0 0", "0 1"], duration: 1300, ease: steps(26) });
+        animate(marks, { opacity: [0, 1], duration: 300, delay: 1300, ease: steps(3) });
+      },
+      { rootMargin: "0px 0px -15% 0px" },
+    );
+    io.observe(road);
+    return () => {
+      io.disconnect();
+      body.forEach((b) => b.setAttribute("draw", "0 1"));
+      marks.forEach((el) => (el.style.opacity = ""));
+    };
+  }, []);
 
   const onKey = (e: React.KeyboardEvent) => {
     const next = { ArrowRight: active + 1, ArrowLeft: active - 1, Home: 0, End: ordered.length - 1 }[e.key];
@@ -60,17 +89,12 @@ export default function ExperienceTimeline({ jobs, label }: { jobs: Job[]; label
     <div>
       <div className="relative mb-20 aspect-[1000/300] sm:mb-24">
         <svg viewBox="0 0 1000 300" aria-hidden className="absolute inset-0 h-full w-full overflow-visible" fill="none" strokeLinecap="round">
-          <defs>
-            {/* The road is wiped in from the left as it scrolls into view. */}
-            <clipPath id="road-wipe">
-              <rect className="road-wipe" x="-20" y="-40" width="1040" height="380" />
-            </clipPath>
-          </defs>
-          <g clipPath="url(#road-wipe)">
-            <path d={ROAD} stroke="var(--border)" strokeWidth="30" />
-            <path d={ROAD} stroke="var(--surface)" strokeWidth="26" />
+          <g ref={roadRef}>
+            <path data-road-body d={ROAD} stroke="var(--border)" strokeWidth="30" />
+            <path data-road-body d={ROAD} stroke="var(--surface)" strokeWidth="26" />
             {/* Travelled part: fills up to the selected stop. pathLength=1 makes the dash maths unit-free. */}
             <path
+              data-road-mark
               d={ROAD}
               pathLength={1}
               stroke="var(--accent)"
@@ -80,7 +104,7 @@ export default function ExperienceTimeline({ jobs, label }: { jobs: Job[]; label
               strokeDashoffset={1 - STOPS[active].at}
               className="transition-[stroke-dashoffset] duration-[1100ms] ease-[cubic-bezier(0.45,0,0.2,1)]"
             />
-            <path ref={pathRef} d={ROAD} stroke="var(--line)" strokeWidth="2" strokeDasharray="10 12" strokeLinecap="butt" />
+            <path ref={pathRef} data-road-mark d={ROAD} stroke="var(--line)" strokeWidth="2" strokeDasharray="10 12" strokeLinecap="butt" />
           </g>
           <g ref={markerRef}>
             {/* Drawn beside the road (44 units to its left), so the stop marker never hides it. */}
