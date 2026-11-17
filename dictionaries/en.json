@@ -20,8 +20,7 @@
     "tagline": "I break software before your users do: end-to-end automation with Playwright, API testing with Postman, and a security mindset mapped to the OWASP Top 10.",
     "ctaProjects": "View projects",
     "ctaCv": "Download CV",
-    "sceneHint": "Drag to rotate. Click a skill to see its projects.",
-    "start": "Press Start"
+    "sceneHint": "Drag to rotate. Click a skill to see its projects."
   },
   "proof": {
     "label": "Test run summary",
@@ -82,8 +81,8 @@
       "design": "Design"
     },
     "projectCount": "projects",
-    "stats": "Stats",
-    "inventory": "Inventory"
+    "stats": "By category",
+    "inventory": "Tools and skills"
   },
   "experience": {
     "title": "Experience",
@@ -193,8 +192,7 @@
     "send": "Send message",
     "sending": "Sending…",
     "success": "Message sent. Thank you, I will reply soon.",
-    "error": "Failed to send the message. Please try again or email me directly.",
-    "savePoint": "Save point"
+    "error": "Failed to send the message. Please try again or email me directly."
   },
   "footer": {
     "explore": "Explore",

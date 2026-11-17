@@ -14,16 +14,19 @@ export default function Experience({ locale, dict }: Props) {
   const month = (ym: string) => fmt.format(new Date(`${ym}-01T00:00:00Z`));
 
   return (
-    <section id="experience" className="py-20">
+    // Full-bleed: wider than <main>, content re-centred inside. overflow-hidden clips the lines that run off the left edge.
+    <section id="experience" className="band-night relative left-1/2 isolate w-screen -translate-x-1/2 overflow-hidden py-24">
+      <div aria-hidden className="stars absolute inset-0 -z-10" />
+      <div className="mx-auto w-full max-w-5xl px-4 sm:px-6">
       <SectionHeading index="03" title={dict.title} />
 
-      <div className="grid gap-12 lg:grid-cols-[1.7fr_1fr]">
+      <div className="space-y-20">
         <ExperienceTimeline jobs={dict.list} label={dict.title} />
 
         {/* Keep the old #certificates anchor working. */}
         <div id="certificates" className="scroll-mt-24">
-          <h3 className="mb-5 font-pixel text-2xl">{dict.credentialsTitle}</h3>
-          <ul data-stagger className="space-y-4">
+          <h3 className="mb-6 font-display text-4xl text-accent">{dict.credentialsTitle}</h3>
+          <ul data-stagger className="grid gap-4 md:grid-cols-2">
             {certificates.map((c) => (
               <li key={c.name} className="corners bg-surface p-4 pixel-border">
                 <p className="font-medium">{c.name}</p>
@@ -44,6 +47,7 @@ export default function Experience({ locale, dict }: Props) {
             ))}
           </ul>
         </div>
+      </div>
       </div>
     </section>
   );

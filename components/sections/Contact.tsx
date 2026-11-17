@@ -9,10 +9,7 @@ export default function Contact({ dict }: { dict: Dictionary["contact"] }) {
       <SectionHeading title={dict.title} subtitle={dict.subtitle} />
       <div className="grid gap-10 md:grid-cols-[1fr_1.4fr]">
         <div>
-        <div className="corners relative self-start bg-surface p-6 pt-8 pixel-border">
-          <p className="absolute -top-3 left-4 bg-gold px-2 font-pixel text-sm text-accent-fg">
-            <span aria-hidden className="cursor">▶</span> {dict.savePoint}
-          </p>
+        <div className="corners self-start bg-surface p-6 pixel-border">
         <dl className="space-y-5">
           <div>
             <dt className="font-mono text-xs uppercase tracking-wide text-muted">{dict.emailLabel}</dt>

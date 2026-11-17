@@ -86,7 +86,7 @@ export default function ProjectCard({ project, href, dict, featured }: Props) {
           <span className="bg-accent-soft px-2 py-0.5 text-accent">● {dict.status[meta.status]}</span>
           <span className="text-muted">{meta.categories.map((c) => dict.categories[c]).join(" · ")}</span>
         </p>
-        <h3 className={`mt-3 font-pixel font-medium ${featured ? "text-3xl" : "text-xl"}`}>
+        <h3 className={`mt-3 font-display text-accent ${featured ? "text-4xl" : "text-2xl"}`}>
           {/* Stretched link: the whole card is clickable, one tab stop. */}
           <Link href={href} className="after:absolute after:inset-0">
             {meta.title}

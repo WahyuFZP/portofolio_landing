@@ -10,10 +10,10 @@ export default function HowIWork({ items }: { items: Dictionary["about"]["how"] 
     <ol data-stagger className="grid gap-6 md:grid-cols-3">
       {items.map((h, i) => (
         <li key={h.title} className="corners bg-surface p-6 pixel-border">
-          <span className="flex h-10 w-10 items-center justify-center border-2 border-accent text-accent" aria-hidden>
+          <span className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-accent text-accent" aria-hidden>
             <PixelIcon name={ICONS[i] ?? "check"} className="h-5 w-5" />
           </span>
-          <h4 className="mt-4 font-pixel text-lg">{h.title}</h4>
+          <h4 className="mt-4 font-display text-2xl text-accent">{h.title}</h4>
           <p className="mt-2 text-muted">{h.body}</p>
         </li>
       ))}

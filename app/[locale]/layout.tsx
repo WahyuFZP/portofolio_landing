@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { Geist, Geist_Mono, Pixelify_Sans } from "next/font/google";
+import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
 import "@/app/globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import MotionProvider from "@/components/motion/MotionProvider";
 import DeepField from "@/components/background/DeepField";
-import SceneMount from "@/components/scene/SceneMount";
 import Reveal from "@/components/motion/Reveal";
 import { EXTRA_SCENES } from "@/lib/scene";
 import { getDictionary } from "@/lib/dictionary";
@@ -17,8 +16,8 @@ import { profile } from "@/content/profile";
 const sans = Geist({ subsets: ["latin"], variable: "--font-geist-sans", display: "optional" });
 // swap, not optional: mono is only used for small labels, and "optional" left them on the Arial-based fallback.
 const mono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono", display: "swap", preload: false });
-// Headings and UI labels. Body text stays in the sans.
-const pixel = Pixelify_Sans({ subsets: ["latin"], weight: ["500", "700"], variable: "--font-pixelify", display: "swap" });
+// Headings only. Body text and labels stay in the sans.
+const display = Instrument_Serif({ subsets: ["latin"], weight: "400", variable: "--font-serif-display", display: "swap" });
 
 export const dynamicParams = false;
 export const generateStaticParams = () => locales.map((locale) => ({ locale }));
@@ -68,7 +67,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
   };
 
   return (
-    <html lang={locale} className={`${sans.variable} ${mono.variable} ${pixel.variable}`}>
+    <html lang={locale} className={`${sans.variable} ${mono.variable} ${display.variable}`}>
       <body className="font-sans antialiased">
         <a
           href="#main"
@@ -77,7 +76,6 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
           {dict.nav.skip}
         </a>
         {EXTRA_SCENES && <DeepField />}
-        <SceneMount />
         <Reveal />
         <MotionProvider>
           <Navbar locale={locale} dict={dict.nav} />

@@ -1,144 +1,53 @@
-"use client";
-
-import { useEffect, useRef, useState } from "react";
-import { animate, AnimatePresence, m } from "motion/react";
 import type { Dictionary } from "@/lib/dictionary";
 import { tag } from "@/components/ui/styles";
 
 type Job = Dictionary["experience"]["list"][number];
 
-// The road, in a 1000 x 300 box: it dips to each stop and climbs between them, like a slide.
-// shortcut: three stops are drawn; add a segment (and its stop below) when a fourth role is added.
-const ROAD = "M 0 50 C 70 50 100 230 170 230 S 270 40 335 40 S 430 230 500 230 S 600 40 665 40 S 760 230 830 230 S 930 60 1000 60";
-const STOPS = [
-  { x: 170, y: 230, at: 0.1657 }, // `at` = share of the road's length up to this stop (measured numerically)
-  { x: 500, y: 230, at: 0.5024 },
-  { x: 830, y: 230, at: 0.8392 },
-];
-
 /**
- * Career as a world-map trail: oldest role on the left, newest on the right and open by default.
- * A marker travels along the trail to the selected node and the trail behind it lights up.
- * Still a standard tab list: click a stop, or use the arrow keys.
+ * Work history as a timeline, newest first. Each row: a thin line coming in from the left edge of the
+ * screen, a numbered tile, then the role. Every role is shown in full (no tabs).
+ * Rows come in one by one on scroll (data-stagger, see Reveal).
  */
 export default function ExperienceTimeline({ jobs, label }: { jobs: Job[]; label: string }) {
-  const ordered = [...jobs].reverse().slice(0, STOPS.length); // the dictionary lists newest first
-  const [active, setActive] = useState(ordered.length - 1);
-  const tabs = useRef<(HTMLButtonElement | null)[]>([]);
-  const pathRef = useRef<SVGPathElement>(null);
-  const markerRef = useRef<SVGGElement>(null);
-  const at = useRef(0); // marker position, as a share of the road's length
-  const job = ordered[active];
-
-  // Drive the marker along the curve to the selected stop.
-  useEffect(() => {
-    const path = pathRef.current;
-    const marker = markerRef.current;
-    if (!path || !marker) return;
-    const total = path.getTotalLength();
-    const place = (v: number) => {
-      at.current = v;
-      const p = path.getPointAtLength(total * v);
-      const q = path.getPointAtLength(Math.min(total, total * v + 1)); // a point just ahead gives the heading
-      marker.setAttribute("transform", `translate(${p.x.toFixed(1)} ${p.y.toFixed(1)}) rotate(${((Math.atan2(q.y - p.y, q.x - p.x) * 180) / Math.PI).toFixed(1)})`);
-    };
-    const target = STOPS[active].at;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return place(target);
-    const run = animate(at.current, target, { duration: 1.1, ease: [0.45, 0, 0.2, 1], onUpdate: place });
-    return () => run.stop();
-  }, [active]);
-
-  const onKey = (e: React.KeyboardEvent) => {
-    const next = { ArrowRight: active + 1, ArrowLeft: active - 1, Home: 0, End: ordered.length - 1 }[e.key];
-    if (next === undefined || next < 0 || next >= ordered.length) return;
-    e.preventDefault();
-    setActive(next);
-    tabs.current[next]?.focus();
-  };
-
   return (
-    <div>
-      <div className="relative mb-20 aspect-[1000/300] sm:mb-24">
-        <svg viewBox="0 0 1000 300" aria-hidden className="absolute inset-0 h-full w-full overflow-visible" fill="none" strokeLinecap="round">
-          <g>
-            {/* A dotted map trail: square dashes, no round caps. */}
-            <path d={ROAD} stroke="var(--border)" strokeWidth="8" strokeDasharray="14 10" strokeLinecap="butt" />
-            {/* Travelled part: fills up to the selected stop. pathLength=1 makes the dash maths unit-free. */}
-            <path
-              d={ROAD}
-              pathLength={1}
-              stroke="var(--accent)"
-              strokeWidth="8"
-              strokeLinecap="butt"
-              strokeDasharray="1"
-              strokeDashoffset={1 - STOPS[active].at}
-              className="transition-[stroke-dashoffset] duration-[1100ms] ease-[cubic-bezier(0.45,0,0.2,1)]"
-            />
-            <path ref={pathRef} d={ROAD} stroke="none" />
-          </g>
-          <g ref={markerRef}>
-            {/* Drawn beside the road (44 units to its left), so the stop marker never hides it. */}
-            <path d="M -11 -51 L 11 -44 L -11 -37 L -6 -44 Z" fill="var(--line)" stroke="var(--bg)" strokeWidth="2" strokeLinejoin="round" />
-          </g>
-        </svg>
-
-        <div role="tablist" aria-label={label} onKeyDown={onKey}>
-          {ordered.map((j, i) => {
-            const selected = i === active;
-            return (
-              <button
-                key={`${j.company}-${j.role}`}
-                ref={(el) => {
-                  tabs.current[i] = el;
-                }}
-                type="button"
-                role="tab"
-                id={`exp-tab-${i}`}
-                aria-selected={selected}
-                aria-controls="exp-panel"
-                tabIndex={selected ? 0 : -1}
-                onClick={() => setActive(i)}
-                style={{ left: `${STOPS[i].x / 10}%`, top: `${STOPS[i].y / 3}%` }}
-                className="group absolute flex w-28 -translate-x-1/2 flex-col items-center gap-2 pt-0 text-center sm:w-40"
-              >
-                {/* The stop itself sits on the road; -translate-y centres it on the curve. */}
-                <span
-                  className={`h-6 w-6 -translate-y-1/2 rotate-45 transition-transform duration-300 ${selected ? "scale-100 bg-accent" : "scale-[0.65] bg-surface pixel-border group-hover:scale-90 group-hover:[--pb:var(--accent)]"}`}
-                  aria-hidden
-                />
-                <span className={`font-mono text-[11px] sm:text-xs ${selected ? "text-accent" : "text-muted"}`}>{j.period}</span>
-                <span className={`hidden text-sm font-semibold tracking-tight sm:block ${selected ? "text-text" : "text-muted group-hover:text-text"}`}>{j.role}</span>
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
-      <div id="exp-panel" role="tabpanel" aria-labelledby={`exp-tab-${active}`} tabIndex={0} className="corners min-h-72 bg-surface p-6 pixel-border sm:p-8">
-        <AnimatePresence mode="wait" initial={false}>
-          <m.div key={active} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}>
-            <p className="font-mono text-xs text-muted">
-              {job.period} · {job.type} · {job.location}
-            </p>
-            <h3 className="mt-2 font-pixel text-2xl font-medium">{job.role}</h3>
-            <p className="text-muted">{job.company}</p>
-            {job.description.length > 0 && (
-              <ul className="mt-4 list-[square] space-y-1.5 pl-5 text-muted">
-                {job.description.map((d) => (
-                  <li key={d}>{d}</li>
-                ))}
-              </ul>
-            )}
-            {job.tags.length > 0 && (
-              <ul className="mt-5 flex flex-wrap gap-2">
-                {job.tags.map((t) => (
-                  <li key={t} className={tag}>{t}</li>
-                ))}
-              </ul>
-            )}
-          </m.div>
-        </AnimatePresence>
-      </div>
-    </div>
+    <ol aria-label={label} data-stagger className="space-y-16">
+      {jobs.map((j, i) => {
+        const n = String(jobs.length - i).padStart(2, "0"); // oldest role is 01
+        return (
+          <li key={`${j.company}-${j.role}`} className="grid items-start gap-6 md:grid-cols-[minmax(2rem,1fr)_auto_2.4fr] md:gap-8">
+            {/* The line runs from the left edge of the screen to the tile. */}
+            <span aria-hidden className="relative mt-20 hidden h-px bg-text/70 before:absolute before:right-full before:h-px before:w-screen before:bg-text/70 md:block" />
+            <span aria-hidden className="dots flex h-40 w-40 items-end rounded-2xl bg-text p-4 font-display text-6xl leading-none text-bg">
+              {n}
+            </span>
+            <div>
+              <p className="flex items-center gap-3 text-sm uppercase tracking-wide">
+                <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-accent" />
+                {n} — {j.period}
+              </p>
+              <h3 className="mt-3 font-display text-4xl leading-tight sm:text-5xl">{j.role}</h3>
+              <p className="mt-2 text-lg">{j.company}</p>
+              <p className="text-sm text-muted">
+                {j.type} · {j.location}
+              </p>
+              {j.description.length > 0 && (
+                <ul className="mt-4 list-disc space-y-1.5 pl-5 text-muted marker:text-accent">
+                  {j.description.map((d) => (
+                    <li key={d}>{d}</li>
+                  ))}
+                </ul>
+              )}
+              {j.tags.length > 0 && (
+                <ul className="mt-5 flex flex-wrap gap-2">
+                  {j.tags.map((t) => (
+                    <li key={t} className={tag}>{t}</li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </li>
+        );
+      })}
+    </ol>
   );
 }

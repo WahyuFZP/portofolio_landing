@@ -20,8 +20,7 @@
     "tagline": "Saya menemukan bug sebelum pengguna Anda menemukannya: otomasi end-to-end dengan Playwright, API testing dengan Postman, dan pola pikir keamanan berbasis OWASP Top 10.",
     "ctaProjects": "Lihat proyek",
     "ctaCv": "Unduh CV",
-    "sceneHint": "Seret untuk memutar. Klik skill untuk melihat proyeknya.",
-    "start": "Tekan Start"
+    "sceneHint": "Seret untuk memutar. Klik skill untuk melihat proyeknya."
   },
   "proof": {
     "label": "Ringkasan test run",
@@ -82,8 +81,8 @@
       "design": "Desain"
     },
     "projectCount": "proyek",
-    "stats": "Statistik",
-    "inventory": "Inventori"
+    "stats": "Per kategori",
+    "inventory": "Alat dan keahlian"
   },
   "experience": {
     "title": "Pengalaman",
@@ -193,8 +192,7 @@
     "send": "Kirim pesan",
     "sending": "Mengirim…",
     "success": "Pesan terkirim. Terima kasih, saya akan segera membalas.",
-    "error": "Gagal mengirim pesan. Silakan coba lagi atau kirim email langsung.",
-    "savePoint": "Titik simpan"
+    "error": "Gagal mengirim pesan. Silakan coba lagi atau kirim email langsung."
   },
   "footer": {
     "explore": "Jelajahi",

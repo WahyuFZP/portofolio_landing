@@ -20,7 +20,7 @@ export default function SkillStats({ dict, usage }: Props) {
   return (
     <div className="grid gap-10 lg:grid-cols-[1fr_1.3fr]">
       <div>
-        <h3 className="mb-5 font-pixel text-xl">{dict.stats}</h3>
+        <h3 className="mb-5 font-display text-3xl text-accent">{dict.stats}</h3>
         <dl data-stagger className="space-y-4">
           {categories.map((c) => {
             const list = skills.filter((s) => s.category === c);
@@ -33,7 +33,7 @@ export default function SkillStats({ dict, usage }: Props) {
                     {list.length} <span className="sr-only">{dict.title}</span>
                   </span>
                 </dt>
-                <dd className="mt-1.5 h-3 bg-bg pixel-border" aria-hidden>
+                <dd className="mt-1.5 h-2.5 overflow-hidden rounded-full bg-accent-soft" aria-hidden>
                   {/* Fills from 0 the first time it is seen. */}
                   <m.div
                     className="h-full origin-left bg-accent"
@@ -51,7 +51,7 @@ export default function SkillStats({ dict, usage }: Props) {
       </div>
 
       <div>
-        <h3 className="mb-5 font-pixel text-xl">{dict.inventory}</h3>
+        <h3 className="mb-5 font-display text-3xl text-accent">{dict.inventory}</h3>
         <ul data-stagger className="grid grid-cols-4 gap-3 sm:grid-cols-6 md:grid-cols-7">
           {skills.map((s) => {
             const logo = skillLogo(s.id);
@@ -62,13 +62,13 @@ export default function SkillStats({ dict, usage }: Props) {
               <>
                 {logo ? (
                   // eslint-disable-next-line @next/next/no-img-element -- tiny local SVG
-                  <img src={logo} alt="" width={28} height={28} loading="lazy" decoding="async" className="h-8 w-8 bg-white p-1" />
+                  <img src={logo} alt="" width={28} height={28} loading="lazy" decoding="async" className="h-8 w-8 rounded bg-white p-1" />
                 ) : (
                   <span aria-hidden className="font-pixel text-sm text-accent">
                     {s.name.slice(0, 2).toUpperCase()}
                   </span>
                 )}
-                {count > 0 && <span aria-hidden className="absolute bottom-0.5 right-1 font-pixel text-[10px] text-gold">x{count}</span>}
+                {count > 0 && <span aria-hidden className="absolute bottom-0.5 right-1 font-pixel text-[10px] text-accent">x{count}</span>}
                 <span role="tooltip" className="pointer-events-none absolute bottom-full left-1/2 z-10 mb-2 hidden -translate-x-1/2 whitespace-nowrap bg-text px-2 py-1 font-pixel text-xs text-bg group-hover/slot:block group-focus-visible/slot:block">
                   {tip}
                 </span>
