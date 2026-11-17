@@ -194,6 +194,10 @@ body {
   transform-origin: left;
   transform: scaleX(0);
 }
+/* Logos fade out toward both edges instead of popping in and out when they turn edge-on. */
+.ring-stage {
+  mask-image: linear-gradient(to right, transparent, #000 18%, #000 82%, transparent);
+}
 .marquee {
   display: flex;
   width: max-content;
@@ -221,7 +225,9 @@ body {
     animation-play-state: paused;
   }
   .ring {
-    animation: ring-spin 90s linear infinite; /* one slow turn every 90 s */
+    /* One turn every 36 s: about 60 px/s at the front. 90 s read as standing still. */
+    animation: ring-spin 36s linear infinite;
+    will-change: transform; /* keep the ring on its own compositor layer */
   }
 
   @supports (animation-timeline: view()) {
