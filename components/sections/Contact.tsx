@@ -9,6 +9,10 @@ export default function Contact({ dict }: { dict: Dictionary["contact"] }) {
       <SectionHeading title={dict.title} subtitle={dict.subtitle} />
       <div className="grid gap-10 md:grid-cols-[1fr_1.4fr]">
         <div>
+        <div className="corners relative self-start bg-surface p-6 pt-8 pixel-border">
+          <p className="absolute -top-3 left-4 bg-gold px-2 font-pixel text-sm text-accent-fg">
+            <span aria-hidden className="cursor">▶</span> {dict.savePoint}
+          </p>
         <dl className="space-y-5">
           <div>
             <dt className="font-mono text-xs uppercase tracking-wide text-muted">{dict.emailLabel}</dt>
@@ -23,6 +27,11 @@ export default function Contact({ dict }: { dict: Dictionary["contact"] }) {
             <dd className="mt-1 font-medium">{profile.location}</dd>
           </div>
         </dl>
+          <p className="mt-6 flex gap-5 font-pixel text-sm">
+            <a href={profile.github} target="_blank" rel="noopener noreferrer" className="text-accent underline underline-offset-4">GitHub ↗</a>
+            <a href={profile.linkedin} target="_blank" rel="noopener noreferrer" className="text-accent underline underline-offset-4">LinkedIn ↗</a>
+          </p>
+        </div>
         </div>
         <ContactForm dict={dict} />
       </div>

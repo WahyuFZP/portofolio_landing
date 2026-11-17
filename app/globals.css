@@ -1,25 +1,35 @@
 @import "tailwindcss";
 
-/* Design tokens. One calm dark theme: navy/slate surfaces, soft blue accent used sparingly. */
+/* Design tokens: RPG save-file theme. Six palette colors, dark only. */
 :root {
   color-scheme: dark;
-  --bg: #0b1220;
-  --surface: #111a2e;
-  --text: #e2e8f0; /* 14:1 on --bg */
-  --muted: #94a3b8; /* 7:1 on --bg */
-  --border: #233049;
-  --accent: #7ab8ff; /* soft sky blue, 8.6:1 on --bg: links, buttons, small highlights only */
-  --accent-soft: #14233f;
-  --accent-fg: #0b1220;
-  --danger: #f87171;
-  /* Read by the 3D scenes */
-  --node-1: #7ab8ff;
-  --node-2: #67d5e8;
-  --node-3: #cbd5e1;
-  --edge: #334155;
-  --warm: #d4a72c;
-  --star: #94a3b8;
-  --line: #d4a72c; /* muted amber: road centre line only */
+  --night: #0f1020; /* background */
+  --panel: #1b1d36; /* cards */
+  --mint: #7cf5c4; /* primary */
+  --pink: #ff6b9d; /* secondary */
+  --gold: #ffd166; /* highlights */
+  --ink: #edebff; /* text */
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Roles used by the components */
+  --bg: var(--night);
+  --surface: var(--panel);
+  --text: var(--ink); /* 15:1 on night */
+  --muted: color-mix(in srgb, var(--ink) 70%, var(--night)); /* 7.5:1 on night, 6.5:1 on panel */
+  --border: color-mix(in srgb, var(--ink) 26%, var(--panel)); /* 2px outlines */
+  --shadow: color-mix(in srgb, var(--night) 55%, black); /* hard offset shadows */
+  --accent: var(--mint); /* 13:1 on night */
+  --accent-soft: color-mix(in srgb, var(--mint) 16%, var(--night));
+  --accent-fg: var(--night);
+  --danger: var(--pink);
+  --line: var(--gold);
+  /* Read by the older WebGL scenes (switched off) */
+  --node-1: var(--mint);
+  --node-2: var(--pink);
+  --node-3: var(--ink);
+  --edge: var(--border);
+  --warm: var(--gold);
+  --star: var(--ink);
   --field-alpha: 1;
 }
 
@@ -34,6 +44,8 @@
   --color-accent-fg: var(--accent-fg);
   --color-danger: var(--danger);
   --color-line: var(--line);
+  --color-pink: var(--pink);
+  --color-gold: var(--gold);
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
   --font-pixel: var(--font-pixelify), var(--font-geist-mono), ui-monospace, monospace; /* small labels: mono, like the bracket labels */
@@ -57,14 +69,17 @@ body {
 
 /* ---------- Pixel utilities ---------- */
 
-/* Card outline: a 1px rounded ring drawn with box-shadow, so it never changes layout. */
+/* Pixel-art border: 4 offset shadows leave the corner pixels empty (stepped corner). No blur anywhere. */
 /* In the components layer on purpose: utilities such as hover:[--pb:...] or target:[--pb:...] must be
    able to override the border color. Unlayered rules always beat Tailwind's utility layer. */
 @layer components {
   .pixel-border {
     --pb: var(--border);
-    border-radius: 8px;
-    box-shadow: 0 0 0 1px var(--pb);
+    box-shadow:
+      0 -2px 0 0 var(--pb),
+      0 2px 0 0 var(--pb),
+      -2px 0 0 0 var(--pb),
+      2px 0 0 0 var(--pb);
   }
   .pixel-border-accent {
     --pb: var(--accent);
@@ -75,17 +90,48 @@ body {
     clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
   }
 
-  /* Cards and panels (kept as a hook; the calm theme adds nothing beyond the outline). */
-  .corners {
-    border-radius: 8px;
+  /* Cards and panels (.corners) and buttons (.lift): stepped border plus a hard offset shadow.
+     Hover lifts 2px and the shadow grows; pressing a button moves it into its shadow.
+     Only transform is animated: the shadow size changes in one step. */
+  .corners,
+  .lift {
+    --sh: 4px;
+    box-shadow:
+      0 -2px 0 0 var(--pb, var(--border)),
+      0 2px 0 0 var(--pb, var(--border)),
+      -2px 0 0 0 var(--pb, var(--border)),
+      2px 0 0 0 var(--pb, var(--border)),
+      var(--sh) calc(var(--sh) + 2px) 0 0 var(--shadow),
+      calc(var(--sh) + 2px) var(--sh) 0 0 var(--shadow);
+    transition: transform 200ms var(--ease);
+  }
+  @media (hover: hover) {
+    .corners:hover,
+    .lift:hover {
+      --sh: 6px;
+      transform: translate(-2px, -2px);
+    }
+  }
+  .lift:active {
+    --sh: 1px;
+    transform: translate(3px, 3px);
   }
 }
 
-/* Hero backdrop: a grid of single-pixel dots that fades out toward the edges. */
-.hero-grid {
-  background-image: radial-gradient(var(--border) 1px, transparent 1px);
-  background-size: 18px 18px;
-  mask-image: radial-gradient(ellipse 75% 70% at 35% 45%, #000 30%, transparent 75%);
+/* Title-screen stars: two layers of 2px dots. They twinkle in two frames (a frame effect, so steps() timing). */
+.stars {
+  background-image: radial-gradient(circle, var(--ink) 1px, transparent 1px), radial-gradient(circle, var(--gold) 1px, transparent 1px);
+  background-size: 130px 96px, 190px 150px;
+  background-position: 12px 18px, 70px 64px;
+  opacity: 0.55;
+}
+@keyframes twinkle {
+  50% { opacity: 0.25; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .stars {
+    animation: twinkle 2.4s steps(2) infinite;
+  }
 }
 
 /* Ordered (Bayer 4x4) dither overlay, shown on hover only. */

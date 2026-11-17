@@ -5,7 +5,7 @@ import Link from "next/link";
 import type { ProjectMeta } from "@/lib/mdx";
 import type { Dictionary } from "@/lib/dictionary";
 import { skillById } from "@/content/skills";
-import { tag } from "@/components/ui/styles";
+import { label, tag } from "@/components/ui/styles";
 import PixelIcon from "@/components/ui/PixelIcon";
 import Laptop3D from "./Laptop3D";
 import { EXTRA_SCENES } from "@/lib/scene";
@@ -66,21 +66,10 @@ export default function ProjectCard({ project, href, dict, featured }: Props) {
   const names = meta.tags.map((id) => skillById.get(id)?.name ?? id);
   const hidden = names.slice(MAX_TAGS);
 
-  // Subtle tilt toward the pointer (mouse only).
-  const onMove = (e: React.PointerEvent<HTMLElement>) => {
-    if (e.pointerType !== "mouse" || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const r = e.currentTarget.getBoundingClientRect();
-    const x = (e.clientX - r.left) / r.width - 0.5;
-    const y = (e.clientY - r.top) / r.height - 0.5;
-    e.currentTarget.style.transform = `perspective(1000px) rotateX(${(-y * 3).toFixed(2)}deg) rotateY(${(x * 3).toFixed(2)}deg)`;
-  };
-  const onLeave = (e: React.PointerEvent<HTMLElement>) => (e.currentTarget.style.transform = "");
 
   return (
     <article
-      onPointerMove={onMove}
-      onPointerLeave={onLeave}
-      className={`corners group relative flex h-full w-full flex-col gap-6 bg-surface p-6 pixel-border transition-transform duration-300 ease-out hover:[--pb:var(--accent)] ${featured ? "md:flex-row md:items-center md:gap-10 md:p-10" : ""}`}
+      className={`corners group relative flex h-full w-full flex-col gap-6 bg-surface p-6 pixel-border hover:[--pb:var(--accent)] ${featured ? "md:flex-row md:items-center md:gap-10 md:p-10" : ""}`}
     >
       <div className={`px-[4%] ${featured ? "md:w-[55%]" : ""}`}>
         {EXTRA_SCENES && featured && meta.image ? (
@@ -97,14 +86,16 @@ export default function ProjectCard({ project, href, dict, featured }: Props) {
           <span className="bg-accent-soft px-2 py-0.5 text-accent">● {dict.status[meta.status]}</span>
           <span className="text-muted">{meta.categories.map((c) => dict.categories[c]).join(" · ")}</span>
         </p>
-        <h3 className={`mt-3 font-semibold tracking-tight ${featured ? "text-3xl" : "text-xl"}`}>
+        <h3 className={`mt-3 font-pixel font-medium ${featured ? "text-3xl" : "text-xl"}`}>
           {/* Stretched link: the whole card is clickable, one tab stop. */}
           <Link href={href} className="after:absolute after:inset-0">
             {meta.title}
           </Link>
         </h3>
-        <p className="mt-2 flex-1 text-muted">{meta.description}</p>
-        <ul className="mt-4 flex flex-wrap gap-2">
+        <p className={`mt-4 ${label}`}>{dict.objective}</p>
+        <p className="mt-1 flex-1 text-muted">{meta.description}</p>
+        <p className={`mt-4 ${label}`}>{dict.tools}</p>
+        <ul className="mt-2 flex flex-wrap gap-2">
           {names.slice(0, MAX_TAGS).map((name) => (
             <li key={name} className={tag}>{name}</li>
           ))}

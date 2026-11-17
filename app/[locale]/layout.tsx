@@ -6,8 +6,8 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import MotionProvider from "@/components/motion/MotionProvider";
 import DeepField from "@/components/background/DeepField";
-import Specimen from "@/components/specimen/Specimen";
-import PixelMotion from "@/components/motion/PixelMotion";
+import SceneMount from "@/components/scene/SceneMount";
+import Reveal from "@/components/motion/Reveal";
 import { EXTRA_SCENES } from "@/lib/scene";
 import { getDictionary } from "@/lib/dictionary";
 import { isLocale, locales } from "@/lib/i18n";
@@ -17,8 +17,8 @@ import { profile } from "@/content/profile";
 const sans = Geist({ subsets: ["latin"], variable: "--font-geist-sans", display: "optional" });
 // swap, not optional: mono is only used for small labels, and "optional" left them on the Arial-based fallback.
 const mono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono", display: "swap", preload: false });
-// Small labels only (nav, tags, buttons): never headings or body text.
-const pixel = Pixelify_Sans({ subsets: ["latin"], weight: ["500"], variable: "--font-pixelify", display: "swap", preload: false });
+// Headings and UI labels. Body text stays in the sans.
+const pixel = Pixelify_Sans({ subsets: ["latin"], weight: ["500", "700"], variable: "--font-pixelify", display: "swap" });
 
 export const dynamicParams = false;
 export const generateStaticParams = () => locales.map((locale) => ({ locale }));
@@ -77,8 +77,8 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
           {dict.nav.skip}
         </a>
         {EXTRA_SCENES && <DeepField />}
-        <Specimen />
-        <PixelMotion />
+        <SceneMount />
+        <Reveal />
         <MotionProvider>
           <Navbar locale={locale} dict={dict.nav} />
           <main id="main" className="mx-auto w-full max-w-5xl px-4 sm:px-6">

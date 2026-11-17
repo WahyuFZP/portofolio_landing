@@ -52,7 +52,7 @@ export default function Navbar({ locale, dict }: { locale: Locale; dict: Diction
     ));
 
   return (
-    <header className="sticky top-0 z-40 border-b-2 border-border bg-bg/90 backdrop-blur">
+    <header className="sticky top-0 z-40 border-b-2 border-border bg-bg">
       <nav aria-label="Primary" className="mx-auto flex h-16 max-w-5xl items-center justify-between gap-4 px-4 sm:px-6">
         <a href={`/${locale}`} className="font-pixel text-base">
           wfzp<span className="cursor text-accent">_</span>

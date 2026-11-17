@@ -21,12 +21,7 @@
     "ctaProjects": "Lihat proyek",
     "ctaCv": "Unduh CV",
     "sceneHint": "Seret untuk memutar. Klik skill untuk melihat proyeknya.",
-    "typed": [
-      "mengotomasi tes end-to-end dengan Playwright",
-      "menguji REST API dengan Postman",
-      "memburu celah OWASP Top 10",
-      "menangkap bug sebelum rilis"
-    ]
+    "start": "Tekan Start"
   },
   "proof": {
     "label": "Ringkasan test run",
@@ -64,7 +59,9 @@
       "next": "Proyek berikutnya"
     },
     "empty": "Tidak ada proyek yang cocok dengan filter ini.",
-    "reset": "Tampilkan semua proyek"
+    "reset": "Tampilkan semua proyek",
+    "objective": "Tujuan",
+    "tools": "Alat"
   },
   "skills": {
     "title": "Keahlian",
@@ -84,7 +81,9 @@
       "ai": "AI Tooling",
       "design": "Desain"
     },
-    "projectCount": "proyek"
+    "projectCount": "proyek",
+    "stats": "Statistik",
+    "inventory": "Inventori"
   },
   "experience": {
     "title": "Pengalaman",
@@ -194,7 +193,8 @@
     "send": "Kirim pesan",
     "sending": "Mengirim…",
     "success": "Pesan terkirim. Terima kasih, saya akan segera membalas.",
-    "error": "Gagal mengirim pesan. Silakan coba lagi atau kirim email langsung."
+    "error": "Gagal mengirim pesan. Silakan coba lagi atau kirim email langsung.",
+    "savePoint": "Titik simpan"
   },
   "footer": {
     "explore": "Jelajahi",
