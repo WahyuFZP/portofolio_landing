@@ -4,6 +4,7 @@ import { project2D, type ConstellationData } from "@/lib/constellation";
 const W = 192;
 const H = 192;
 const R = 76;
+const TILE = 15; // logo tile, in viewBox units
 
 export default function ConstellationPoster({ data }: { data: ConstellationData }) {
   const pts = data.nodes.map((n) => {
@@ -20,9 +21,17 @@ export default function ConstellationPoster({ data }: { data: ConstellationData 
       </g>
       {[...pts]
         .sort((p, q) => p.z - q.z)
-        .map(({ x, y, n }) => (
-          <rect key={n.id} x={x - n.size} y={y - n.size} width={n.size * 2} height={n.size * 2} fill={`var(--node-${n.color})`} />
-        ))}
+        .map(({ x, y, n }) =>
+          n.icon ? (
+            // White tile so every logo keeps its own colors on light and dark backgrounds.
+            <g key={n.id}>
+              <rect x={x - TILE / 2} y={y - TILE / 2} width={TILE} height={TILE} fill="#fff" stroke="var(--border)" strokeWidth={0.75} />
+              <image href={n.icon} x={x - TILE / 2 + 2} y={y - TILE / 2 + 2} width={TILE - 4} height={TILE - 4} />
+            </g>
+          ) : (
+            <rect key={n.id} x={x - n.size} y={y - n.size} width={n.size * 2} height={n.size * 2} fill={`var(--node-${n.color})`} />
+          ),
+        )}
     </svg>
   );
 }

@@ -8,11 +8,18 @@ export interface ConstellationNode {
   size: 1 | 2 | 3; // learning / familiar / proficient
   color: 1 | 2 | 3; // CSS var --node-N
   linked: boolean; // used by at least one project (clickable in the 3D scene)
+  icon?: string; // logo path; skills without one (practices like "API Testing") stay plain dots
 }
 export interface ConstellationData {
   nodes: ConstellationNode[];
   edges: [number, number][]; // node index pairs
 }
+
+// Skill ids that have a logo file in public/stack/<id>.svg (devicon 2.18.0, original colors).
+const LOGOS = new Set([
+  "playwright", "postman", "jira", "notion", "selenium", "cypress", "nextjs", "react", "typescript", "tailwind", "html-css", "threejs",
+  "laravel", "php", "nodejs", "supabase", "postgresql", "mysql", "git", "grafana", "github-actions", "vercel", "linux", "docker", "figma",
+]);
 
 const sizeOf: Record<Skill["level"], ConstellationNode["size"]> = { proficient: 3, familiar: 2, learning: 1 };
 const colorOf = (s: Skill): ConstellationNode["color"] =>
@@ -27,7 +34,7 @@ export function buildConstellation(projectTags: string[][]): ConstellationData {
     const y = 1 - (2 * (i + 0.5)) / n;
     const r = Math.sqrt(1 - y * y);
     const t = golden * i;
-    return { id: s.id, name: s.name, pos: [Math.cos(t) * r, y, Math.sin(t) * r], size: sizeOf[s.level], color: colorOf(s), linked: used.has(s.id) };
+    return { id: s.id, name: s.name, pos: [Math.cos(t) * r, y, Math.sin(t) * r], size: sizeOf[s.level], color: colorOf(s), linked: used.has(s.id), ...(LOGOS.has(s.id) ? { icon: `/stack/${s.id}.svg` } : {}) };
   });
 
   const index = new Map(nodes.map((node, i) => [node.id, i]));

@@ -27,10 +27,11 @@ export const cssColor = (name: string) =>
 interface Options {
   label: HTMLElement; // tooltip element, positioned over the canvas
   onPick: (skillId: string) => void; // click on a skill that has projects
+  icons: (HTMLElement | null)[]; // logo tile per node index (null = plain dot), moved every frame
 }
 
 /** Starts the scene on `canvas`. Returns a cleanup function. */
-export function startConstellation(canvas: HTMLCanvasElement, data: ConstellationData, { label, onPick }: Options): () => void {
+export function startConstellation(canvas: HTMLCanvasElement, data: ConstellationData, { label, onPick, icons }: Options): () => void {
   const renderer = new WebGLRenderer({ canvas, antialias: false, alpha: true, powerPreference: "low-power" });
   renderer.setPixelRatio(1);
 
@@ -78,7 +79,9 @@ export function startConstellation(canvas: HTMLCanvasElement, data: Constellatio
   let highlight = new Color();
   const paint = (hovered: number) => {
     data.nodes.forEach((node, i) => (i === hovered ? highlight : palette[node.color - 1]).toArray(colors, i * 3));
-    sizes.forEach((_, i) => (sizes[i] = data.nodes[i].size + (i === hovered ? 2 : 0)));
+    // Nodes with a logo are drawn as DOM tiles, so their GL point shrinks to nothing (-1 + 1 = 0 px).
+    sizes.forEach((_, i) => (sizes[i] = icons[i] ? -1 : data.nodes[i].size + (i === hovered ? 2 : 0)));
+    icons.forEach((el, i) => el?.toggleAttribute("data-hover", i === hovered));
     pointGeo.attributes.color.needsUpdate = true;
     pointGeo.attributes.size.needsUpdate = true;
   };
@@ -186,6 +189,19 @@ export function startConstellation(canvas: HTMLCanvasElement, data: Constellatio
       paint(hovered);
     }
     showLabel();
+
+    // Logo tiles follow their node: nearer = larger, on top, and fully opaque.
+    icons.forEach((el, i) => {
+      if (!el) return;
+      v.fromArray(data.nodes[i].pos).applyMatrix4(group.matrixWorld);
+      const near = (v.z + 1) / 2; // 0 = back of the sphere, 1 = front
+      v.project(camera);
+      const x = ((v.x + 1) / 2) * canvas.clientWidth;
+      const y = ((1 - v.y) / 2) * canvas.clientHeight;
+      el.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px) translate(-50%, -50%) scale(${(0.8 + near * 0.35).toFixed(3)})`;
+      el.style.opacity = (0.7 + near * 0.3).toFixed(2); // back tiles stay readable
+      el.style.zIndex = String(Math.round(near * 100));
+    });
 
     renderer.render(scene, camera);
     frame = requestAnimationFrame(loop);

@@ -15,6 +15,7 @@ function showProjectsFor(skillId: string) {
 export default function HeroScene({ data, hint, children }: { data: ConstellationData; hint: string; children: React.ReactNode }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const labelRef = useRef<HTMLSpanElement>(null);
+  const iconRefs = useRef<(HTMLElement | null)[]>([]);
   const [mode, setMode] = useState<Mode>("poster");
 
   useEffect(() => {
@@ -25,7 +26,7 @@ export default function HeroScene({ data, hint, children }: { data: Constellatio
       try {
         const { startConstellation } = await import("./constellation3d");
         if (disposed || !canvasRef.current || !labelRef.current) return;
-        stop = startConstellation(canvasRef.current, data, { label: labelRef.current, onPick: showProjectsFor });
+        stop = startConstellation(canvasRef.current, data, { label: labelRef.current, onPick: showProjectsFor, icons: data.nodes.map((_, i) => iconRefs.current[i] ?? null) });
         setMode("live");
       } catch {
         // Keep the poster if the chunk or WebGL fails.
@@ -47,7 +48,25 @@ export default function HeroScene({ data, hint, children }: { data: Constellatio
         ref={canvasRef}
         className={`absolute inset-0 h-full w-full transition-opacity duration-500 [image-rendering:pixelated] ${live ? "opacity-100" : "pointer-events-none opacity-0"}`}
       />
-      <span ref={labelRef} hidden className="pointer-events-none absolute left-0 top-0 z-10 whitespace-nowrap bg-text px-2 py-1 font-pixel text-xs text-bg" />
+      {/* Logo tiles for the live scene. They ignore the pointer: hover and click are resolved on the canvas. */}
+      <div className={`pointer-events-none absolute inset-0 transition-opacity duration-500 ${live ? "opacity-100" : "opacity-0"}`}>
+        {data.nodes.map(
+          (n, i) =>
+            n.icon && (
+              <span
+                key={n.id}
+                ref={(el) => {
+                  iconRefs.current[i] = el;
+                }}
+                className="absolute left-0 top-0 flex h-10 w-10 items-center justify-center bg-white pixel-border will-change-transform data-[hover]:[--pb:var(--accent)]"
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element -- tiny local SVG, no optimisation to gain */}
+                <img src={n.icon} alt="" width={28} height={28} loading="lazy" decoding="async" />
+              </span>
+            ),
+        )}
+      </div>
+      <span ref={labelRef} hidden className="pointer-events-none absolute left-0 top-0 z-[200] whitespace-nowrap bg-text px-2 py-1 font-pixel text-xs text-bg" />
       {live && <p className="absolute inset-x-0 -bottom-6 hidden text-center font-mono text-xs text-muted md:block">{hint}</p>}
     </div>
   );
