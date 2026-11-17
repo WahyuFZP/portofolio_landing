@@ -3,6 +3,10 @@
 import { useEffect, useRef, useState } from "react";
 import type { Dictionary } from "@/lib/dictionary";
 import { afterLoadIdle, canRun3D, EXTRA_SCENES } from "@/lib/scene";
+import PixelIcon, { type PixelIconName } from "@/components/ui/PixelIcon";
+
+// One icon per card, in the order of dictionaries/*.json about.how.
+const ICONS: PixelIconName[] = ["check", "shield", "doc"];
 
 /** The three "How I work" cards, with the scroll-driven release-pipeline scene above them on desktop. */
 export default function HowIWork({ items }: { items: Dictionary["about"]["how"] }) {
@@ -54,8 +58,10 @@ export default function HowIWork({ items }: { items: Dictionary["about"]["how"] 
               data-lit={lit || undefined}
               className="corners reveal bg-surface p-6 pixel-border transition-transform duration-300 data-[lit]:-translate-y-1 data-[lit]:[--pb:var(--accent)]"
             >
-              <p className="font-pixel text-sm text-accent">0{i + 1}</p>
-              <h4 className="mt-2 text-lg font-semibold tracking-tight">{h.title}</h4>
+              <span className="flex h-10 w-10 items-center justify-center border-2 border-accent text-accent" aria-hidden>
+                <PixelIcon name={ICONS[i] ?? "check"} className="h-5 w-5" />
+              </span>
+              <h4 className="mt-4 font-pixel text-base font-medium">{h.title}</h4>
               <p className="mt-2 text-muted">{h.body}</p>
             </li>
           );

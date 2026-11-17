@@ -22,7 +22,7 @@ export default function Experience({ locale, dict }: Props) {
 
         {/* Keep the old #certificates anchor working. */}
         <div id="certificates" className="scroll-mt-24">
-          <h3 className="reveal mb-5 text-xl font-semibold tracking-tight">{dict.credentialsTitle}</h3>
+          <h3 className="reveal mb-5 font-pixel text-xl font-medium">{dict.credentialsTitle}</h3>
           <ul className="space-y-4">
             {certificates.map((c) => (
               <li key={c.name} className="corners reveal bg-surface p-4 pixel-border">
