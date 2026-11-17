@@ -2,6 +2,7 @@ import Image from "next/image";
 import type { Dictionary } from "@/lib/dictionary";
 import { profile } from "@/content/profile";
 import SectionHeading, { Words } from "@/components/ui/SectionHeading";
+import HowIWork from "@/components/about/HowIWork";
 
 export default function About({ dict }: { dict: Dictionary["about"] }) {
   return (
@@ -31,16 +32,8 @@ export default function About({ dict }: { dict: Dictionary["about"] }) {
         </div>
       </div>
 
-      <h3 className="mt-16 mb-6 text-2xl font-semibold tracking-tight"><Words text={dict.howTitle} /></h3>
-      <ol className="grid gap-6 md:grid-cols-3">
-        {dict.how.map((h, i) => (
-          <li key={h.title} className="reveal bg-surface p-6 pixel-border">
-            <p className="font-pixel text-sm text-accent">0{i + 1}</p>
-            <h4 className="mt-2 text-lg font-semibold tracking-tight">{h.title}</h4>
-            <p className="mt-2 text-muted">{h.body}</p>
-          </li>
-        ))}
-      </ol>
+      <h3 className="mt-16 mb-2 text-2xl font-semibold tracking-tight"><Words text={dict.howTitle} /></h3>
+      <HowIWork items={dict.how} />
     </section>
   );
 }
