@@ -108,16 +108,20 @@ body {
 /* ---------- Pixel utilities ---------- */
 
 /* Pixel-art border: 4 offset shadows leave the corner pixels empty (stepped corner). */
-.pixel-border {
-  --pb: var(--border);
-  box-shadow:
-    0 -2px 0 0 var(--pb),
-    0 2px 0 0 var(--pb),
-    -2px 0 0 0 var(--pb),
-    2px 0 0 0 var(--pb);
-}
-.pixel-border-accent {
-  --pb: var(--accent);
+/* In the components layer on purpose: utilities such as hover:[--pb:...] or target:[--pb:...] must be
+   able to override the border color. Unlayered rules always beat Tailwind's utility layer. */
+@layer components {
+  .pixel-border {
+    --pb: var(--border);
+    box-shadow:
+      0 -2px 0 0 var(--pb),
+      0 2px 0 0 var(--pb),
+      -2px 0 0 0 var(--pb),
+      2px 0 0 0 var(--pb);
+  }
+  .pixel-border-accent {
+    --pb: var(--accent);
+  }
 }
 
 /* Ordered (Bayer 4x4) dither overlay, shown on hover only. */
@@ -182,10 +186,6 @@ body {
 @keyframes marquee {
   to { transform: translateX(-50%); }
 }
-@keyframes ring-spin {
-  from { transform: rotateY(0deg); }
-  to { transform: rotateY(-360deg); }
-}
 @keyframes blink {
   50% { opacity: 0; }
 }
@@ -193,10 +193,6 @@ body {
 .scroll-progress {
   transform-origin: left;
   transform: scaleX(0);
-}
-/* Logos fade out toward both edges instead of popping in and out when they turn edge-on. */
-.ring-stage {
-  mask-image: linear-gradient(to right, transparent, #000 18%, #000 82%, transparent);
 }
 .marquee {
   display: flex;
@@ -219,15 +215,8 @@ body {
     animation-direction: reverse;
   }
   .marquee-band:hover .marquee,
-  [data-paused="true"] .marquee,
-  .ring-stage:hover .ring,
-  [data-paused="true"] .ring {
+  [data-paused="true"] .marquee {
     animation-play-state: paused;
-  }
-  .ring {
-    /* One turn every 36 s: about 60 px/s at the front. 90 s read as standing still. */
-    animation: ring-spin 36s linear infinite;
-    will-change: transform; /* keep the ring on its own compositor layer */
   }
 
   @supports (animation-timeline: view()) {

@@ -1,6 +1,6 @@
 import type { Dictionary } from "@/lib/dictionary";
 import { categories, levels, skills, skillLogo, type Level } from "@/content/skills";
-import LogoRing from "./LogoRing";
+import SkillCrystals from "@/components/skills/SkillCrystals";
 import MarqueePause from "./MarqueePause";
 import SectionHeading from "@/components/ui/SectionHeading";
 
@@ -16,15 +16,16 @@ export default function Skills({ dict, pause, usage }: { dict: Dictionary["skill
       <SectionHeading index="02" title={dict.title} subtitle={dict.subtitle} />
 
       <MarqueePause pause={pause.pause} play={pause.play}>
-        <LogoRing />
+        <SkillCrystals labels={dict.categories} />
       </MarqueePause>
 
       <div className="grid gap-x-10 gap-y-6 md:grid-cols-2">
         {categories.map((cat, ci) => (
           <details
             key={cat}
+            id={`skills-${cat}`}
             open
-            className={`reveal group/cat bg-surface/40 p-5 pixel-border ${ci === 0 ? "md:col-span-2 [--pb:var(--accent)]" : ""}`}
+            className={`reveal group/cat scroll-mt-24 bg-surface/40 p-5 pixel-border target:[--pb:var(--accent)] ${ci === 0 ? "md:col-span-2 [--pb:var(--accent)]" : ""}`}
           >
             <summary className="flex cursor-pointer list-none items-center justify-between text-lg font-semibold tracking-tight [&::-webkit-details-marker]:hidden">
               <span className={ci === 0 ? "text-accent" : ""}>{dict.categories[cat]}</span>
