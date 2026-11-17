@@ -81,6 +81,13 @@ body {
   }
 }
 
+/* Hero backdrop: a grid of single-pixel dots that fades out toward the edges. */
+.hero-grid {
+  background-image: radial-gradient(var(--border) 1px, transparent 1px);
+  background-size: 18px 18px;
+  mask-image: radial-gradient(ellipse 75% 70% at 35% 45%, #000 30%, transparent 75%);
+}
+
 /* Ordered (Bayer 4x4) dither overlay, shown on hover only. */
 .dither {
   position: relative;

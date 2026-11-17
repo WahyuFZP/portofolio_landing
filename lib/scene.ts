@@ -49,6 +49,6 @@ export function onThemeChange(fn: () => void): () => void {
 
 /**
  * Direction B trial (PRD-UIUX 18.12): 3D only in the hero and Skills.
- * false turns off the page background, the "How I work" pipeline and the 3D project laptop. Set true to bring them back.
+ * false turns off the page background and the 3D project laptop. Set true to bring them back.
  */
 export const EXTRA_SCENES = false;

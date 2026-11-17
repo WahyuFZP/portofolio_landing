@@ -4,6 +4,7 @@ import { btnPrimary, btnSecondary } from "@/components/ui/styles";
 import PixelIcon from "@/components/ui/PixelIcon";
 import ProofStrip from "@/components/hero/ProofStrip";
 import ScrambleText from "@/components/motion/ScrambleText";
+import Typewriter from "@/components/motion/Typewriter";
 
 interface Props {
   dict: Dictionary["hero"];
@@ -15,13 +16,19 @@ interface Props {
 export default function Hero({ dict, proofDict, caseStudies }: Props) {
   const i = (n: number) => ({ "--i": n }) as React.CSSProperties;
   return (
-    <section id="home" className="py-20 sm:py-28">
+    <section id="home" className="relative isolate py-20 sm:py-28">
+      <div aria-hidden className="hero-grid absolute inset-x-0 inset-y-6 -z-10" />
       <p className="boot mb-5 font-mono text-sm text-accent" style={i(0)}>{dict.eyebrow}</p>
       {/* H1 is the LCP element: no opacity animation on it. */}
       <h1 aria-label={profile.name} className="text-4xl font-semibold leading-[1.08] tracking-tight sm:text-6xl">
         <ScrambleText text={profile.name} />
       </h1>
-      <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted">{dict.tagline}</p>
+      {/* Two lines reserved on phones: the longest phrase wraps there, and the text below must not jump. */}
+      <p className="mt-5 min-h-[3.5em] font-pixel text-lg text-accent sm:min-h-[1.75em] sm:text-xl">
+        <span aria-hidden>&gt; </span>
+        <Typewriter phrases={dict.typed} />
+      </p>
+      <p className="mt-5 max-w-2xl text-lg leading-relaxed text-muted">{dict.tagline}</p>
 
       <div className="boot mt-9 flex flex-wrap gap-4" style={i(2)}>
         <a href="#projects" className={btnPrimary}>

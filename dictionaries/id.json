@@ -20,7 +20,13 @@
     "tagline": "Saya menemukan bug sebelum pengguna Anda menemukannya: otomasi end-to-end dengan Playwright, API testing dengan Postman, dan pola pikir keamanan berbasis OWASP Top 10.",
     "ctaProjects": "Lihat proyek",
     "ctaCv": "Unduh CV",
-    "sceneHint": "Seret untuk memutar. Klik skill untuk melihat proyeknya."
+    "sceneHint": "Seret untuk memutar. Klik skill untuk melihat proyeknya.",
+    "typed": [
+      "mengotomasi tes end-to-end dengan Playwright",
+      "menguji REST API dengan Postman",
+      "memburu celah OWASP Top 10",
+      "menangkap bug sebelum rilis"
+    ]
   },
   "proof": {
     "label": "Ringkasan test run",

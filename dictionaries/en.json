@@ -20,7 +20,13 @@
     "tagline": "I break software before your users do: end-to-end automation with Playwright, API testing with Postman, and a security mindset mapped to the OWASP Top 10.",
     "ctaProjects": "View projects",
     "ctaCv": "Download CV",
-    "sceneHint": "Drag to rotate. Click a skill to see its projects."
+    "sceneHint": "Drag to rotate. Click a skill to see its projects.",
+    "typed": [
+      "automating end-to-end tests with Playwright",
+      "testing REST APIs with Postman",
+      "hunting OWASP Top 10 flaws",
+      "catching bugs before release"
+    ]
   },
   "proof": {
     "label": "Test run summary",

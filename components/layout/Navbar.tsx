@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
-import { m } from "motion/react";
 import { Menu, X } from "lucide-react";
 import type { Dictionary } from "@/lib/dictionary";
 import type { Locale } from "@/lib/i18n";
@@ -40,13 +39,15 @@ export default function Navbar({ locale, dict }: { locale: Locale; dict: Diction
         href={`/${locale}#${id}`}
         onClick={closeMenu}
         aria-current={active === id ? "true" : undefined}
-        className="relative px-3 py-2 font-pixel text-sm text-muted transition-colors hover:text-text aria-[current]:text-text"
+        className={
+          withIndicator && id === "contact"
+            ? // The one filled item in the bar: the call to action.
+              "ml-3 bg-accent px-4 py-2 font-pixel text-sm text-accent-fg transition-transform pixel-border pixel-border-accent hover:-translate-y-0.5"
+            : // Brackets close in around the link on hover and stay on the section in view (not color-only).
+              "relative px-4 py-2 font-pixel text-sm text-muted transition-colors before:absolute before:left-1 before:text-accent before:opacity-0 before:transition-[opacity,transform] before:content-['['] after:absolute after:right-1 after:text-accent after:opacity-0 after:transition-[opacity,transform] after:content-[']'] hover:text-text hover:before:opacity-100 hover:after:opacity-100 aria-[current]:text-text aria-[current]:before:opacity-100 aria-[current]:after:opacity-100 motion-safe:before:-translate-x-1 motion-safe:after:translate-x-1 motion-safe:hover:before:translate-x-0 motion-safe:hover:after:translate-x-0 motion-safe:aria-[current]:before:translate-x-0 motion-safe:aria-[current]:after:translate-x-0"
+        }
       >
         {dict[id]}
-        {withIndicator && active === id && (
-          // Slides between links (shared layout animation). Not color-only: it is a visible bar.
-          <m.span layoutId="nav-active" className="absolute inset-x-3 -bottom-0.5 h-0.5 bg-accent" transition={{ duration: 0.25 }} />
-        )}
       </a>
     ));
 
@@ -54,7 +55,7 @@ export default function Navbar({ locale, dict }: { locale: Locale; dict: Diction
     <header className="sticky top-0 z-40 border-b-2 border-border bg-bg/90 backdrop-blur">
       <nav aria-label="Primary" className="mx-auto flex h-16 max-w-5xl items-center justify-between gap-4 px-4 sm:px-6">
         <a href={`/${locale}`} className="font-pixel text-base">
-          wfzp<span className="text-accent">_</span>
+          wfzp<span className="cursor text-accent">_</span>
         </a>
 
         <div className="hidden items-center md:flex">{links(true)}</div>
