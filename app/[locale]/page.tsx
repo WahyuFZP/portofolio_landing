@@ -11,7 +11,6 @@ import Contact from "@/components/sections/Contact";
 import { getAllProjects } from "@/lib/mdx";
 import { getDictionary } from "@/lib/dictionary";
 import { isLocale } from "@/lib/i18n";
-import { buildConstellation } from "@/lib/constellation";
 
 export default async function Home({ params }: PageProps<"/[locale]">) {
   const { locale } = await params;
@@ -23,12 +22,11 @@ export default async function Home({ params }: PageProps<"/[locale]">) {
   const usage = new Map<string, number>();
   for (const p of projects) for (const id of p.meta.tags) usage.set(id, (usage.get(id) ?? 0) + 1);
 
-  const constellation = buildConstellation(projects.map((p) => p.meta.tags));
 
   // Order: QA-first story (PRD-UIUX §6).
   return (
     <>
-      <Hero dict={dict.hero} proofDict={dict.proof} constellation={constellation} caseStudies={projects.length} />
+      <Hero dict={dict.hero} proofDict={dict.proof} caseStudies={projects.length} />
       <StackMarquee dict={dict.marquee} />
       <Projects locale={locale} projects={projects} dict={dict.projects} />
       <Skills dict={dict.skills} pause={dict.marquee} usage={usage} />

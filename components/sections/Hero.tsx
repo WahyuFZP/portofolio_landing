@@ -1,20 +1,17 @@
 import type { Dictionary } from "@/lib/dictionary";
-import type { ConstellationData } from "@/lib/constellation";
+import Image from "next/image";
 import { profile } from "@/content/profile";
 import { btnPrimary, btnSecondary } from "@/components/ui/styles";
 import PixelIcon from "@/components/ui/PixelIcon";
-import HeroScene from "@/components/hero/HeroScene";
-import ConstellationPoster from "@/components/hero/ConstellationPoster";
 import ProofStrip from "@/components/hero/ProofStrip";
 
 interface Props {
   dict: Dictionary["hero"];
   proofDict: Dictionary["proof"];
-  constellation: ConstellationData;
   caseStudies: number;
 }
 
-export default function Hero({ dict, proofDict, constellation, caseStudies }: Props) {
+export default function Hero({ dict, proofDict, caseStudies }: Props) {
   const i = (n: number) => ({ "--i": n }) as React.CSSProperties;
   return (
     <section id="home" className="relative py-14 sm:py-20">
@@ -22,6 +19,7 @@ export default function Hero({ dict, proofDict, constellation, caseStudies }: Pr
         <div className="relative z-10">
           <p className="boot mb-4 font-pixel text-sm text-accent" style={i(0)}>{dict.eyebrow}</p>
           {/* H1 is the LCP element: no opacity animation on it. */}
+          {/* Not the pixel font: its capital Z reads like a 2, and the name must be unmistakable. */}
           <h1 className="text-4xl font-semibold leading-[1.08] tracking-tight sm:text-6xl">
             {profile.name}
             <span className="cursor ml-1 inline-block h-[0.85em] w-[0.45em] translate-y-[0.08em] bg-accent" aria-hidden />
@@ -45,11 +43,10 @@ export default function Hero({ dict, proofDict, constellation, caseStudies }: Pr
           </div>
         </div>
 
-        {/* Desktop: live scene in its own column. Fixed box = no layout shift. */}
-        <div className="mx-auto hidden aspect-square max-h-[420px] w-full max-w-[420px] md:block">
-          <HeroScene data={constellation} hint={dict.sceneHint}>
-            <ConstellationPoster data={constellation} />
-          </HeroScene>
+        {/* Pixel-art scene, drawn by scripts/hero-art.mjs at 240x200 and shown at 2x with hard pixels.
+            Its edges fade to black, so on the black theme it melts into the page. Decorative. */}
+        <div aria-hidden className="corners mx-auto w-full max-w-[480px]">
+          <Image src="/hero/launch-night.png" alt="" width={480} height={400} unoptimized priority className="h-auto w-full [image-rendering:pixelated]" />
         </div>
       </div>
 
@@ -57,10 +54,6 @@ export default function Hero({ dict, proofDict, constellation, caseStudies }: Pr
         <ProofStrip dict={proofDict} caseStudies={caseStudies} />
       </div>
 
-      {/* Phones: static poster below the content, never behind text (keeps text contrast clean). */}
-      <div aria-hidden className="mx-auto mt-10 aspect-square w-full max-w-[300px] md:hidden">
-        <ConstellationPoster data={constellation} />
-      </div>
     </section>
   );
 }
