@@ -28,8 +28,8 @@
 /* Dark values are listed twice on purpose: once for the explicit toggle, once for "OS dark, no choice made". */
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --bg: #03050a; /* space black */
-  --surface: #0a0f1a;
+  --bg: #000000; /* pure black, so pixel art can fade into the page */
+  --surface: #07090f;
   --text: #f1f5f9;
   --muted: #94a3b8; /* 8.1:1 on --bg */
   --border: #1e293b;
@@ -51,8 +51,8 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     color-scheme: dark;
-    --bg: #03050a; /* space black */
-    --surface: #0a0f1a;
+    --bg: #000000; /* pure black, so pixel art can fade into the page */
+    --surface: #07090f;
     --text: #f1f5f9;
     --muted: #94a3b8;
     --border: #1e293b;
