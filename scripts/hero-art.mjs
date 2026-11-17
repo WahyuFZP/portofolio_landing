@@ -1,17 +1,9 @@
 // Draws the hero pixel-art scene ("launch night") pixel by pixel and writes public/hero/launch-night.png.
-// Run: node scripts/hero-art.mjs   (needs Node 22.2+ for zlib.crc32). The PNG is committed; this only re-draws it.
-import { deflateSync, crc32 } from "node:zlib";
-import { writeFileSync } from "node:fs";
+// Run: node scripts/hero-art.mjs. The PNG is committed; this only re-draws it.
+import { canvas } from "./pixel-canvas.mjs";
 
 const W = 240, H = 200, HORIZON = 152;
-const buf = new Uint8Array(W * H * 3); // RGB, starts black
-const hex = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
-const set = (x, y, c) => { x |= 0; y |= 0; if (x >= 0 && y >= 0 && x < W && y < H) buf.set(typeof c === "string" ? hex(c) : c, (y * W + x) * 3); };
-const get = (x, y) => [...buf.subarray((y * W + x) * 3, (y * W + x) * 3 + 3)];
-const rect = (x, y, w, h, c) => { for (let j = 0; j < h; j++) for (let i = 0; i < w; i++) set(x + i, y + j, c); };
-let seed = 11;
-const rand = () => { seed = (seed + 0x6d2b79f5) | 0; let t = Math.imul(seed ^ (seed >>> 15), 1 | seed); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
-const ri = (a, b) => a + Math.floor(rand() * (b - a + 1));
+const { set, get, rect, rand, ri, sprite, fade, save } = canvas(W, H, 11);
 
 // Sky: banded blue glow around the moon.
 const MX = 150, MY = 70, MR = 52;
@@ -102,23 +94,7 @@ for (let x = 168; x < W; x++) {
 }
 const FIGURE = ["..ooo..", ".ooooo.", ".ovvvo.", ".ovvvo.", "..ooo..", ".sssss.", "bsssssy", "bsssss.", "bsssss.", ".sssss.", ".ss.ss.", ".ss.ss.", ".ss.ss.", "dd..dd."];
 const INK = { o: "#f1f5f9", v: "#22d3ee", s: "#cbd5e1", b: "#64748b", y: "#facc15", d: "#334155" };
-FIGURE.forEach((row, j) => [...row].forEach((ch, i) => INK[ch] && set(204 + i, 150 + j, INK[ch])));
+sprite(FIGURE, INK, 204, 150);
 
-// Fade every edge to black so the picture melts into a black page.
-for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
-  const k = Math.min(1, x / 28, (W - 1 - x) / 14, y / 12, (H - 1 - y) / 26);
-  if (k < 1) set(x, y, get(x, y).map((v) => Math.round(v * k)));
-}
-
-// Minimal PNG writer (8-bit RGB, no filter).
-const chunk = (type, data) => {
-  const out = Buffer.alloc(12 + data.length);
-  out.writeUInt32BE(data.length, 0); out.write(type, 4, "latin1"); Buffer.from(data).copy(out, 8);
-  out.writeUInt32BE(crc32(out.subarray(4, 8 + data.length)), 8 + data.length);
-  return out;
-};
-const raw = Buffer.alloc((W * 3 + 1) * H);
-for (let y = 0; y < H; y++) Buffer.from(buf.subarray(y * W * 3, (y + 1) * W * 3)).copy(raw, y * (W * 3 + 1) + 1);
-const head = Buffer.alloc(13); head.writeUInt32BE(W, 0); head.writeUInt32BE(H, 4); head.set([8, 2, 0, 0, 0], 8);
-writeFileSync("public/hero/launch-night.png", Buffer.concat([Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]), chunk("IHDR", head), chunk("IDAT", deflateSync(raw)), chunk("IEND", Buffer.alloc(0))]));
-console.log("wrote public/hero/launch-night.png", W, "x", H);
+fade(28, 14, 12, 26);
+save("public/hero/launch-night.png");
