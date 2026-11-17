@@ -16,7 +16,7 @@ export default function SpotifyEmbed({ src, link, dict }: Props) {
   const [loaded, setLoaded] = useState(false);
   return (
     <div className="reveal max-w-2xl">
-      <div className="h-[352px] bg-surface pixel-border">
+      <div className="corners h-[352px] bg-surface pixel-border">
         {loaded ? (
           <iframe
             src={src}

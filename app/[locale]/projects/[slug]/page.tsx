@@ -117,7 +117,7 @@ export default async function CaseStudy({ params }: PageProps<"/[locale]/project
       {next && next.slug !== project.slug && (
         <Link
           href={`/${locale}/projects/${next.slug}`}
-          className="mt-16 flex items-center justify-between bg-surface p-6 pixel-border transition-transform hover:-translate-y-0.5 hover:[--pb:var(--accent)]"
+          className="corners mt-16 flex items-center justify-between bg-surface p-6 pixel-border transition-transform hover:-translate-y-0.5 hover:[--pb:var(--accent)]"
         >
           <span>
             <span className="block font-mono text-xs uppercase tracking-wide text-muted">{dict.caseStudy.next}</span>

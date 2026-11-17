@@ -153,6 +153,7 @@ test.describe("projects", () => {
 
   test("skill chip filters projects and the filter can be cleared", async ({ page }) => {
     await page.goto("/en");
+    await page.locator("#skills").getByRole("tab", { name: "Backend & API" }).click(); // skills are grouped behind category tabs
     await page.locator("#skills").getByRole("link", { name: /Laravel/ }).click();
     await expect(page).toHaveURL(/\?skill=laravel#projects$/);
     const cards = page.locator("#projects article");

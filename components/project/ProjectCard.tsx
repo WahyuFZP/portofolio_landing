@@ -79,7 +79,7 @@ export default function ProjectCard({ project, href, dict, featured }: Props) {
     <article
       onPointerMove={onMove}
       onPointerLeave={onLeave}
-      className={`group relative flex h-full w-full flex-col gap-6 bg-surface p-6 pixel-border transition-transform duration-300 ease-out hover:[--pb:var(--accent)] ${featured ? "md:flex-row md:items-center md:gap-10 md:p-10" : ""}`}
+      className={`corners group relative flex h-full w-full flex-col gap-6 bg-surface p-6 pixel-border transition-transform duration-300 ease-out hover:[--pb:var(--accent)] ${featured ? "md:flex-row md:items-center md:gap-10 md:p-10" : ""}`}
     >
       <div className={`px-[4%] ${featured ? "md:w-[55%]" : ""}`}>
         {featured && meta.image ? (

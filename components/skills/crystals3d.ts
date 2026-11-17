@@ -1,57 +1,53 @@
-import {
-  BufferAttribute,
-  BufferGeometry,
-  Color,
-  Mesh,
-  OctahedronGeometry,
-  OrthographicCamera,
-  PlaneGeometry,
-  Points,
-  Scene,
-  ShaderMaterial,
-  WebGLRenderer,
-} from "three";
+import { BufferAttribute, BufferGeometry, Color, Mesh, OctahedronGeometry, OrthographicCamera, PlaneGeometry, Points, Scene, ShaderMaterial, WebGLRenderer } from "three";
 import { cssColor } from "@/components/hero/constellation3d";
 import { onThemeChange } from "@/lib/scene";
 
 const PIXEL = 2; // half-resolution render, upscaled pixelated
-const HALF_H = 1.2; // world units from centre to top edge
-const SPARKS = 6; // per crystal
+const HALF_H = 1.6; // world units from centre to top edge
+const SPARKS = 40;
+const RING_Y = 0.3; // ring centre, a little above the middle
+const TURN = 0.1; // rad/s: the ring goes round once every ~63 s
 
 // 4x4 ordered dither: turns the few light levels into a smooth-looking ramp without losing the pixel grid.
 const BAYER = `
   float b2(vec2 a) { a = floor(a); return fract(a.x / 2.0 + a.y * a.y * 0.75); }
   float bayer4(vec2 a) { return b2(0.5 * a) * 0.25 + b2(a); }`;
 
-export interface CrystalSpec {
-  tone: "--node-1" | "--node-2" | "--warm"; // CSS color variable
-  tiles: HTMLElement[]; // logo tiles that orbit this crystal
+interface Options {
+  tones: string[]; // CSS color variable per crystal
+  tabs: HTMLElement[]; // one button per crystal, moved to follow it
+  tiles: () => HTMLElement[]; // logo tiles of the selected category (they change with the selection)
+  selected: () => number;
+  hovered: () => number; // crystal under the pointer or focus, or -1
+  paused: () => boolean;
 }
 
 /**
- * One floating crystal per skill category, in a row. Soft pixel look: faceted crystals lit in
- * dithered steps, a faint glow behind each, a few rising sparks, and the category's logos in orbit.
- * `hovered()` returns the column under the pointer (or -1); `paused()` freezes time. Returns a cleanup function.
+ * Skill categories as crystals orbiting in one tilted ring: near ones large, far ones small.
+ * The selected crystal leaves the ring and floats in the middle, with its logos circling it.
+ * Soft pixel look: faceted crystals lit in dithered steps, a tinted glow, slow sparks.
+ * Returns a cleanup function.
  */
-export function startCrystals(canvas: HTMLCanvasElement, specs: CrystalSpec[], hovered: () => number, paused: () => boolean): () => void {
+export function startCrystals(canvas: HTMLCanvasElement, { tones, tabs, tiles, selected, hovered, paused }: Options): () => void {
   const renderer = new WebGLRenderer({ canvas, antialias: false, alpha: true, powerPreference: "low-power" });
   renderer.setPixelRatio(1);
   const scene = new Scene();
   const camera = new OrthographicCamera(-1, 1, HALF_H, -HALF_H, 0.1, 20);
-  camera.position.z = 5;
+  camera.position.z = 8;
 
   const uSky = { value: new Color() };
   const uTime = { value: 0 };
 
-  const crystalGeo = new OctahedronGeometry(0.34);
+  const crystalGeo = new OctahedronGeometry(0.3);
   const glowGeo = new PlaneGeometry(1.5, 2.0);
-  const crystals = specs.map((spec, i) => {
+  const crystals = tones.map((tone, i) => {
     const uColor = { value: new Color() };
-    const uLift = { value: 0 }; // 0..1, eased toward 1 while hovered
+    const uLift = { value: 0 }; // 0..1: brighter while hovered or selected
+    const uniforms = { uColor, uSky, uTime, uLift, uPhase: { value: i * 1.7 } };
     const body = new Mesh(
       crystalGeo,
       new ShaderMaterial({
-        uniforms: { uColor, uSky, uTime, uLift, uPhase: { value: i * 1.7 } },
+        uniforms,
         vertexShader: `
           varying vec3 vView;
           void main() { vec4 mv = modelViewMatrix * vec4(position, 1.0); vView = mv.xyz; gl_Position = projectionMatrix * mv; }`,
@@ -63,7 +59,7 @@ export function startCrystals(canvas: HTMLCanvasElement, specs: CrystalSpec[], h
             vec3 n = normalize(cross(dFdx(vView), dFdy(vView)));            // one normal per facet
             float key = max(dot(n, normalize(vec3(-0.5, 0.7, 0.6))), 0.0);
             float rim = pow(1.0 - abs(n.z), 2.0) * 0.35;                     // lighter toward the silhouette
-            float pulse = 0.06 * sin(uTime * 1.3 + uPhase) + uLift * 0.18;   // slow breathing, brighter on hover
+            float pulse = 0.06 * sin(uTime * 1.3 + uPhase) + uLift * 0.16;
             float lit = clamp(0.18 + key * 0.72 + rim + pulse, 0.0, 1.0);
             float level = floor(lit * 5.0 + bayer4(gl_FragCoord.xy)) / 5.0;  // 6 steps, dithered between them
             vec3 shade = mix(uSky, uColor, 0.35);
@@ -72,52 +68,49 @@ export function startCrystals(canvas: HTMLCanvasElement, specs: CrystalSpec[], h
           }`,
       }),
     );
-    body.scale.y = 1.6;
     const glow = new Mesh(
       glowGeo,
       new ShaderMaterial({
         transparent: true,
         depthWrite: false,
-        uniforms: { uColor, uTime, uLift, uPhase: { value: i * 1.7 } },
+        uniforms,
         vertexShader: `varying vec2 vUv; void main() { vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`,
         fragmentShader: `
           uniform vec3 uColor; uniform float uTime; uniform float uLift; uniform float uPhase;
           varying vec2 vUv;
           ${BAYER}
           void main() {
-            float d = length((vUv - 0.5) * vec2(2.0, 1.6));
-            float a = smoothstep(1.0, 0.0, d) * (0.3 + 0.06 * sin(uTime * 1.3 + uPhase) + uLift * 0.25);
+            float d = length((vUv - 0.5) * 2.0);                              // reaches 0 at every edge of the quad
+            float a = smoothstep(1.0, 0.0, d) * (0.3 + 0.06 * sin(uTime * 1.3 + uPhase) + uLift * 0.1);
             a = floor(a * 8.0 + bayer4(gl_FragCoord.xy)) / 8.0;             // stepped falloff keeps it pixel art
             gl_FragColor = vec4(uColor, a);                                  // tinted, so it reads on light and dark
           }`,
       }),
     );
-    glow.position.z = -1;
     scene.add(glow, body);
-    return { spec, body, glow, uColor, uLift, x: 0 };
+    return { tone, body, glow, uColor, uLift, x: 0, y: 0, s: 1, d: 0 }; // x, y, scale, depth: eased every frame
   });
 
-  // Sparks: small points that rise beside each crystal and fade; all motion is in the vertex shader.
-  const n = specs.length * SPARKS;
-  const seed = new Float32Array(n * 3); // crystal index, random a, random b
-  for (let i = 0; i < n; i++) seed.set([Math.floor(i / SPARKS), (i * 0.618) % 1, (i * 0.377) % 1], i * 3);
+  // Sparks: small points drifting up across the stage; all motion is in the vertex shader.
+  const seed = new Float32Array(SPARKS * 3);
+  for (let i = 0; i < SPARKS; i++) seed.set([(i * 0.754877) % 1, (i * 0.618034) % 1, (i * 0.377) % 1], i * 3);
   const sparkGeo = new BufferGeometry();
   sparkGeo.setAttribute("position", new BufferAttribute(seed, 3));
   const sparkMat = new ShaderMaterial({
     transparent: true,
     depthTest: false,
-    uniforms: { uTime, uXs: { value: new Float32Array(16) }, uColor: { value: new Color() }, uPx: { value: 1 } },
+    uniforms: { uTime, uHalfW: { value: 1 }, uColor: { value: new Color() }, uPx: { value: 1 } },
     vertexShader: `
-      uniform float uTime; uniform float uXs[16]; uniform float uPx;
+      uniform float uTime; uniform float uHalfW; uniform float uPx;
       varying float vAlpha;
       void main() {
-        float rise = fract(position.y + uTime * (0.05 + position.z * 0.05));
-        vec3 p = vec3(uXs[int(position.x)] + (position.z - 0.5) * 0.9 + sin(uTime * 0.6 + position.y * 20.0) * 0.04, -0.75 + rise * 1.5, 1.0);
+        float rise = fract(position.y + uTime * (0.03 + position.z * 0.04));
+        vec3 p = vec3((position.x * 2.0 - 1.0) * uHalfW + sin(uTime * 0.5 + position.y * 20.0) * 0.05, -${HALF_H.toFixed(1)} + rise * ${(HALF_H * 2).toFixed(1)}, 3.0);
         vAlpha = sin(rise * 3.14159);                                     // fade in, then out
-        gl_PointSize = (1.0 + step(0.6, position.y)) * uPx;
+        gl_PointSize = (1.0 + step(0.6, position.z)) * uPx;
         gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
       }`,
-    fragmentShader: `uniform vec3 uColor; varying float vAlpha; void main() { gl_FragColor = vec4(uColor, vAlpha * 0.8); }`,
+    fragmentShader: `uniform vec3 uColor; varying float vAlpha; void main() { gl_FragColor = vec4(uColor, vAlpha * 0.7); }`,
   });
   const sparks = new Points(sparkGeo, sparkMat);
   sparks.frustumCulled = false;
@@ -127,7 +120,7 @@ export function startCrystals(canvas: HTMLCanvasElement, specs: CrystalSpec[], h
   const applyTheme = () => {
     uSky.value = cssColor("--bg");
     sparkMat.uniforms.uColor.value = cssColor("--star");
-    crystals.forEach((c) => (c.uColor.value = cssColor(c.spec.tone)));
+    crystals.forEach((c) => (c.uColor.value = cssColor(c.tone)));
   };
   const resize = () => {
     const w = Math.max(1, Math.ceil(canvas.clientWidth / PIXEL));
@@ -137,40 +130,75 @@ export function startCrystals(canvas: HTMLCanvasElement, specs: CrystalSpec[], h
     camera.left = -halfW;
     camera.right = halfW;
     camera.updateProjectionMatrix();
-    sparkMat.uniforms.uPx.value = Math.max(1, Math.round(h / 90));
-    // One crystal above the centre of each of the equal columns below.
-    crystals.forEach((c, i) => {
-      c.x = (-1 + (2 * i + 1) / crystals.length) * halfW;
-      sparkMat.uniforms.uXs.value[i] = c.x;
-    });
+    sparkMat.uniforms.uHalfW.value = halfW;
+    sparkMat.uniforms.uPx.value = Math.max(1, Math.round(h / 110));
   };
 
+  let ring = 0; // current ring rotation
+  let orbit = 0; // logo orbit angle
+  let first = true;
   const draw = (dt: number) => {
-    if (!paused()) uTime.value += dt;
+    const still = paused();
+    if (!still) {
+      uTime.value += dt;
+      ring += dt * TURN;
+      orbit += dt * 0.4;
+    }
     const t = uTime.value;
+    const sel = selected();
     const hot = hovered();
     const W = canvas.clientWidth;
     const H = canvas.clientHeight;
-    crystals.forEach((c, i) => {
-      c.uLift.value += ((i === hot ? 1 : 0) - c.uLift.value) * 0.1;
-      const lift = c.uLift.value;
-      const y = 0.12 + Math.sin(t * 0.7 + i * 0.9) * 0.06 + lift * 0.08; // slow bob
-      c.body.position.set(c.x, y, 0);
-      c.body.rotation.y = t * 0.3 + i; // one turn every ~21 s
-      c.body.scale.set(1 + lift * 0.15, 1.6 * (1 + lift * 0.15), 1 + lift * 0.15);
-      c.glow.position.set(c.x, y, -1);
+    const toX = (wx: number) => ((wx / halfW + 1) / 2) * W;
+    const toY = (wy: number) => ((1 - wy / HALF_H) / 2) * H;
+    const rx = Math.min(halfW * 0.8, 4.4);
+    const ease = first ? 1 : 0.07;
+    first = false;
 
-      // Logos orbit on a tilted ring. They are DOM tiles (sharp), sorted in front of or behind the canvas.
-      c.spec.tiles.forEach((el, j) => {
-        const a = t * 0.35 + (j * Math.PI * 2) / c.spec.tiles.length;
-        const front = Math.sin(a); // 1 = nearest, -1 = behind the crystal
-        const px = ((c.x + Math.cos(a) * 0.62) / halfW + 1) / 2 * W;
-        const py = (1 - (y - front * 0.16) / HALF_H) / 2 * H;
-        el.style.transform = `translate(${px.toFixed(1)}px, ${py.toFixed(1)}px) translate(-50%, -50%) scale(${(0.82 + front * 0.18).toFixed(3)})`;
-        el.style.zIndex = front > 0 ? "30" : "10"; // the canvas sits at 20
-        el.style.opacity = (0.75 + front * 0.25).toFixed(2);
-      });
+    crystals.forEach((c, i) => {
+      // Ring slot, or the middle of the stage for the selected one.
+      const a = ring + (i * Math.PI * 2) / crystals.length;
+      const depth = Math.sin(a); // 1 = nearest
+      const picked = i === sel;
+      const tx = picked ? 0 : Math.cos(a) * rx;
+      const ty = picked ? 0.05 : RING_Y - depth * 0.42;
+      const ts = picked ? 2.3 : 0.72 + ((depth + 1) / 2) * 0.5;
+      c.x += (tx - c.x) * ease;
+      c.y += (ty - c.y) * ease;
+      c.s += (ts - c.s) * ease;
+      c.d += ((picked ? 1.6 : depth) - c.d) * ease;
+      c.uLift.value += ((picked || i === hot ? 1 : 0) - c.uLift.value) * 0.1;
+
+      const bob = Math.sin(t * 0.7 + i * 0.9) * 0.05;
+      c.body.position.set(c.x, c.y + bob, c.d);
+      c.body.scale.set(c.s, c.s * 1.55, c.s);
+      // Each crystal leans and turns on its own rhythm, so no two move alike.
+      c.body.rotation.set(Math.sin(t * 0.4 + i) * 0.22, t * (picked ? 0.5 : 0.3) + i, 0.16 + Math.sin(t * 0.5 + i * 1.3) * 0.26);
+      c.glow.position.set(c.x, c.y + bob, c.d - 0.3);
+      c.glow.scale.setScalar(c.s);
+
+      // The tab button rides on its crystal: that is what makes each crystal clickable and focusable.
+      const el = tabs[i];
+      if (el) {
+        el.style.transform = `translate(${toX(c.x).toFixed(1)}px, ${toY(c.y + bob).toFixed(1)}px) translate(-50%, -50%) scale(${Math.min(c.s, 1.25).toFixed(3)})`;
+        el.style.zIndex = String(40 + Math.round(c.d * 5));
+        // The picked label would sit behind its own big crystal; the panel heading below names it instead.
+        el.style.opacity = picked ? "0" :(0.25 + ((c.d + 1) / 2) * 0.75).toFixed(2); // far labels fade so they do not pile up
+        el.style.pointerEvents = picked ? "none" : ""; // the middle one is already selected; let its logos take the pointer
+      }
     });
+
+    // Logos of the selected category circle the middle crystal, passing in front of and behind it.
+    const mid = crystals[sel];
+    const list = tiles();
+    list.forEach((el, j) => {
+      const a = orbit + (j * Math.PI * 2) / list.length;
+      const front = Math.sin(a);
+      el.style.transform = `translate(${toX(mid.x + Math.cos(a) * 1.45).toFixed(1)}px, ${toY(mid.y - front * 0.34).toFixed(1)}px) translate(-50%, -50%) scale(${(0.85 + front * 0.15).toFixed(3)})`;
+      el.style.zIndex = front > 0 ? "60" : "10"; // canvas at 20, crystal buttons at 35-48: front logos stay hoverable
+      el.style.opacity = (0.8 + front * 0.2).toFixed(2);
+    });
+
     renderer.render(scene, camera);
   };
 

@@ -49,7 +49,7 @@ export default function HowIWork({ items }: { items: Dictionary["about"]["how"] 
             <li
               key={h.title}
               data-lit={lit || undefined}
-              className="reveal bg-surface p-6 pixel-border transition-transform duration-300 data-[lit]:-translate-y-1 data-[lit]:[--pb:var(--accent)]"
+              className="corners reveal bg-surface p-6 pixel-border transition-transform duration-300 data-[lit]:-translate-y-1 data-[lit]:[--pb:var(--accent)]"
             >
               <p className="font-pixel text-sm text-accent">0{i + 1}</p>
               <h4 className="mt-2 text-lg font-semibold tracking-tight">{h.title}</h4>

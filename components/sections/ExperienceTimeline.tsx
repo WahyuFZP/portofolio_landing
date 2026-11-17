@@ -1,21 +1,52 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { AnimatePresence, m } from "motion/react";
+import { useEffect, useRef, useState } from "react";
+import { animate, AnimatePresence, m } from "motion/react";
 import type { Dictionary } from "@/lib/dictionary";
 import { tag } from "@/components/ui/styles";
 
 type Job = Dictionary["experience"]["list"][number];
 
+// The road, in a 1000 x 200 box. Each stop is the end point of one curve segment.
+// shortcut: three stops are drawn; add a segment (and its stop below) when a fourth role is added.
+const ROAD = "M 0 170 C 90 170 110 130 170 130 S 340 30 500 70 S 700 190 830 120 S 950 40 1000 40";
+const STOPS = [
+  { x: 170, y: 130, at: 0.1666 }, // `at` = share of the road's length up to this stop (measured numerically)
+  { x: 500, y: 70, at: 0.4902 },
+  { x: 830, y: 120, at: 0.82 },
+];
+
 /**
- * Horizontal timeline as a tab list: oldest on the left, newest on the right and open by default.
- * Arrow keys move between roles (standard tabs pattern); the panel below shows the selected one.
+ * Career as a winding road: oldest role on the left, newest on the right and open by default.
+ * A marker drives along the curve to the selected stop and the road behind it turns blue.
+ * Still a standard tab list: click a stop, or use the arrow keys.
  */
 export default function ExperienceTimeline({ jobs, label }: { jobs: Job[]; label: string }) {
-  const ordered = [...jobs].reverse(); // the dictionary lists newest first
+  const ordered = [...jobs].reverse().slice(0, STOPS.length); // the dictionary lists newest first
   const [active, setActive] = useState(ordered.length - 1);
   const tabs = useRef<(HTMLButtonElement | null)[]>([]);
+  const pathRef = useRef<SVGPathElement>(null);
+  const markerRef = useRef<SVGGElement>(null);
+  const at = useRef(0); // marker position, as a share of the road's length
   const job = ordered[active];
+
+  // Drive the marker along the curve to the selected stop.
+  useEffect(() => {
+    const path = pathRef.current;
+    const marker = markerRef.current;
+    if (!path || !marker) return;
+    const total = path.getTotalLength();
+    const place = (v: number) => {
+      at.current = v;
+      const p = path.getPointAtLength(total * v);
+      const q = path.getPointAtLength(Math.min(total, total * v + 1)); // a point just ahead gives the heading
+      marker.setAttribute("transform", `translate(${p.x.toFixed(1)} ${p.y.toFixed(1)}) rotate(${((Math.atan2(q.y - p.y, q.x - p.x) * 180) / Math.PI).toFixed(1)})`);
+    };
+    const target = STOPS[active].at;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return place(target);
+    const run = animate(at.current, target, { duration: 1.1, ease: [0.45, 0, 0.2, 1], onUpdate: place });
+    return () => run.stop();
+  }, [active]);
 
   const onKey = (e: React.KeyboardEvent) => {
     const next = { ArrowRight: active + 1, ArrowLeft: active - 1, Home: 0, End: ordered.length - 1 }[e.key];
@@ -27,43 +58,69 @@ export default function ExperienceTimeline({ jobs, label }: { jobs: Job[]; label
 
   return (
     <div>
-      <div role="tablist" aria-label={label} onKeyDown={onKey} className="relative grid" style={{ gridTemplateColumns: `repeat(${ordered.length}, minmax(0, 1fr))` }}>
-        {/* Rail: the filled part runs up to the selected role. Dots sit at the centre of each column. */}
-        <span className="absolute left-0 right-0 top-[13px] h-0.5 bg-border" aria-hidden />
-        <span
-          className="absolute left-0 top-[13px] h-0.5 bg-accent transition-[width] duration-500 ease-out"
-          style={{ width: `${((active + 0.5) / ordered.length) * 100}%` }}
-          aria-hidden
-        />
-        {ordered.map((j, i) => {
-          const selected = i === active;
-          return (
-            <button
-              key={`${j.company}-${j.role}`}
-              ref={(el) => {
-                tabs.current[i] = el;
-              }}
-              type="button"
-              role="tab"
-              id={`exp-tab-${i}`}
-              aria-selected={selected}
-              aria-controls="exp-panel"
-              tabIndex={selected ? 0 : -1}
-              onClick={() => setActive(i)}
-              className="group relative flex flex-col items-center gap-3 px-1 pb-2 text-center"
-            >
-              <span
-                className={`relative z-10 h-7 w-7 transition-transform duration-300 ${selected ? "scale-100 bg-accent" : "scale-[0.6] bg-surface pixel-border group-hover:scale-75 group-hover:[--pb:var(--accent)]"}`}
-                aria-hidden
-              />
-              <span className={`font-mono text-xs ${selected ? "text-accent" : "text-muted"}`}>{j.period}</span>
-              <span className={`text-sm font-semibold tracking-tight sm:text-base ${selected ? "text-text" : "text-muted group-hover:text-text"}`}>{j.role}</span>
-            </button>
-          );
-        })}
+      <div className="relative mb-20 aspect-[1000/200] sm:mb-24">
+        <svg viewBox="0 0 1000 200" aria-hidden className="absolute inset-0 h-full w-full overflow-visible" fill="none" strokeLinecap="round">
+          <defs>
+            {/* The road is wiped in from the left as it scrolls into view. */}
+            <clipPath id="road-wipe">
+              <rect className="road-wipe" x="-20" y="-40" width="1040" height="280" />
+            </clipPath>
+          </defs>
+          <g clipPath="url(#road-wipe)">
+            <path d={ROAD} stroke="var(--border)" strokeWidth="30" />
+            <path d={ROAD} stroke="var(--surface)" strokeWidth="26" />
+            {/* Travelled part: fills up to the selected stop. pathLength=1 makes the dash maths unit-free. */}
+            <path
+              d={ROAD}
+              pathLength={1}
+              stroke="var(--accent)"
+              strokeWidth="26"
+              strokeOpacity="0.35"
+              strokeDasharray="1"
+              strokeDashoffset={1 - STOPS[active].at}
+              className="transition-[stroke-dashoffset] duration-[1100ms] ease-[cubic-bezier(0.45,0,0.2,1)]"
+            />
+            <path ref={pathRef} d={ROAD} stroke="var(--line)" strokeWidth="2" strokeDasharray="10 12" strokeLinecap="butt" />
+          </g>
+          <g ref={markerRef}>
+            {/* Drawn beside the road (22 units to its left), so the stop marker never hides it. */}
+            <path d="M -11 -29 L 11 -22 L -11 -15 L -6 -22 Z" fill="var(--line)" stroke="var(--bg)" strokeWidth="2" strokeLinejoin="round" />
+          </g>
+        </svg>
+
+        <div role="tablist" aria-label={label} onKeyDown={onKey}>
+          {ordered.map((j, i) => {
+            const selected = i === active;
+            return (
+              <button
+                key={`${j.company}-${j.role}`}
+                ref={(el) => {
+                  tabs.current[i] = el;
+                }}
+                type="button"
+                role="tab"
+                id={`exp-tab-${i}`}
+                aria-selected={selected}
+                aria-controls="exp-panel"
+                tabIndex={selected ? 0 : -1}
+                onClick={() => setActive(i)}
+                style={{ left: `${STOPS[i].x / 10}%`, top: `${STOPS[i].y / 2}%` }}
+                className="group absolute flex w-28 -translate-x-1/2 flex-col items-center gap-2 pt-0 text-center sm:w-40"
+              >
+                {/* The stop itself sits on the road; -translate-y centres it on the curve. */}
+                <span
+                  className={`h-6 w-6 -translate-y-1/2 rotate-45 transition-transform duration-300 ${selected ? "scale-100 bg-accent" : "scale-[0.65] bg-surface pixel-border group-hover:scale-90 group-hover:[--pb:var(--accent)]"}`}
+                  aria-hidden
+                />
+                <span className={`font-mono text-[11px] sm:text-xs ${selected ? "text-accent" : "text-muted"}`}>{j.period}</span>
+                <span className={`hidden text-sm font-semibold tracking-tight sm:block ${selected ? "text-text" : "text-muted group-hover:text-text"}`}>{j.role}</span>
+              </button>
+            );
+          })}
+        </div>
       </div>
 
-      <div id="exp-panel" role="tabpanel" aria-labelledby={`exp-tab-${active}`} tabIndex={0} className="mt-8 min-h-72 bg-surface p-6 pixel-border sm:p-8">
+      <div id="exp-panel" role="tabpanel" aria-labelledby={`exp-tab-${active}`} tabIndex={0} className="corners min-h-72 bg-surface p-6 pixel-border sm:p-8">
         <AnimatePresence mode="wait" initial={false}>
           <m.div key={active} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}>
             <p className="font-mono text-xs text-muted">

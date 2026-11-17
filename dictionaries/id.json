@@ -62,7 +62,7 @@
   },
   "skills": {
     "title": "Keahlian",
-    "subtitle": "QA lebih dulu. Pilih skill untuk melihat proyek yang memakainya.",
+    "subtitle": "QA lebih dulu. Pilih kategori, lalu skill untuk melihat proyek yang memakainya.",
     "levels": {
       "proficient": "Mahir",
       "familiar": "Terbiasa",

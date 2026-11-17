@@ -62,7 +62,7 @@
   },
   "skills": {
     "title": "Skills",
-    "subtitle": "QA first. Select a skill to see the projects that use it.",
+    "subtitle": "QA first. Pick a category, then a skill to see the projects that use it.",
     "levels": {
       "proficient": "Proficient",
       "familiar": "Familiar",

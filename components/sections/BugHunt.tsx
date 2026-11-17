@@ -81,6 +81,7 @@ export default function BugHunt({ dict }: { dict: Dictionary["bugHunt"] }) {
         </p>
       </div>
 
+      <div className="corners">
       <div className="relative h-80 overflow-hidden bg-surface pixel-border">
         {phase === "playing" &&
           bugs.map((b) => (
@@ -114,6 +115,7 @@ export default function BugHunt({ dict }: { dict: Dictionary["bugHunt"] }) {
             </button>
           </div>
         )}
+      </div>
       </div>
     </section>
   );

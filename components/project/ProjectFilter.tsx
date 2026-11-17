@@ -77,7 +77,7 @@ export default function ProjectFilter({ locale, projects, dict }: Props) {
       </p>
 
       {visible.length === 0 && (
-        <div className="bg-surface p-8 text-center pixel-border">
+        <div className="corners bg-surface p-8 text-center pixel-border">
           <p className="text-muted">{dict.empty}</p>
           <button type="button" onClick={() => go({ category: null, skill: null })} className={`${chip} ${off} mt-4`}>
             {dict.reset}

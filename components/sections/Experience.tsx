@@ -25,7 +25,7 @@ export default function Experience({ locale, dict }: Props) {
           <h3 className="reveal mb-5 text-xl font-semibold tracking-tight">{dict.credentialsTitle}</h3>
           <ul className="space-y-4">
             {certificates.map((c) => (
-              <li key={c.name} className="reveal bg-surface p-4 pixel-border">
+              <li key={c.name} className="corners reveal bg-surface p-4 pixel-border">
                 <p className="font-medium">{c.name}</p>
                 <p className="mt-1 text-sm text-muted">
                   {c.issuer} · {dict.issued} <time dateTime={c.date}>{month(c.date)}</time>
