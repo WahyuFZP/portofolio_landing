@@ -164,7 +164,7 @@ export default function SkillCrystals({ dict, pause, usage }: Props) {
       <div id="skills-panel" role="tabpanel" aria-labelledby={`skills-tab-${cat}`} tabIndex={0} className="corners mt-6 min-h-56 bg-surface p-6 pixel-border sm:p-8">
         <AnimatePresence mode="wait" initial={false}>
           <m.div key={cat} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}>
-            <h3 className="font-pixel text-xl font-medium">{dict.categories[cat]}</h3>
+            <h3 className="font-dot text-3xl font-black leading-none text-accent">{dict.categories[cat]}</h3>
             <div className="mt-5 grid gap-6 sm:grid-cols-3">
               {levels.map((lvl) => {
                 const list = inCat.filter((s) => s.level === lvl);

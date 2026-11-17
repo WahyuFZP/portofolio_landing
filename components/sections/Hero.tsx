@@ -1,5 +1,5 @@
-import type { Dictionary } from "@/lib/dictionary";
 import Image from "next/image";
+import type { Dictionary } from "@/lib/dictionary";
 import { profile } from "@/content/profile";
 import { btnPrimary, btnSecondary } from "@/components/ui/styles";
 import PixelIcon from "@/components/ui/PixelIcon";
@@ -11,49 +11,56 @@ interface Props {
   caseStudies: number;
 }
 
+// Small plus signs scattered over the blue band (decorative).
+const SPARKS = ["left-[6%] top-[46%]", "left-[44%] top-[38%]", "right-[5%] top-[52%]"];
+
 export default function Hero({ dict, proofDict, caseStudies }: Props) {
-  const i = (n: number) => ({ "--i": n }) as React.CSSProperties;
+  const [first, second, ...rest] = profile.name.split(" ");
   return (
-    <section id="home" className="relative py-14 sm:py-20">
-      <div className="grid items-center gap-8 md:grid-cols-[1.15fr_1fr]">
-        <div className="relative z-10">
-          <p className="boot mb-4 font-pixel text-sm text-accent" style={i(0)}>{dict.eyebrow}</p>
-          {/* H1 is the LCP element: no opacity animation on it. */}
-          {/* Not the pixel font: its capital Z reads like a 2, and the name must be unmistakable. */}
-          <h1 className="text-4xl font-semibold leading-[1.08] tracking-tight sm:text-6xl">
-            {profile.name}
-            <span className="cursor ml-1 inline-block h-[0.85em] w-[0.45em] translate-y-[0.08em] bg-accent" aria-hidden />
-          </h1>
-          {/* Tagline is the LCP element on mobile: not animated. */}
-          <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted">{dict.tagline}</p>
+    // Full-bleed blue band: wider than <main>, content re-centred inside.
+    <section id="home" className="relative left-1/2 w-screen -translate-x-1/2 overflow-hidden bg-accent text-accent-fg">
+      {SPARKS.map((pos) => (
+        <span key={pos} aria-hidden className={`absolute font-mono text-2xl font-bold text-hi ${pos}`}>+</span>
+      ))}
+      <div className="relative mx-auto w-full max-w-5xl px-4 pb-14 pt-8 sm:px-6 sm:pb-20">
+        {/* Dot-matrix wordmark. The H1 still reads as the full name; it is the LCP element, so no opacity animation. */}
+        <h1 className="font-dot text-[clamp(2.75rem,12.5vw,9.5rem)] font-black uppercase leading-[0.85] tracking-tight">
+          {first} <span className="text-hi">{second}</span>
+          <span className="sr-only"> {rest.join(" ")}</span>
+        </h1>
+        <div className="mt-4 flex flex-wrap justify-between gap-x-10 gap-y-2 font-mono text-xs uppercase tracking-wide sm:text-sm">
+          <p>[ {dict.eyebrow} ]</p>
+          <p>[ {profile.location} ]</p>
+        </div>
 
-          <div className="boot mt-8 flex flex-wrap gap-4" style={i(2)}>
-            <a href="#projects" className={btnPrimary}>
-              {dict.ctaProjects} <PixelIcon name="arrowDown" className="h-3.5 w-3.5" />
-            </a>
-            <a href={profile.cv} className={btnSecondary} download>
-              <PixelIcon name="download" className="h-3.5 w-3.5" /> {dict.ctaCv}
-            </a>
+        <div className="mt-12 grid items-center gap-10 md:grid-cols-[1.2fr_1fr]">
+          <div>
+            <p className="max-w-xl font-mono text-lg leading-relaxed">{dict.tagline}</p>
+            <div className="boot mt-8 flex flex-wrap gap-4" style={{ "--i": 1 } as React.CSSProperties}>
+              <a href="#projects" className={btnPrimary}>
+                {dict.ctaProjects} <PixelIcon name="arrowDown" className="h-3.5 w-3.5" />
+              </a>
+              <a href={profile.cv} className={btnSecondary} download>
+                <PixelIcon name="download" className="h-3.5 w-3.5" /> {dict.ctaCv}
+              </a>
+            </div>
+            <div className="mt-6 flex gap-5 font-mono text-sm">
+              <a href={profile.github} target="_blank" rel="noopener noreferrer" className="underline underline-offset-4 hover:text-hi">GitHub ↗</a>
+              <a href={profile.linkedin} target="_blank" rel="noopener noreferrer" className="underline underline-offset-4 hover:text-hi">LinkedIn ↗</a>
+              <a href={`mailto:${profile.email}`} className="underline underline-offset-4 hover:text-hi">Email ↗</a>
+            </div>
           </div>
 
-          <div className="boot mt-6 flex gap-5 font-mono text-sm text-muted" style={i(3)}>
-            <a href={profile.github} target="_blank" rel="noopener noreferrer" className="hover:text-text">GitHub ↗</a>
-            <a href={profile.linkedin} target="_blank" rel="noopener noreferrer" className="hover:text-text">LinkedIn ↗</a>
-            <a href={`mailto:${profile.email}`} className="hover:text-text">Email ↗</a>
+          {/* Pixel portrait made from the About photo by scripts/portrait-art.mjs: 88x88, shown at 4x with hard pixels. */}
+          <div className="card-hi mx-auto w-full max-w-[352px] overflow-hidden md:mr-2">
+            <Image src="/hero/portrait-pixel.png" alt="" width={352} height={352} unoptimized priority className="h-auto w-full [image-rendering:pixelated]" />
           </div>
         </div>
 
-        {/* Pixel-art scene, drawn by scripts/hero-art.mjs at 240x200 and shown at 2x with hard pixels.
-            Its edges fade to black, so on the black theme it melts into the page. Decorative. */}
-        <div aria-hidden className="corners mx-auto w-full max-w-[480px]">
-          <Image src="/hero/launch-night.png" alt="" width={480} height={400} unoptimized priority className="h-auto w-full [image-rendering:pixelated]" />
+        <div className="mt-12 text-text">
+          <ProofStrip dict={proofDict} caseStudies={caseStudies} />
         </div>
       </div>
-
-      <div className="mt-10">
-        <ProofStrip dict={proofDict} caseStudies={caseStudies} />
-      </div>
-
     </section>
   );
 }

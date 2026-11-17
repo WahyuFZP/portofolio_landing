@@ -61,7 +61,7 @@ export default function HowIWork({ items }: { items: Dictionary["about"]["how"] 
               <span className="flex h-10 w-10 items-center justify-center border-2 border-accent text-accent" aria-hidden>
                 <PixelIcon name={ICONS[i] ?? "check"} className="h-5 w-5" />
               </span>
-              <h4 className="mt-4 font-pixel text-base font-medium">{h.title}</h4>
+              <h4 className="mt-4 font-mono text-base font-semibold">{h.title}</h4>
               <p className="mt-2 text-muted">{h.body}</p>
             </li>
           );

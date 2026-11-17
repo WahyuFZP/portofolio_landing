@@ -6,7 +6,6 @@ import { m } from "motion/react";
 import { Menu, X } from "lucide-react";
 import type { Dictionary } from "@/lib/dictionary";
 import type { Locale } from "@/lib/i18n";
-import ThemeToggle from "./ThemeToggle";
 
 const sections = ["projects", "skills", "experience", "about", "contact"] as const;
 
@@ -73,8 +72,6 @@ export default function Navbar({ locale, dict }: { locale: Locale; dict: Diction
             {other}
             <span className="sr-only">: {dict.switchLanguage}</span>
           </a>
-
-          <ThemeToggle label={dict.theme} />
 
           <details ref={menuRef} className="group relative md:hidden">
             <summary

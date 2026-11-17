@@ -1,80 +1,28 @@
 @import "tailwindcss";
 
-/* Design tokens. Follows the OS by default; the navbar toggle sets html[data-theme] and wins. */
+/* Design tokens. One light theme: blue, white and black, with yellow as the highlight. */
 :root {
   color-scheme: light;
-  --bg: #f8fafc;
+  --bg: #ffffff;
   --surface: #ffffff;
-  --text: #0f172a;
-  --muted: #475569; /* 7.2:1 on --bg */
-  --border: #cbd5e1;
-  --accent: #2563eb; /* blue-600, 5.2:1 on white */
-  --accent-soft: #eff6ff;
+  --text: #0a0a0a;
+  --muted: #475569; /* 7.6:1 on white */
+  --border: #0a0a0a; /* cards are outlined in black */
+  --accent: #0a66e8; /* 5.2:1 with white text */
+  --accent-soft: #e8f1ff;
   --accent-fg: #ffffff;
+  --hi: #facc15; /* yellow highlight: fills, the one bright word, primary button */
   --danger: #b91c1c;
-  /* Constellation palette (read by the 3D scene and the SVG poster) */
-  --node-1: #2563eb;
+  /* Read by the 3D scenes */
+  --node-1: #0a66e8;
   --node-2: #0e7490;
   --node-3: #475569;
   --edge: #94a3b8;
-  --warm: #ca8a04; /* same yellow as --line: planet and ship lights (palette: blue, cyan, yellow, neutral) */
-  --star: #64748b; /* background dust */
-  --line: #ca8a04; /* yellow accent lines: corner brackets, road markings */
-  --show-light: inline-block;
-  --show-dark: none;
-  --field-alpha: 0.45; /* deep-field background strength */
+  --warm: #ca8a04;
+  --star: #64748b;
+  --line: #ca8a04; /* thin yellow lines on white (darker than --hi so they stay visible) */
+  --field-alpha: 0.45;
 }
-
-/* Dark values are listed twice on purpose: once for the explicit toggle, once for "OS dark, no choice made". */
-:root[data-theme="dark"] {
-  color-scheme: dark;
-  --bg: #000000; /* pure black, so pixel art can fade into the page */
-  --surface: #07090f;
-  --text: #f1f5f9;
-  --muted: #94a3b8; /* 8.1:1 on --bg */
-  --border: #1e293b;
-  --accent: #60a5fa; /* blue-400 */
-  --accent-soft: #0c1f3d;
-  --accent-fg: #06122b;
-  --danger: #f87171;
-  --node-1: #60a5fa;
-  --node-2: #22d3ee;
-  --node-3: #cbd5e1;
-  --edge: #3b4a63;
-  --warm: #facc15;
-  --star: #e2e8f0;
-  --line: #facc15;
-  --show-light: none;
-  --show-dark: inline-block;
-  --field-alpha: 1;
-}
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    color-scheme: dark;
-    --bg: #000000; /* pure black, so pixel art can fade into the page */
-    --surface: #07090f;
-    --text: #f1f5f9;
-    --muted: #94a3b8;
-    --border: #1e293b;
-    --accent: #60a5fa;
-    --accent-soft: #0c1f3d;
-    --accent-fg: #06122b;
-    --danger: #f87171;
-    --node-1: #60a5fa;
-    --node-2: #22d3ee;
-    --node-3: #cbd5e1;
-    --edge: #3b4a63;
-  --warm: #facc15;
-  --star: #e2e8f0;
-  --line: #facc15;
-    --show-light: none;
-    --show-dark: inline-block;
-  --field-alpha: 1;
-  }
-}
-
-.only-light { display: var(--show-light); }
-.only-dark { display: var(--show-dark); }
 
 @theme inline {
   --color-bg: var(--bg);
@@ -87,9 +35,11 @@
   --color-accent-fg: var(--accent-fg);
   --color-danger: var(--danger);
   --color-line: var(--line);
+  --color-hi: var(--hi);
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
-  --font-pixel: var(--font-pixelify), var(--font-geist-mono), monospace;
+  --font-pixel: var(--font-geist-mono), ui-monospace, monospace; /* small labels: mono, like the bracket labels */
+  --font-dot: var(--font-doto), var(--font-geist-mono), monospace; /* dot-matrix display type for headings */
 }
 
 html {
@@ -101,7 +51,6 @@ html {
 body {
   background-color: var(--bg);
   color: var(--text);
-  transition: background-color 200ms, color 200ms;
 }
 
 :focus-visible {
@@ -111,17 +60,14 @@ body {
 
 /* ---------- Pixel utilities ---------- */
 
-/* Pixel-art border: 4 offset shadows leave the corner pixels empty (stepped corner). */
+/* Card outline: a 2px rounded ring drawn with box-shadow, so it never changes layout. */
 /* In the components layer on purpose: utilities such as hover:[--pb:...] or target:[--pb:...] must be
    able to override the border color. Unlayered rules always beat Tailwind's utility layer. */
 @layer components {
   .pixel-border {
     --pb: var(--border);
-    box-shadow:
-      0 -2px 0 0 var(--pb),
-      0 2px 0 0 var(--pb),
-      -2px 0 0 0 var(--pb),
-      2px 0 0 0 var(--pb);
+    border-radius: 8px;
+    box-shadow: 0 0 0 2px var(--pb);
   }
   .pixel-border-accent {
     --pb: var(--accent);
@@ -132,30 +78,15 @@ body {
     clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
   }
 
-  /* Yellow brackets on the top-left and bottom-right corners of cards and panels. */
+  /* Cards and panels: a colored layer peeks out behind the top-left corner. */
   .corners {
-    position: relative;
+    border-radius: 8px;
+    box-shadow: 0 0 0 2px var(--pb, var(--border)), -7px -7px 0 2px var(--accent);
   }
-  .corners::before,
-  .corners::after {
-    content: "";
-    position: absolute;
-    width: 14px;
-    height: 14px;
-    pointer-events: none;
-    border: 0 solid var(--line);
-  }
-  .corners::before {
-    top: -6px;
-    left: -6px;
-    border-top-width: 2px;
-    border-left-width: 2px;
-  }
-  .corners::after {
-    bottom: -6px;
-    right: -6px;
-    border-bottom-width: 2px;
-    border-right-width: 2px;
+  /* Same, in yellow: for cards that sit on the blue band. */
+  .card-hi {
+    border-radius: 8px;
+    box-shadow: 0 0 0 2px var(--border), -8px -8px 0 2px var(--hi);
   }
 }
 

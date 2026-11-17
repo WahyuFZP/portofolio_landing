@@ -32,7 +32,7 @@ export default function About({ dict }: { dict: Dictionary["about"] }) {
         </div>
       </div>
 
-      <h3 className="mt-16 mb-2 font-pixel text-xl font-medium"><Words text={dict.howTitle} /></h3>
+      <h3 className="mt-16 mb-2 font-dot text-3xl font-black leading-none text-accent"><Words text={dict.howTitle} /></h3>
       <HowIWork items={dict.how} />
     </section>
   );

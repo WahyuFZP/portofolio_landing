@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { Geist, Geist_Mono, Pixelify_Sans } from "next/font/google";
+import { Doto, Geist, Geist_Mono } from "next/font/google";
 import "@/app/globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import MotionProvider from "@/components/motion/MotionProvider";
 import DeepField from "@/components/background/DeepField";
 import { EXTRA_SCENES } from "@/lib/scene";
-import { themeScript } from "@/components/layout/ThemeToggle";
 import { getDictionary } from "@/lib/dictionary";
 import { isLocale, locales } from "@/lib/i18n";
 import { profile } from "@/content/profile";
@@ -16,7 +15,7 @@ import { profile } from "@/content/profile";
 const sans = Geist({ subsets: ["latin"], variable: "--font-geist-sans", display: "optional" });
 // swap, not optional: mono is only used for small labels, and "optional" left them on the Arial-based fallback.
 const mono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono", display: "swap", preload: false });
-const pixel = Pixelify_Sans({ subsets: ["latin"], weight: ["500", "700"], variable: "--font-pixelify", display: "swap" });
+const dot = Doto({ subsets: ["latin"], weight: ["900"], variable: "--font-doto", display: "swap" });
 
 export const dynamicParams = false;
 export const generateStaticParams = () => locales.map((locale) => ({ locale }));
@@ -66,10 +65,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
   };
 
   return (
-    <html lang={locale} className={`${sans.variable} ${mono.variable} ${pixel.variable}`} suppressHydrationWarning>
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
-      </head>
+    <html lang={locale} className={`${sans.variable} ${mono.variable} ${dot.variable}`}>
       <body className="font-sans antialiased">
         <a
           href="#main"
