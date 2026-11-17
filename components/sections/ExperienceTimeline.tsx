@@ -7,13 +7,13 @@ import { tag } from "@/components/ui/styles";
 
 type Job = Dictionary["experience"]["list"][number];
 
-// The road, in a 1000 x 200 box. Each stop is the end point of one curve segment.
+// The road, in a 1000 x 300 box: it dips to each stop and climbs between them, like a slide.
 // shortcut: three stops are drawn; add a segment (and its stop below) when a fourth role is added.
-const ROAD = "M 0 170 C 90 170 110 130 170 130 S 340 30 500 70 S 700 190 830 120 S 950 40 1000 40";
+const ROAD = "M 0 50 C 70 50 100 230 170 230 S 270 40 335 40 S 430 230 500 230 S 600 40 665 40 S 760 230 830 230 S 930 60 1000 60";
 const STOPS = [
-  { x: 170, y: 130, at: 0.1666 }, // `at` = share of the road's length up to this stop (measured numerically)
-  { x: 500, y: 70, at: 0.4902 },
-  { x: 830, y: 120, at: 0.82 },
+  { x: 170, y: 230, at: 0.1657 }, // `at` = share of the road's length up to this stop (measured numerically)
+  { x: 500, y: 230, at: 0.5024 },
+  { x: 830, y: 230, at: 0.8392 },
 ];
 
 /**
@@ -58,12 +58,12 @@ export default function ExperienceTimeline({ jobs, label }: { jobs: Job[]; label
 
   return (
     <div>
-      <div className="relative mb-20 aspect-[1000/200] sm:mb-24">
-        <svg viewBox="0 0 1000 200" aria-hidden className="absolute inset-0 h-full w-full overflow-visible" fill="none" strokeLinecap="round">
+      <div className="relative mb-20 aspect-[1000/300] sm:mb-24">
+        <svg viewBox="0 0 1000 300" aria-hidden className="absolute inset-0 h-full w-full overflow-visible" fill="none" strokeLinecap="round">
           <defs>
             {/* The road is wiped in from the left as it scrolls into view. */}
             <clipPath id="road-wipe">
-              <rect className="road-wipe" x="-20" y="-40" width="1040" height="280" />
+              <rect className="road-wipe" x="-20" y="-40" width="1040" height="380" />
             </clipPath>
           </defs>
           <g clipPath="url(#road-wipe)">
@@ -83,8 +83,8 @@ export default function ExperienceTimeline({ jobs, label }: { jobs: Job[]; label
             <path ref={pathRef} d={ROAD} stroke="var(--line)" strokeWidth="2" strokeDasharray="10 12" strokeLinecap="butt" />
           </g>
           <g ref={markerRef}>
-            {/* Drawn beside the road (22 units to its left), so the stop marker never hides it. */}
-            <path d="M -11 -29 L 11 -22 L -11 -15 L -6 -22 Z" fill="var(--line)" stroke="var(--bg)" strokeWidth="2" strokeLinejoin="round" />
+            {/* Drawn beside the road (44 units to its left), so the stop marker never hides it. */}
+            <path d="M -11 -51 L 11 -44 L -11 -37 L -6 -44 Z" fill="var(--line)" stroke="var(--bg)" strokeWidth="2" strokeLinejoin="round" />
           </g>
         </svg>
 
@@ -104,7 +104,7 @@ export default function ExperienceTimeline({ jobs, label }: { jobs: Job[]; label
                 aria-controls="exp-panel"
                 tabIndex={selected ? 0 : -1}
                 onClick={() => setActive(i)}
-                style={{ left: `${STOPS[i].x / 10}%`, top: `${STOPS[i].y / 2}%` }}
+                style={{ left: `${STOPS[i].x / 10}%`, top: `${STOPS[i].y / 3}%` }}
                 className="group absolute flex w-28 -translate-x-1/2 flex-col items-center gap-2 pt-0 text-center sm:w-40"
               >
                 {/* The stop itself sits on the road; -translate-y centres it on the curve. */}

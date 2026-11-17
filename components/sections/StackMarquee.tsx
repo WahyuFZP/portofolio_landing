@@ -6,7 +6,7 @@ import MarqueePause from "./MarqueePause";
 const testing = skills.filter((s) => ["qa", "security", "devops", "ai"].includes(s.category));
 const building = skills.filter((s) => ["frontend", "backend", "database", "design"].includes(s.category));
 
-function Row({ items, chip }: { items: Skill[]; chip: string }) {
+function Row({ items, chip, mark = "" }: { items: Skill[]; chip: string; mark?: string }) {
   // Rendered twice so the -50% loop is seamless.
   return (
     <>
@@ -20,7 +20,7 @@ function Row({ items, chip }: { items: Skill[]; chip: string }) {
                 <span className={i % 3 === 0 ? "font-pixel text-2xl" : "text-xl font-semibold tracking-tight"}>{s.name}</span>
               )}
               {/* Plain squares, not SVG icons: this row repeats ~80 times and must stay light. */}
-              <span className={i % 2 ? "h-2 w-2 bg-current" : "h-2 w-2 rotate-45 border-2 border-current"} />
+              <span className={`h-2 w-2 ${mark} ${i % 2 ? "bg-current" : "rotate-45 border-2 border-current"}`} />
             </li>
           ))}
         </ul>
@@ -46,9 +46,11 @@ export default function StackMarquee({ dict }: { dict: Dictionary["marquee"] }) 
           <Row items={testing} chip="border-2 border-current" />
         </div>
       </div>
+      {/* Yellow accent: a lane divider, like a road marking, plus yellow separators on the quiet lane. */}
+      <div className="h-[3px] bg-line" />
       <div className={`${lane} bg-surface pb-8 pt-3 text-muted`}>
         <div className="marquee marquee-rev [--marquee-time:70s]">
-          <Row items={building} chip="border-2 border-border" />
+          <Row items={building} chip="border-2 border-border" mark="text-line" />
         </div>
       </div>
     </div>

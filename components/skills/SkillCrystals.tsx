@@ -6,8 +6,8 @@ import type { Dictionary } from "@/lib/dictionary";
 import { categories, levels, skills, skillLogo } from "@/content/skills";
 import { afterLoadIdle, canRun3D } from "@/lib/scene";
 
-// Three tones only, repeated across the eight categories.
-const TONES = ["--node-1", "--warm", "--node-2"];
+// Three gem colors only (blue, cyan, yellow), repeated across the eight categories.
+const TONES = ["#3b82f6", "#22d3ee", "#facc15"];
 
 interface Props {
   dict: Dictionary["skills"];

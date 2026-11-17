@@ -8,13 +8,8 @@ const SPARKS = 40;
 const RING_Y = 0.3; // ring centre, a little above the middle
 const TURN = 0.1; // rad/s: the ring goes round once every ~63 s
 
-// 4x4 ordered dither: turns the few light levels into a smooth-looking ramp without losing the pixel grid.
-const BAYER = `
-  float b2(vec2 a) { a = floor(a); return fract(a.x / 2.0 + a.y * a.y * 0.75); }
-  float bayer4(vec2 a) { return b2(0.5 * a) * 0.25 + b2(a); }`;
-
 interface Options {
-  tones: string[]; // CSS color variable per crystal
+  tones: string[]; // gem color per crystal (hex): gems are self-lit, so the same in both themes
   tabs: HTMLElement[]; // one button per crystal, moved to follow it
   tiles: () => HTMLElement[]; // logo tiles of the selected category (they change with the selection)
   selected: () => number;
@@ -25,7 +20,7 @@ interface Options {
 /**
  * Skill categories as crystals orbiting in one tilted ring: near ones large, far ones small.
  * The selected crystal leaves the ring and floats in the middle, with its logos circling it.
- * Soft pixel look: faceted crystals lit in dithered steps, a tinted glow, slow sparks.
+ * Soft pixel look: each facet one clean flat color (no dither), a smooth tinted glow, slow sparks.
  * Returns a cleanup function.
  */
 export function startCrystals(canvas: HTMLCanvasElement, { tones, tabs, tiles, selected, hovered, paused }: Options): () => void {
@@ -35,15 +30,14 @@ export function startCrystals(canvas: HTMLCanvasElement, { tones, tabs, tiles, s
   const camera = new OrthographicCamera(-1, 1, HALF_H, -HALF_H, 0.1, 20);
   camera.position.z = 8;
 
-  const uSky = { value: new Color() };
   const uTime = { value: 0 };
 
   const crystalGeo = new OctahedronGeometry(0.3);
   const glowGeo = new PlaneGeometry(1.5, 2.0);
   const crystals = tones.map((tone, i) => {
-    const uColor = { value: new Color() };
+    const uColor = { value: new Color(tone) };
     const uLift = { value: 0 }; // 0..1: brighter while hovered or selected
-    const uniforms = { uColor, uSky, uTime, uLift, uPhase: { value: i * 1.7 } };
+    const uniforms = { uColor, uTime, uLift, uPhase: { value: i * 1.7 } };
     const body = new Mesh(
       crystalGeo,
       new ShaderMaterial({
@@ -52,18 +46,14 @@ export function startCrystals(canvas: HTMLCanvasElement, { tones, tabs, tiles, s
           varying vec3 vView;
           void main() { vec4 mv = modelViewMatrix * vec4(position, 1.0); vView = mv.xyz; gl_Position = projectionMatrix * mv; }`,
         fragmentShader: `
-          uniform vec3 uColor; uniform vec3 uSky; uniform float uTime; uniform float uLift; uniform float uPhase;
+          uniform vec3 uColor; uniform float uTime; uniform float uLift; uniform float uPhase;
           varying vec3 vView;
-          ${BAYER}
           void main() {
-            vec3 n = normalize(cross(dFdx(vView), dFdy(vView)));            // one normal per facet
+            vec3 n = normalize(cross(dFdx(vView), dFdy(vView)));            // one normal per facet = one flat color per facet
             float key = max(dot(n, normalize(vec3(-0.5, 0.7, 0.6))), 0.0);
-            float rim = pow(1.0 - abs(n.z), 2.0) * 0.35;                     // lighter toward the silhouette
-            float pulse = 0.06 * sin(uTime * 1.3 + uPhase) + uLift * 0.16;
-            float lit = clamp(0.18 + key * 0.72 + rim + pulse, 0.0, 1.0);
-            float level = floor(lit * 5.0 + bayer4(gl_FragCoord.xy)) / 5.0;  // 6 steps, dithered between them
-            vec3 shade = mix(uSky, uColor, 0.35);
-            vec3 col = level < 0.8 ? mix(shade, uColor, level / 0.8) : mix(uColor, vec3(1.0), (level - 0.8) / 0.2 * 0.75);
+            float lit = clamp(0.2 + key * 0.8 + 0.04 * sin(uTime * 1.3 + uPhase) + uLift * 0.1, 0.0, 1.0);
+            // Shadow and highlight stay inside the gem's own hue, so it never turns muddy on a light page.
+            vec3 col = lit < 0.6 ? mix(uColor * 0.5, uColor, lit / 0.6) : mix(uColor, mix(uColor, vec3(1.0), 0.6), (lit - 0.6) / 0.4);
             gl_FragColor = vec4(col, 1.0);
           }`,
       }),
@@ -78,11 +68,10 @@ export function startCrystals(canvas: HTMLCanvasElement, { tones, tabs, tiles, s
         fragmentShader: `
           uniform vec3 uColor; uniform float uTime; uniform float uLift; uniform float uPhase;
           varying vec2 vUv;
-          ${BAYER}
           void main() {
             float d = length((vUv - 0.5) * 2.0);                              // reaches 0 at every edge of the quad
-            float a = smoothstep(1.0, 0.0, d) * (0.3 + 0.06 * sin(uTime * 1.3 + uPhase) + uLift * 0.1);
-            a = floor(a * 8.0 + bayer4(gl_FragCoord.xy)) / 8.0;             // stepped falloff keeps it pixel art
+            float f = max(1.0 - d, 0.0);
+            float a = f * f * (0.26 + 0.04 * sin(uTime * 1.3 + uPhase) + uLift * 0.06); // smooth falloff, no dither
             gl_FragColor = vec4(uColor, a);                                  // tinted, so it reads on light and dark
           }`,
       }),
@@ -118,9 +107,7 @@ export function startCrystals(canvas: HTMLCanvasElement, { tones, tabs, tiles, s
 
   let halfW = 1;
   const applyTheme = () => {
-    uSky.value = cssColor("--bg");
     sparkMat.uniforms.uColor.value = cssColor("--star");
-    crystals.forEach((c) => (c.uColor.value = cssColor(c.tone)));
   };
   const resize = () => {
     const w = Math.max(1, Math.ceil(canvas.clientWidth / PIXEL));
@@ -182,8 +169,9 @@ export function startCrystals(canvas: HTMLCanvasElement, { tones, tabs, tiles, s
       if (el) {
         el.style.transform = `translate(${toX(c.x).toFixed(1)}px, ${toY(c.y + bob).toFixed(1)}px) translate(-50%, -50%) scale(${Math.min(c.s, 1.25).toFixed(3)})`;
         el.style.zIndex = String(40 + Math.round(c.d * 5));
-        // The picked label would sit behind its own big crystal; the panel heading below names it instead.
-        el.style.opacity = picked ? "0" :(0.25 + ((c.d + 1) / 2) * 0.75).toFixed(2); // far labels fade so they do not pile up
+        // Only the front half of the ring is labelled, so labels never pile up or hide behind a crystal.
+        // The picked one is named by the panel heading below.
+        el.style.opacity = picked ? "0" : Math.min(1, Math.max(0, c.d * 2)).toFixed(2);
         el.style.pointerEvents = picked ? "none" : ""; // the middle one is already selected; let its logos take the pointer
       }
     });
