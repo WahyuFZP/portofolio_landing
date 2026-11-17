@@ -23,7 +23,7 @@ export default function SectionHeading({ index, title, subtitle }: Props) {
           <span className="heading-rule h-0.5 w-16 bg-accent" aria-hidden />
         </div>
       )}
-      <h2 className="font-dot text-5xl font-black leading-none text-accent sm:text-6xl">
+      <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
         <Words text={title} />
       </h2>
       {subtitle && <p className="reveal mt-3 max-w-2xl text-lg text-muted">{subtitle}</p>}

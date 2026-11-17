@@ -1,27 +1,26 @@
 @import "tailwindcss";
 
-/* Design tokens. One light theme: blue, white and black, with yellow as the highlight. */
+/* Design tokens. One calm dark theme: navy/slate surfaces, soft blue accent used sparingly. */
 :root {
-  color-scheme: light;
-  --bg: #ffffff;
-  --surface: #ffffff;
-  --text: #0a0a0a;
-  --muted: #475569; /* 7.6:1 on white */
-  --border: #0a0a0a; /* cards are outlined in black */
-  --accent: #0a66e8; /* 5.2:1 with white text */
-  --accent-soft: #e8f1ff;
-  --accent-fg: #ffffff;
-  --hi: #facc15; /* yellow highlight: fills, the one bright word, primary button */
-  --danger: #b91c1c;
+  color-scheme: dark;
+  --bg: #0b1220;
+  --surface: #111a2e;
+  --text: #e2e8f0; /* 14:1 on --bg */
+  --muted: #94a3b8; /* 7:1 on --bg */
+  --border: #233049;
+  --accent: #7ab8ff; /* soft sky blue, 8.6:1 on --bg: links, buttons, small highlights only */
+  --accent-soft: #14233f;
+  --accent-fg: #0b1220;
+  --danger: #f87171;
   /* Read by the 3D scenes */
-  --node-1: #0a66e8;
-  --node-2: #0e7490;
-  --node-3: #475569;
-  --edge: #94a3b8;
-  --warm: #ca8a04;
-  --star: #64748b;
-  --line: #ca8a04; /* thin yellow lines on white (darker than --hi so they stay visible) */
-  --field-alpha: 0.45;
+  --node-1: #7ab8ff;
+  --node-2: #67d5e8;
+  --node-3: #cbd5e1;
+  --edge: #334155;
+  --warm: #d4a72c;
+  --star: #94a3b8;
+  --line: #d4a72c; /* muted amber: road centre line only */
+  --field-alpha: 1;
 }
 
 @theme inline {
@@ -35,11 +34,9 @@
   --color-accent-fg: var(--accent-fg);
   --color-danger: var(--danger);
   --color-line: var(--line);
-  --color-hi: var(--hi);
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
   --font-pixel: var(--font-geist-mono), ui-monospace, monospace; /* small labels: mono, like the bracket labels */
-  --font-dot: var(--font-doto), var(--font-geist-mono), monospace; /* dot-matrix display type for headings */
 }
 
 html {
@@ -60,14 +57,14 @@ body {
 
 /* ---------- Pixel utilities ---------- */
 
-/* Card outline: a 2px rounded ring drawn with box-shadow, so it never changes layout. */
+/* Card outline: a 1px rounded ring drawn with box-shadow, so it never changes layout. */
 /* In the components layer on purpose: utilities such as hover:[--pb:...] or target:[--pb:...] must be
    able to override the border color. Unlayered rules always beat Tailwind's utility layer. */
 @layer components {
   .pixel-border {
     --pb: var(--border);
     border-radius: 8px;
-    box-shadow: 0 0 0 2px var(--pb);
+    box-shadow: 0 0 0 1px var(--pb);
   }
   .pixel-border-accent {
     --pb: var(--accent);
@@ -78,15 +75,9 @@ body {
     clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
   }
 
-  /* Cards and panels: a colored layer peeks out behind the top-left corner. */
+  /* Cards and panels (kept as a hook; the calm theme adds nothing beyond the outline). */
   .corners {
     border-radius: 8px;
-    box-shadow: 0 0 0 2px var(--pb, var(--border)), -7px -7px 0 2px var(--accent);
-  }
-  /* Same, in yellow: for cards that sit on the blue band. */
-  .card-hi {
-    border-radius: 8px;
-    box-shadow: 0 0 0 2px var(--border), -8px -8px 0 2px var(--hi);
   }
 }
 

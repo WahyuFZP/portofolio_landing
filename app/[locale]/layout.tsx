@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { Doto, Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono } from "next/font/google";
 import "@/app/globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
@@ -15,7 +15,6 @@ import { profile } from "@/content/profile";
 const sans = Geist({ subsets: ["latin"], variable: "--font-geist-sans", display: "optional" });
 // swap, not optional: mono is only used for small labels, and "optional" left them on the Arial-based fallback.
 const mono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono", display: "swap", preload: false });
-const dot = Doto({ subsets: ["latin"], weight: ["900"], variable: "--font-doto", display: "swap" });
 
 export const dynamicParams = false;
 export const generateStaticParams = () => locales.map((locale) => ({ locale }));
@@ -65,7 +64,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
   };
 
   return (
-    <html lang={locale} className={`${sans.variable} ${mono.variable} ${dot.variable}`}>
+    <html lang={locale} className={`${sans.variable} ${mono.variable}`}>
       <body className="font-sans antialiased">
         <a
           href="#main"
