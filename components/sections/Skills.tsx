@@ -1,5 +1,7 @@
 import type { Dictionary } from "@/lib/dictionary";
-import { categories, levels, skills, type Level } from "@/content/skills";
+import { categories, levels, skills, skillLogo, type Level } from "@/content/skills";
+import LogoRing from "./LogoRing";
+import MarqueePause from "./MarqueePause";
 import SectionHeading from "@/components/ui/SectionHeading";
 
 const levelStyle: Record<Level, string> = {
@@ -8,10 +10,14 @@ const levelStyle: Record<Level, string> = {
   learning: "border-2 border-dashed border-border text-muted",
 };
 
-export default function Skills({ dict, usage }: { dict: Dictionary["skills"]; usage: Map<string, number> }) {
+export default function Skills({ dict, pause, usage }: { dict: Dictionary["skills"]; pause: Dictionary["marquee"]; usage: Map<string, number> }) {
   return (
     <section id="skills" className="py-20">
       <SectionHeading index="02" title={dict.title} subtitle={dict.subtitle} />
+
+      <MarqueePause pause={pause.pause} play={pause.play}>
+        <LogoRing />
+      </MarqueePause>
 
       <div className="grid gap-x-10 gap-y-6 md:grid-cols-2">
         {categories.map((cat, ci) => (
@@ -36,8 +42,14 @@ export default function Skills({ dict, usage }: { dict: Dictionary["skills"]; us
                       {list.map((s) => {
                         const count = usage.get(s.id) ?? 0;
                         const cls = `flex min-h-9 items-center gap-2 px-3 text-sm ${levelStyle[lvl]}`;
+                        const logo = skillLogo(s.id);
                         const body = (
                           <>
+                            {/* White tile: several logos are black and would vanish on the dark theme. */}
+                            {logo && (
+                              // eslint-disable-next-line @next/next/no-img-element -- tiny local SVG
+                              <img src={logo} alt="" width={18} height={18} loading="lazy" decoding="async" className="h-[22px] w-[22px] shrink-0 bg-white p-0.5" />
+                            )}
                             {s.name}
                             {count > 0 && (
                               <span className="bg-accent-soft px-1.5 font-pixel text-xs text-accent">

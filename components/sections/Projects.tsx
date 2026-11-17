@@ -15,7 +15,7 @@ export default function Projects({ locale, projects, dict }: { locale: Locale; p
         fallback={
           <ul className="grid gap-8 md:grid-cols-2">
             {projects.map((p, i) => (
-              <li key={p.slug} className={`flex ${i === 0 ? "md:col-span-2" : ""}`}>
+              <li key={p.slug} className={`flex min-w-0 ${i === 0 ? "md:col-span-2" : ""}`}>
                 <ProjectCard project={p} href={`/${locale}/projects/${p.slug}`} dict={dict} featured={i === 0} />
               </li>
             ))}

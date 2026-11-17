@@ -2,7 +2,7 @@ import type { Dictionary } from "@/lib/dictionary";
 import type { Locale } from "@/lib/i18n";
 import { certificates } from "@/content/certificates";
 import SectionHeading from "@/components/ui/SectionHeading";
-import { tag } from "@/components/ui/styles";
+import ExperienceTimeline from "./ExperienceTimeline";
 
 interface Props {
   locale: Locale;
@@ -17,39 +17,8 @@ export default function Experience({ locale, dict }: Props) {
     <section id="experience" className="py-20">
       <SectionHeading index="03" title={dict.title} />
 
-      <div className="grid gap-12 lg:grid-cols-[1.6fr_1fr]">
-        <ol className="relative space-y-10 pl-8">
-          {/* Timeline line draws itself on scroll (CSS scroll-driven animation). */}
-          <span className="timeline-line absolute left-[7px] top-2 bottom-2 w-0.5 bg-border" aria-hidden />
-          {dict.list.map((job) => (
-            <li key={`${job.company}-${job.role}`} className="reveal relative">
-              <span className="absolute -left-8 top-1.5 h-4 w-4 bg-accent" aria-hidden />
-              <p className="font-mono text-xs text-muted">
-                {job.period} · {job.type} · {job.location}
-              </p>
-              {job.kind === "other" ? (
-                <h3 className="mt-1 text-base">
-                  {job.role}, <span className="text-muted">{job.company}</span>
-                </h3>
-              ) : (
-                <>
-                  <h3 className="mt-1 text-xl font-semibold tracking-tight">{job.role}</h3>
-                  <p className="text-muted">{job.company}</p>
-                  <ul className="mt-3 list-[square] space-y-1.5 pl-5 text-muted">
-                    {job.description.map((d) => (
-                      <li key={d}>{d}</li>
-                    ))}
-                  </ul>
-                  <ul className="mt-4 flex flex-wrap gap-2">
-                    {job.tags.map((t) => (
-                      <li key={t} className={tag}>{t}</li>
-                    ))}
-                  </ul>
-                </>
-              )}
-            </li>
-          ))}
-        </ol>
+      <div className="grid gap-12 lg:grid-cols-[1.7fr_1fr]">
+        <ExperienceTimeline jobs={dict.list} label={dict.title} />
 
         {/* Keep the old #certificates anchor working. */}
         <div id="certificates" className="scroll-mt-24">

@@ -31,7 +31,7 @@ export default async function Home({ params }: PageProps<"/[locale]">) {
       <Hero dict={dict.hero} proofDict={dict.proof} constellation={constellation} caseStudies={projects.length} />
       <StackMarquee dict={dict.marquee} />
       <Projects locale={locale} projects={projects} dict={dict.projects} />
-      <Skills dict={dict.skills} usage={usage} />
+      <Skills dict={dict.skills} pause={dict.marquee} usage={usage} />
       <BugHunt dict={dict.bugHunt} />
       <Experience locale={locale} dict={dict.experience} />
       <About dict={dict.about} />

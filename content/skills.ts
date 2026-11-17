@@ -68,3 +68,11 @@ export const skills: Skill[] = [
 ];
 
 export const skillById = new Map(skills.map((s) => [s.id, s]));
+
+// Skill ids that have a logo file in public/stack/<id>.svg (devicon 2.18.0, original colors).
+// Practices such as "API Testing" have no logo and are shown without one.
+const LOGOS = new Set([
+  "playwright", "postman", "jira", "notion", "selenium", "cypress", "nextjs", "react", "typescript", "tailwind", "html-css", "threejs",
+  "laravel", "php", "nodejs", "supabase", "postgresql", "mysql", "git", "grafana", "github-actions", "vercel", "linux", "docker", "figma",
+]);
+export const skillLogo = (id: string) => (LOGOS.has(id) ? `/stack/${id}.svg` : undefined);

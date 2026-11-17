@@ -7,6 +7,7 @@ import type { Dictionary } from "@/lib/dictionary";
 import { skillById } from "@/content/skills";
 import { tag } from "@/components/ui/styles";
 import PixelIcon from "@/components/ui/PixelIcon";
+import Laptop3D from "./Laptop3D";
 
 export interface CardProject {
   slug: string;
@@ -81,7 +82,13 @@ export default function ProjectCard({ project, href, dict, featured }: Props) {
       className={`group relative flex h-full w-full flex-col gap-6 bg-surface p-6 pixel-border transition-transform duration-300 ease-out hover:[--pb:var(--accent)] ${featured ? "md:flex-row md:items-center md:gap-10 md:p-10" : ""}`}
     >
       <div className={`px-[4%] ${featured ? "md:w-[55%]" : ""}`}>
-        <Laptop project={project} sizes={featured ? "(min-width: 768px) 520px, 100vw" : "(min-width: 768px) 400px, 100vw"} />
+        {featured && meta.image ? (
+          <Laptop3D image={meta.image}>
+            <Laptop project={project} sizes="(min-width: 768px) 520px, 100vw" />
+          </Laptop3D>
+        ) : (
+          <Laptop project={project} sizes="(min-width: 768px) 400px, 100vw" />
+        )}
       </div>
 
       <div className="flex flex-1 flex-col">

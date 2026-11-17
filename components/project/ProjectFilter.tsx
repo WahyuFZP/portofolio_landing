@@ -97,7 +97,7 @@ export default function ProjectFilter({ locale, projects, dict }: Props) {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.96 }}
                 transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-                className={`flex ${featured ? "md:col-span-2" : ""}`}
+                className={`flex min-w-0 ${featured ? "md:col-span-2" : ""}`} // min-w-0: grid items must not grow past the column
               >
                 <ProjectCard project={p} href={`/${locale}/projects/${p.slug}`} dict={dict} featured={featured} />
               </m.li>

@@ -1,4 +1,4 @@
-import { skills, type Skill } from "@/content/skills";
+import { skills, skillLogo, type Skill } from "@/content/skills";
 
 // Shared by the server-rendered SVG poster and the client 3D scene, so both draw the same constellation.
 export interface ConstellationNode {
@@ -15,12 +15,6 @@ export interface ConstellationData {
   edges: [number, number][]; // node index pairs
 }
 
-// Skill ids that have a logo file in public/stack/<id>.svg (devicon 2.18.0, original colors).
-const LOGOS = new Set([
-  "playwright", "postman", "jira", "notion", "selenium", "cypress", "nextjs", "react", "typescript", "tailwind", "html-css", "threejs",
-  "laravel", "php", "nodejs", "supabase", "postgresql", "mysql", "git", "grafana", "github-actions", "vercel", "linux", "docker", "figma",
-]);
-
 const sizeOf: Record<Skill["level"], ConstellationNode["size"]> = { proficient: 3, familiar: 2, learning: 1 };
 const colorOf = (s: Skill): ConstellationNode["color"] =>
   s.category === "qa" || s.category === "security" ? 1 : ["frontend", "backend", "database"].includes(s.category) ? 2 : 3;
@@ -34,7 +28,7 @@ export function buildConstellation(projectTags: string[][]): ConstellationData {
     const y = 1 - (2 * (i + 0.5)) / n;
     const r = Math.sqrt(1 - y * y);
     const t = golden * i;
-    return { id: s.id, name: s.name, pos: [Math.cos(t) * r, y, Math.sin(t) * r], size: sizeOf[s.level], color: colorOf(s), linked: used.has(s.id), ...(LOGOS.has(s.id) ? { icon: `/stack/${s.id}.svg` } : {}) };
+    return { id: s.id, name: s.name, pos: [Math.cos(t) * r, y, Math.sin(t) * r], size: sizeOf[s.level], color: colorOf(s), linked: used.has(s.id), ...(skillLogo(s.id) ? { icon: skillLogo(s.id) } : {}) };
   });
 
   const index = new Map(nodes.map((node, i) => [node.id, i]));

@@ -104,10 +104,16 @@ test.describe("home sections", () => {
 
   test("experience matches LinkedIn: 3 roles, current one first", async ({ page }) => {
     await page.goto("/en");
-    const roles = page.locator("#experience ol > li");
-    await expect(roles).toHaveCount(3);
-    await expect(roles.first()).toContainText("Software Quality Assurance Engineer");
-    await expect(roles.first()).toContainText("PT Exodrinks Indonesia Prestige");
+    const tabs = page.locator("#experience").getByRole("tab");
+    await expect(tabs).toHaveCount(3);
+    await expect(tabs.last()).toHaveAttribute("aria-selected", "true"); // newest role is open
+    const panel = page.locator("#experience").getByRole("tabpanel");
+    await expect(panel).toContainText("Software Quality Assurance Engineer");
+    await expect(panel).toContainText("PT Exodrinks Indonesia Prestige");
+    await tabs.nth(1).click();
+    await expect(panel).toContainText("Dinas Lingkungan Hidup Kota Madiun");
+    await tabs.nth(1).press("ArrowRight"); // keyboard: arrows move between roles
+    await expect(panel).toContainText("PT Exodrinks Indonesia Prestige");
     await expect(page.locator("main")).not.toContainText("—"); // no em dashes in visible copy
   });
 
