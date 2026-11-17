@@ -17,7 +17,7 @@
   --node-2: #0e7490;
   --node-3: #475569;
   --edge: #94a3b8;
-  --warm: #b45309; /* one warm planet and ship lights */
+  --warm: #ca8a04; /* same yellow as --line: planet and ship lights (palette: blue, cyan, yellow, neutral) */
   --star: #64748b; /* background dust */
   --line: #ca8a04; /* yellow accent lines: corner brackets, road markings */
   --show-light: inline-block;
@@ -41,7 +41,7 @@
   --node-2: #22d3ee;
   --node-3: #cbd5e1;
   --edge: #3b4a63;
-  --warm: #fbbf24;
+  --warm: #facc15;
   --star: #e2e8f0;
   --line: #facc15;
   --show-light: none;
@@ -64,7 +64,7 @@
     --node-2: #22d3ee;
     --node-3: #cbd5e1;
     --edge: #3b4a63;
-  --warm: #fbbf24;
+  --warm: #facc15;
   --star: #e2e8f0;
   --line: #facc15;
     --show-light: none;

@@ -35,11 +35,6 @@ function mulberry32(seed: number) {
   };
 }
 
-// 4x4 ordered dither (arithmetic form: no arrays, works in every GLSL version).
-const BAYER = `
-  float b2(vec2 a) { a = floor(a); return fract(a.x / 2.0 + a.y * a.y * 0.75); }
-  float bayer4(vec2 a) { return b2(0.5 * a) * 0.25 + b2(a); }`;
-
 // Planets: x, y (clip space), scroll speed, diameter (low-res px), kind (0 gas / 1 ringed / 2 rocky).
 // They sit near the screen edges so they frame the content instead of sitting under the text.
 const PLANETS = [
@@ -84,7 +79,7 @@ const DEBRIS0 = ROCK0 + ROCKS;
 const ACTORS = DEBRIS0 + BLASTS * DEBRIS;
 
 /**
- * Page background: pixel dust at different depths, three dithered planets, UFOs that cross the sky from
+ * Page background: pixel dust at different depths, three smoothly shaded planets, UFOs that cross the sky from
  * random directions, a guardian ship that shoots down meteoroids, and one 3D object beside each section.
  * Returns a cleanup function.
  */
@@ -148,7 +143,7 @@ export function startDeepField(canvas: HTMLCanvasElement): () => void {
   );
   layer(dustGeo, dustMat, 0);
 
-  // ---- Planets: lit spheres drawn inside point quads, shaded in 4 dithered steps ----
+  // ---- Planets: lit spheres drawn inside point quads, smooth shading, no dither (same look as the skill crystals) ----
   const planetGeo = new BufferGeometry();
   planetGeo.setAttribute("position", new BufferAttribute(new Float32Array(PLANETS.flatMap((p) => [p[0], p[1], p[2]])), 3));
   planetGeo.setAttribute("aSize", new BufferAttribute(new Float32Array(PLANETS.map((p) => p[3])), 1));
@@ -166,7 +161,6 @@ export function startDeepField(canvas: HTMLCanvasElement): () => void {
      }`,
     `uniform vec3 uAccent; uniform vec3 uCyan; uniform vec3 uWarm; uniform vec3 uBody; uniform vec3 uSky; uniform float uAlpha;
      varying float vKind;
-     ${BAYER}
      void main() {
        vec2 uv = gl_PointCoord * 2.0 - 1.0; uv.y = -uv.y;
        bool ringed = vKind > 0.5 && vKind < 1.5;
@@ -182,9 +176,8 @@ export function startDeepField(canvas: HTMLCanvasElement): () => void {
        float lit = clamp(dot(n, normalize(vec3(-0.55, 0.6, 0.58))), 0.0, 1.0);
        if (vKind < 1.5) lit *= 0.82 + 0.18 * sin(p.y * 9.0 + sin(p.x * 3.0) * 1.5);   // gas bands
        else lit *= 1.0 - 0.22 * step(0.72, fract(sin(dot(floor(p * 5.0), vec2(12.9898, 78.233))) * 43758.5453)); // craters
-       float level = clamp(floor(lit * 4.0 + bayer4(gl_FragCoord.xy)) / 4.0, 0.0, 1.0);
        vec3 base = vKind < 0.5 ? uAccent : (vKind < 1.5 ? uWarm : uBody);
-       gl_FragColor = vec4(mix(uSky, base, level), 0.85 * uAlpha);   // night side fades into the sky
+       gl_FragColor = vec4(mix(uSky, base, lit), 0.85 * uAlpha);   // night side fades into the sky
      }`,
   );
   layer(planetGeo, planetMat, 1);
@@ -268,6 +261,8 @@ export function startDeepField(canvas: HTMLCanvasElement): () => void {
     aSize[ROCK0 + rocks.indexOf(r)] = 12 + Math.floor(Math.random() * 3) * 4;
   };
 
+  // Sky traffic fades to 30% while it crosses the middle of the page, where the text is.
+  const overText = (x: number) => Math.min(1, Math.max(0.3, (Math.abs(x) - 0.45) / 0.2));
   const stepSky = (t: number, dt: number) => {
     if (t >= next.ufo) {
       spawnUfo();
@@ -285,7 +280,7 @@ export function startDeepField(canvas: HTMLCanvasElement): () => void {
         u.y += u.vy * dt;
         if (u.age > 1 && (Math.abs(u.x) > 1.2 || Math.abs(u.y) > 1.2)) u.on = false;
       }
-      aAlpha[i] = u.on ? 1 : 0;
+      aAlpha[i] = u.on ? overText(u.x) : 0;
       aSize[i] = 32; // 16 sprite px at 2x
       aPos.set([u.x, u.y + Math.sin(t * 2.5 + i) * 0.012, 0], i * 3);
     });
@@ -296,7 +291,7 @@ export function startDeepField(canvas: HTMLCanvasElement): () => void {
         r.y += r.vy * dt;
         if (r.y < -1.2 || Math.abs(r.x) > 1.2) r.on = false;
       }
-      aAlpha[ROCK0 + i] = r.on ? 1 : 0;
+      aAlpha[ROCK0 + i] = r.on ? overText(r.x) : 0;
       aPos.set([r.x, r.y, 0], (ROCK0 + i) * 3);
     });
 
@@ -308,6 +303,7 @@ export function startDeepField(canvas: HTMLCanvasElement): () => void {
     guard.x += (goalX - guard.x) * ease;
     guard.y += (goalY - guard.y) * ease;
     aPos.set([guard.x, guard.y + Math.sin(t * 1.7) * 0.008, 0], GUARD * 3);
+    aAlpha[GUARD] = overText(guard.x);
 
     if (target && Math.abs(guard.x - target.x) < 0.035 && t - guard.shotAt > 0.9) {
       guard.shotAt = t;
