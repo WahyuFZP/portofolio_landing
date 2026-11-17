@@ -6,6 +6,7 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import MotionProvider from "@/components/motion/MotionProvider";
 import DeepField from "@/components/background/DeepField";
+import { EXTRA_SCENES } from "@/lib/scene";
 import { themeScript } from "@/components/layout/ThemeToggle";
 import { getDictionary } from "@/lib/dictionary";
 import { isLocale, locales } from "@/lib/i18n";
@@ -76,7 +77,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
         >
           {dict.nav.skip}
         </a>
-        <DeepField />
+        {EXTRA_SCENES && <DeepField />}
         <MotionProvider>
           <Navbar locale={locale} dict={dict.nav} />
           <main id="main" className="mx-auto w-full max-w-5xl px-4 sm:px-6">

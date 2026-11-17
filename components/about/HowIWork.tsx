@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { Dictionary } from "@/lib/dictionary";
-import { afterLoadIdle, canRun3D } from "@/lib/scene";
+import { afterLoadIdle, canRun3D, EXTRA_SCENES } from "@/lib/scene";
 
 /** The three "How I work" cards, with the scroll-driven release-pipeline scene above them on desktop. */
 export default function HowIWork({ items }: { items: Dictionary["about"]["how"] }) {
@@ -11,7 +11,7 @@ export default function HowIWork({ items }: { items: Dictionary["about"]["how"] 
   const [stage, setStage] = useState(-1); // -1 idle, 0..2 gate the cube is at, 3 shipped
 
   useEffect(() => {
-    if (!canRun3D()) return;
+    if (!EXTRA_SCENES || !canRun3D()) return;
     let stop: (() => void) | undefined;
     let disposed = false;
     const cancel = afterLoadIdle(async () => {
@@ -34,15 +34,18 @@ export default function HowIWork({ items }: { items: Dictionary["about"]["how"] 
   return (
     <>
       {/* Space is reserved on desktop so nothing jumps when the scene starts. Decorative: the cards say the same thing. */}
-      <div aria-hidden className="hidden h-40 md:block motion-reduce:md:hidden">
-        <canvas
-          ref={canvasRef}
-          data-pipeline={live ? "live" : "off"}
-          className={`h-full w-full transition-opacity duration-500 [image-rendering:pixelated] ${live ? "opacity-100" : "opacity-0"}`}
-        />
-      </div>
+      {EXTRA_SCENES && (
+        <div aria-hidden className="hidden h-40 md:block motion-reduce:md:hidden">
+          <canvas
+            ref={canvasRef}
+            data-pipeline={live ? "live" : "off"}
+            className={`h-full w-full transition-opacity duration-500 [image-rendering:pixelated] ${live ? "opacity-100" : "opacity-0"}`}
+          />
+        </div>
+      )}
 
-      <ol className="grid gap-6 md:grid-cols-3">
+      {/* Without the scene above, the cards need their own gap from the heading. */}
+      <ol className={`grid gap-6 md:grid-cols-3 ${EXTRA_SCENES ? "" : "md:mt-6"}`}>
         {items.map((h, i) => {
           const lit = live && (stage === i || stage === 3);
           return (

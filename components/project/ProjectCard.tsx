@@ -8,6 +8,7 @@ import { skillById } from "@/content/skills";
 import { tag } from "@/components/ui/styles";
 import PixelIcon from "@/components/ui/PixelIcon";
 import Laptop3D from "./Laptop3D";
+import { EXTRA_SCENES } from "@/lib/scene";
 
 export interface CardProject {
   slug: string;
@@ -82,7 +83,7 @@ export default function ProjectCard({ project, href, dict, featured }: Props) {
       className={`corners group relative flex h-full w-full flex-col gap-6 bg-surface p-6 pixel-border transition-transform duration-300 ease-out hover:[--pb:var(--accent)] ${featured ? "md:flex-row md:items-center md:gap-10 md:p-10" : ""}`}
     >
       <div className={`px-[4%] ${featured ? "md:w-[55%]" : ""}`}>
-        {featured && meta.image ? (
+        {EXTRA_SCENES && featured && meta.image ? (
           <Laptop3D image={meta.image}>
             <Laptop project={project} sizes="(min-width: 768px) 520px, 100vw" />
           </Laptop3D>
