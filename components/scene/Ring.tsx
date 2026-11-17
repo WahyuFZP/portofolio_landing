@@ -99,12 +99,38 @@ function Scene() {
     s.closePath();
     return new ExtrudeGeometry(s, { depth: 0.22, bevelEnabled: false });
   }, []);
+  // The phone's screen. The canvas is square but the screen is about 2.1:1, so shapes are drawn 2.1x narrower to come out true.
+  const screen = useMemo(
+    () =>
+      texture((ctx, s) => {
+        const k = 1 / 2.1;
+        ctx.fillStyle = BLUE;
+        ctx.beginPath();
+        ctx.roundRect(0, 0, s, s, [s * 0.11 * k, s * 0.11 * k].map((r) => r * 2.1)); // rounded screen corners; outside stays transparent
+        ctx.fill();
+        for (let row = 0; row < 3; row++) {
+          const y = s * (0.2 + row * 0.24);
+          ctx.fillStyle = "rgba(251, 236, 200, 0.16)";
+          ctx.beginPath();
+          ctx.roundRect(s * 0.16, y, s * 0.74, s * 0.17, s * 0.04);
+          ctx.fill();
+          ctx.fillStyle = PAPER;
+          ctx.beginPath();
+          ctx.ellipse(s * 0.215, y + s * 0.085, s * 0.055 * k, s * 0.055, 0, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillRect(s * 0.27, y + s * 0.05, s * (0.34 + row * 0.08), s * 0.028);
+          ctx.fillStyle = "rgba(251, 236, 200, 0.55)";
+          ctx.fillRect(s * 0.27, y + s * 0.105, s * 0.22, s * 0.02);
+        }
+      }),
+    [],
+  );
   useEffect(
     () => () => {
-      [...panels, ball].forEach((t) => t.dispose());
+      [...panels, ball, screen].forEach((t) => t.dispose());
       check.dispose();
     },
-    [panels, ball, check],
+    [panels, ball, screen, check],
   );
 
   useEffect(() => {
@@ -171,16 +197,32 @@ function Scene() {
         </mesh>
       </Float>
 
-      {/* A phone lying under the ring: dark body, blue screen. */}
-      <group position={[0.2, -1.75, 0.3]} rotation={[0.05, -0.5, 0.06]}>
-        <RoundedBox args={[2.7, 0.17, 1.35]} radius={0.08} smoothness={3}>
-          <meshBasicMaterial color={INK} />
-        </RoundedBox>
-        <mesh position={[0, 0.09, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-          <planeGeometry args={[2.52, 1.18]} />
-          <meshBasicMaterial color={BLUE} />
-        </mesh>
-      </group>
+      {/* A phone hovering under the ring. Lit (unlike the flat ring), so its rounded edges catch the light. */}
+      <ambientLight intensity={1.5} />
+      <directionalLight position={[-3, 5, 4]} intensity={2.4} />
+      <Float speed={1.4} rotationIntensity={0.35} floatIntensity={0.6}>
+        <group position={[0.2, -1.75, 0.3]} rotation={[0.12, -0.5, 0.06]}>
+          <RoundedBox args={[2.8, 0.2, 1.4]} radius={0.095} smoothness={8}>
+            <meshStandardMaterial color="#20232c" roughness={0.42} metalness={0.35} />
+          </RoundedBox>
+          {/* Screen: a rounded picture of a test run (rows with check marks), set just above the body. */}
+          <mesh position={[0, 0.102, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+            <planeGeometry args={[2.66, 1.26]} />
+            <meshBasicMaterial map={screen} transparent />
+          </mesh>
+          {/* Camera island and two side buttons */}
+          <mesh position={[-1.12, 0.104, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+            <capsuleGeometry args={[0.035, 0.2, 6, 14]} />
+            <meshStandardMaterial color="#0c0d11" roughness={0.3} />
+          </mesh>
+          <RoundedBox args={[0.34, 0.06, 0.03]} radius={0.012} smoothness={4} position={[0.55, 0, -0.71]}>
+            <meshStandardMaterial color="#2c303b" roughness={0.4} metalness={0.4} />
+          </RoundedBox>
+          <RoundedBox args={[0.2, 0.06, 0.03]} radius={0.012} smoothness={4} position={[0.12, 0, -0.71]}>
+            <meshStandardMaterial color="#2c303b" roughness={0.4} metalness={0.4} />
+          </RoundedBox>
+        </group>
+      </Float>
     </group>
   );
 }
