@@ -9,6 +9,7 @@
   --sun: #f6d60a; /* dots and small highlights only: too light for text on paper */
   --peach: #f4a44c;
   --ink: #1c2456; /* body text: 12:1 on paper */
+  --ink-black: #14151a; /* the dark patches of the hero landscape */
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
 
   /* Roles used by the components */
@@ -32,8 +33,9 @@
   --field-alpha: 0.45;
 }
 
-/* A full-width night section: the same components, re-inked through the role variables. */
-.band-night {
+/* Night ink: the same components, re-inked through the role variables. .band-night also paints the night itself. */
+.band-night,
+.ink-night {
   --bg: var(--navy);
   --surface: color-mix(in srgb, var(--navy) 86%, white);
   --text: var(--paper); /* 11:1 on navy */
@@ -42,8 +44,20 @@
   --accent: var(--sun);
   --accent-soft: color-mix(in srgb, var(--sun) 14%, var(--navy));
   --accent-fg: var(--navy);
-  background-color: var(--bg);
   color: var(--text);
+}
+.band-night {
+  background-color: var(--bg);
+}
+
+/* The top of the page: night blue that fades into the paper color as the hero scrolls away.
+   A plain layer (z -20) under the stars canvas (z -10), so stars show in front of the sky. */
+.page-dawn {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 118svh;
+  z-index: -20;
+  background: linear-gradient(var(--navy) 0 70%, var(--paper) 100%);
 }
 
 @theme inline {
@@ -196,6 +210,12 @@ body {
 @keyframes marquee {
   to { transform: translateX(-50%); }
 }
+@keyframes bob {
+  50% { transform: translateY(-5px); }
+}
+@keyframes orbit {
+  to { transform: rotate(360deg); }
+}
 @keyframes blink {
   50% { opacity: 0; }
 }
@@ -217,6 +237,18 @@ body {
   }
   .cursor {
     animation: blink 1.1s steps(1) infinite;
+  }
+  .bob {
+    animation: bob 4.5s ease-in-out infinite;
+    animation-delay: calc(var(--n, 0) * -0.37s); /* each tile is at a different point of the same wave */
+  }
+  .orbit {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: orbit var(--orbit-time, 40s) linear infinite;
+  }
+  .orbit-rev {
+    animation-direction: reverse;
   }
   .marquee {
     animation: marquee var(--marquee-time, 50s) linear infinite;

@@ -13,9 +13,9 @@ const PANELS = 7;
 const TURN = (Math.PI * 2) / PANELS;
 // Per panel: height, lift, and the glyph it carries (paper color) or nothing. Uneven on purpose, like cut paper.
 const BAND = [
-  { h: 1.05, y: 0.02, glyph: "Q" },
+  { h: 1.05, y: 0.02, glyph: "✓" },
   { h: 0.7, y: 0.2, glyph: "" },
-  { h: 0.95, y: -0.1, glyph: "A" },
+  { h: 0.95, y: -0.1, glyph: "" },
   { h: 0.62, y: 0.12, glyph: "" },
   { h: 1.1, y: -0.02, glyph: "" },
   { h: 0.74, y: 0.22, glyph: "" },
@@ -57,7 +57,7 @@ function Scene() {
       ),
     [],
   );
-  // The ball in the middle: warm, with a round "QA" badge.
+  // The ball in the middle: warm, with a round check-mark badge.
   const ball = useMemo(
     () =>
       texture((ctx, s) => {
@@ -76,11 +76,14 @@ function Scene() {
         ctx.arc(0, 0, s * 0.17, 0, Math.PI * 2);
         ctx.fill();
         ctx.stroke();
-        ctx.fillStyle = INK;
-        ctx.font = `bold ${s * 0.17}px Georgia, serif`;
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillText("QA", 0, s * 0.01);
+        ctx.lineWidth = s * 0.05;
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+        ctx.beginPath();
+        ctx.moveTo(-s * 0.08, s * 0.005);
+        ctx.lineTo(-s * 0.02, s * 0.06);
+        ctx.lineTo(s * 0.09, -s * 0.06);
+        ctx.stroke();
       }),
     [],
   );

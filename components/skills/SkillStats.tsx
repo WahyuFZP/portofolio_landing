@@ -53,7 +53,7 @@ export default function SkillStats({ dict, usage }: Props) {
       <div>
         <h3 className="mb-5 font-display text-3xl text-accent">{dict.inventory}</h3>
         <ul data-stagger className="grid grid-cols-4 gap-3 sm:grid-cols-6 md:grid-cols-7">
-          {skills.map((s) => {
+          {skills.map((s, n) => {
             const logo = skillLogo(s.id);
             const count = usage[s.id] ?? 0;
             const tip = `${s.name} · ${dict.levels[s.level]}${count ? ` · ${count} ${dict.projectCount}` : ""}`;
@@ -75,7 +75,7 @@ export default function SkillStats({ dict, usage }: Props) {
               </>
             );
             return (
-              <li key={s.id}>
+              <li key={s.id} className="bob" style={{ "--n": n } as React.CSSProperties}>
                 {count > 0 ? (
                   <a href={`?skill=${s.id}#projects`} aria-label={tip} className={slot}>
                     {body}
