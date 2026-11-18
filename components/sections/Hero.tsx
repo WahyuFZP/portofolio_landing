@@ -5,7 +5,8 @@ import PixelIcon, { type PixelIconName } from "@/components/ui/PixelIcon";
 import ProofStrip from "@/components/hero/ProofStrip";
 import Octopus from "@/components/hero/Octopus";
 import { Parallax } from "@/components/motion/Pointer";
-import Typed from "@/components/motion/Typed";
+import { Words } from "@/components/ui/SectionHeading";
+import { Seaweed } from "@/components/ui/Reef";
 import Bubbles from "@/components/motion/Bubbles";
 
 interface Props {
@@ -21,6 +22,14 @@ interface Props {
 export default function Hero({ dict, proofDict, caseStudies }: Props) {
   const [first, second, ...rest] = profile.name.split(" ");
   const i = (n: number) => ({ "--i": n }) as React.CSSProperties;
+  // Typewriter: one span per letter, switched on in turn by CSS (.type-char); the last letter keeps a blinking caret for a moment.
+  const total = first.length + second.length;
+  const type = (word: string, from: number) =>
+    [...word].map((ch, n) => (
+      <span key={n} className={`type-char ${from + n === total - 1 ? "type-last" : ""}`} style={{ "--c": from + n } as React.CSSProperties}>
+        {ch}
+      </span>
+    ));
   const cards: [icon: PixelIconName, label: string, value: string, shadow: string][] = [
     ["bug", dict.roleTag, dict.eyebrow, "var(--action)"],
     ["pin", dict.baseTag, profile.location, "var(--action)"],
@@ -29,6 +38,9 @@ export default function Hero({ dict, proofDict, caseStudies }: Props) {
     <>
       <section id="home" className="relative left-1/2 w-screen -translate-x-1/2 overflow-hidden bg-primary text-white">
         <Bubbles color="--paper" />
+        {/* Seaweed in both bottom corners, standing on the pixel edge (36px). */}
+        <Seaweed colors={["var(--action)", "var(--deep)"]} className="absolute bottom-9 left-0 h-24 w-20 sm:h-40 sm:w-32" />
+        <Seaweed colors={["var(--deep)", "var(--action)"]} fronds={4} className="absolute bottom-9 right-0 h-20 w-16 -scale-x-100 sm:h-32 sm:w-24" />
         {/* Ornaments drift a little with the mouse. */}
         <Parallax strength={10} className="pointer-events-none absolute inset-0 hidden font-mono text-3xl font-bold md:block">
           <span aria-hidden className="absolute left-[5%] top-[40%] text-action">+</span>
@@ -39,10 +51,13 @@ export default function Hero({ dict, proofDict, caseStudies }: Props) {
         {/* 66px navbar (64 + its 2px border) + 36px pixel edge below = 102px: with this block they make exactly one screen. */}
         <div className="relative mx-auto grid w-full max-w-5xl items-center gap-8 px-4 py-8 sm:px-6 md:min-h-[calc(100svh-102px)] md:grid-cols-[1.3fr_1fr]">
           <div>
-            {/* H1 is the LCP element: no opacity animation on it. It still reads as the full name. */}
+            {/* The name is typed letter by letter (CSS only, so it works before hydration). Screen readers get the full name at once. */}
             <h1 className="font-display text-[clamp(3rem,min(10.5vw,17svh),9rem)] uppercase leading-[0.82]">
-              {first} <span className="text-action">{second}</span>
-              <span className="sr-only"> {rest.join(" ")}</span>
+              <span className="sr-only">{[first, second, ...rest].join(" ")}</span>
+              <span aria-hidden>
+                {/* Each word is one unbreakable box, so a line never breaks between two letters. */}
+                <span className="inline-block whitespace-nowrap">{type(first, 0)}</span> <span className="inline-block whitespace-nowrap text-action">{type(second, first.length)}</span>
+              </span>
             </h1>
 
             {/* Role and location as two cards that drop in one after the other; their icons bob. */}
@@ -61,8 +76,9 @@ export default function Hero({ dict, proofDict, caseStudies }: Props) {
               ))}
             </ul>
 
-            <p className="mt-6 max-w-xl text-[clamp(1.2rem,2.8svh,1.5rem)] font-semibold leading-snug">
-              <Typed text={dict.tagline} />
+            {/* The tagline rises word by word out of a mask, once the name is typed. */}
+            <p className="words-load mt-6 max-w-xl text-[clamp(1.2rem,2.8svh,1.5rem)] font-semibold leading-snug" style={{ "--d": "1.3s" } as React.CSSProperties}>
+              <Words text={dict.tagline} />
             </p>
             <div className="boot mt-6 flex flex-wrap gap-4" style={i(3)}>
               <a href="#projects" className={btnPrimary}>

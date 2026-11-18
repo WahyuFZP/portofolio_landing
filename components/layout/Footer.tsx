@@ -2,6 +2,7 @@ import type { Dictionary } from "@/lib/dictionary";
 import type { Locale } from "@/lib/i18n";
 import { profile } from "@/content/profile";
 import { proof } from "@/content/proof";
+import { Pixels, Seaweed } from "@/components/ui/Reef";
 
 interface Props {
   locale: Locale;
@@ -82,6 +83,21 @@ export default function Footer({ locale, dict, nav }: Props) {
           <p>© {new Date().getFullYear()} {profile.name}</p>
           <a href="#home" className="hover:text-text">{dict.top} ↑</a>
         </div>
+      </div>
+
+      {/* Sea floor: coral and seaweed on a strip of sand, and one fish passing by. */}
+      <div aria-hidden className="relative h-24 overflow-clip">
+        <Pixels shape="fish" color="var(--action)" className="swim absolute left-0 top-2 h-5 w-8" />
+        <div className="absolute inset-x-0 bottom-2 mx-auto flex max-w-5xl items-end justify-between px-4 sm:px-6">
+          <Pixels shape="branch" color="var(--pink)" className="h-16 w-20" />
+          <Seaweed colors={["var(--action)", "var(--primary)"]} fronds={3} className="h-20 w-12" />
+          <Pixels shape="dome" color="var(--primary)" className="hidden h-9 w-12 sm:block" />
+          <Pixels shape="branch" color="var(--action)" className="hidden h-12 w-14 -scale-x-100 sm:block" />
+          <Seaweed colors={["var(--primary)", "var(--action)"]} fronds={4} className="hidden h-16 w-14 md:block" />
+          <Pixels shape="dome" color="var(--pink)" className="h-11 w-14" />
+          <Pixels shape="branch" color="var(--primary)" className="h-14 w-16 -scale-x-100" />
+        </div>
+        <div className="absolute inset-x-0 bottom-0 h-2 bg-[color-mix(in_srgb,var(--primary)_45%,var(--deep))]" />
       </div>
     </footer>
   );

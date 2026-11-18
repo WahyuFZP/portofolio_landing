@@ -4,6 +4,7 @@ import { certificates } from "@/content/certificates";
 import SectionHeading from "@/components/ui/SectionHeading";
 import ExperienceTimeline from "./ExperienceTimeline";
 import Bubbles from "@/components/motion/Bubbles";
+import { Seaweed } from "@/components/ui/Reef";
 
 interface Props {
   locale: Locale;
@@ -18,6 +19,8 @@ export default function Experience({ locale, dict }: Props) {
     // Full-bleed: wider than <main>, content re-centred inside. overflow-hidden clips the lines that run off the left edge.
     <section id="experience" className="band-night relative left-1/2 isolate w-screen -translate-x-1/2 overflow-hidden py-24">
       <Bubbles color="--action" className="-z-10" />
+      <Seaweed colors={["var(--action)", "var(--primary)"]} className="absolute bottom-0 left-0 -z-10 h-28 w-24 sm:h-48 sm:w-40" />
+      <Seaweed colors={["var(--primary)", "var(--action)"]} fronds={4} className="absolute bottom-0 right-0 -z-10 h-24 w-20 -scale-x-100 sm:h-40 sm:w-32" />
       <div className="mx-auto w-full max-w-5xl px-4 sm:px-6">
       <SectionHeading index="03" title={dict.title} />
 

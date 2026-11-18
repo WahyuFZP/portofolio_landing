@@ -7,7 +7,8 @@ import { MDXRemote } from "next-mdx-remote/rsc";
 import { getAllProjects, getProjectBySlug } from "@/lib/mdx";
 import { getDictionary } from "@/lib/dictionary";
 import { isLocale, locales } from "@/lib/i18n";
-import { skillById } from "@/content/skills";
+import { skillById, skillLogo } from "@/content/skills";
+import { Words } from "@/components/ui/SectionHeading";
 import { tag } from "@/components/ui/styles";
 
 export const dynamicParams = false;
@@ -57,8 +58,11 @@ export default async function CaseStudy({ params }: PageProps<"/[locale]/project
       </a>
 
       <header className="mt-8">
-        <h1 className="text-3xl font-semibold tracking-tight sm:text-5xl">{meta.title}</h1>
-        <p className="mt-4 text-lg text-muted">{meta.description}</p>
+        {/* Title words rise out of a mask on load; the summary and the picture step in after it. */}
+        <h1 className="words-load text-3xl font-semibold tracking-tight sm:text-5xl">
+          <Words text={meta.title} />
+        </h1>
+        <p className="boot mt-4 text-lg text-muted" style={{ "--i": 3 } as React.CSSProperties}>{meta.description}</p>
 
         <dl className="mt-8 grid gap-6 border-y border-border py-6 sm:grid-cols-3">
           {meta.year && (
@@ -76,10 +80,18 @@ export default async function CaseStudy({ params }: PageProps<"/[locale]/project
           <div className="sm:col-span-3">
             <dt className="font-mono text-xs uppercase tracking-wide text-muted">{dict.caseStudy.stack}</dt>
             <dd className="mt-2">
-              <ul className="flex flex-wrap gap-2">
-                {meta.tags.map((id) => (
-                  <li key={id} className={tag}>{skillById.get(id)?.name ?? id}</li>
-                ))}
+              {/* Tags pop in one after another, left to right (data-stagger, see Reveal). */}
+              <ul data-stagger className="flex flex-wrap gap-2.5">
+                {meta.tags.map((id) => {
+                  const logo = skillLogo(id);
+                  return (
+                    <li key={id} className={`${tag} gap-1.5 py-1`}>
+                      {/* eslint-disable-next-line @next/next/no-img-element -- 16px local SVG, nothing to optimize */}
+                      {logo && <img src={logo} alt="" width={16} height={16} className="h-4 w-4 rounded-sm bg-white" />}
+                      {skillById.get(id)?.name ?? id}
+                    </li>
+                  );
+                })}
               </ul>
             </dd>
           </div>
@@ -106,7 +118,8 @@ export default async function CaseStudy({ params }: PageProps<"/[locale]/project
           height={1080}
           priority
           sizes="(min-width: 768px) 768px, 100vw"
-          className="mt-10 aspect-[16/10] w-full object-cover object-top pixel-border"
+          className="boot mt-10 aspect-[16/10] w-full object-cover object-top pixel-border"
+          style={{ "--i": 5 } as React.CSSProperties}
         />
       )}
 
