@@ -11,30 +11,30 @@ interface Props {
 
 const sections = ["about", "skills", "process", "projects", "experience", "contact"] as const;
 const ext = { target: "_blank", rel: "noopener noreferrer" };
-// Mountain heights, one per 4-unit column of a 160 x 36 drawing.
-const FAR = [6, 8, 10, 13, 16, 19, 22, 25, 27, 25, 22, 19, 17, 15, 13, 12, 14, 17, 20, 23, 26, 29, 31, 29, 26, 23, 20, 17, 14, 11, 9, 8, 10, 12, 14, 16, 18, 16, 14, 12];
-const NEAR = [2, 3, 4, 5, 7, 8, 9, 8, 7, 5, 4, 6, 7, 9, 10, 11, 10, 9, 7, 6, 4, 4, 5, 7, 8, 9, 11, 12, 11, 9, 8, 7, 5, 4, 3, 3, 3, 4, 3, 2];
+// One row of waves: 80 columns (two identical halves of 40), heights from a sine with a whole number of crests per half.
+const row = (base: number, amp: number, crests: number, shift: number) => Array.from({ length: 80 }, (_, i) => Math.round(base + amp * Math.sin((i / 40) * Math.PI * 2 * crests + shift)));
+const WAVES = [
+  { fill: "var(--primary)", heights: row(19, 5, 2, 0), time: "16s", reverse: false, foam: true },
+  { fill: "color-mix(in srgb, var(--primary) 45%, var(--deep))", heights: row(13, 4, 3, 1.2), time: "11s", reverse: true, foam: false },
+  { fill: "var(--deep)", heights: row(7, 3, 2, 2.4), time: "8s", reverse: false, foam: false },
+];
 
 export default function Footer({ locale, dict, nav }: Props) {
   const heading = "mb-4 font-pixel text-sm text-accent";
   const link = "inline-flex min-h-9 items-center text-muted transition-colors hover:text-text";
   return (
-    <footer className="band-night relative mt-44">
-      {/* Mountains: columns of blocks, as two stacked drawings. The far range (an HTML-level layer, so the
-          scroll-driven .drift animation applies) slides as the page scrolls; the near range is footer-colored and joins the footer. */}
-      {/* overflow-clip, not hidden: "hidden" would make this box the scroller that .drift's view() timeline tracks. */}
-      <div aria-hidden className="absolute inset-x-0 bottom-full h-40 overflow-clip">
-        <svg viewBox="0 0 160 36" preserveAspectRatio="none" shapeRendering="crispEdges" className="drift absolute inset-0 h-full w-full">
-          {FAR.map((h, i) => (
-            <rect key={i} x={i * 4} y={36 - h} width={4} height={h + 12} fill="var(--primary)" />
-          ))}
-          {FAR.map((h, i) => (h >= 27 ? <rect key={i} x={i * 4} y={36 - h} width={4} height={3} fill="var(--paper)" /> : null))}
-        </svg>
-        <svg viewBox="0 0 160 36" preserveAspectRatio="none" shapeRendering="crispEdges" className="absolute inset-0 h-full w-full">
-          {NEAR.map((h, i) => (
-            <rect key={i} x={i * 4} y={36 - h} width={4} height={h} fill="var(--deep)" />
-          ))}
-        </svg>
+    <footer className="band-night relative mt-36">
+      {/* Sea: three rows of pixel waves sliding sideways at different speeds (.wave). Each row is drawn twice as wide
+          as the screen and repeats after half its width, so the loop has no seam. The front row is footer-colored. */}
+      <div aria-hidden className="absolute inset-x-0 bottom-full h-28 overflow-clip">
+        {WAVES.map((wave) => (
+          <svg key={wave.fill} viewBox="0 0 320 28" preserveAspectRatio="none" shapeRendering="crispEdges" className={`wave absolute bottom-0 left-0 h-full w-[200%] ${wave.reverse ? "wave-rev" : ""}`} style={{ "--wave-time": wave.time } as React.CSSProperties}>
+            {wave.heights.map((h, i) => (
+              <rect key={i} x={i * 4} y={28 - h} width={4.2} height={h} fill={wave.fill} />
+            ))}
+            {wave.foam && wave.heights.map((h, i) => <rect key={`f${i}`} x={i * 4} y={28 - h} width={4.2} height={1.5} fill="var(--paper)" />)}
+          </svg>
+        ))}
       </div>
       <div className="mx-auto max-w-5xl px-4 py-14 sm:px-6">
         <div className="grid gap-10 sm:grid-cols-[1.4fr_1fr_1fr_1fr]">
