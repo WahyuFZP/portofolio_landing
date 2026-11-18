@@ -232,6 +232,10 @@ body {
 @keyframes orbit {
   to { transform: rotate(360deg); }
 }
+@keyframes drift {
+  from { transform: translateY(34px); }
+  to { transform: translateY(0); }
+}
 @keyframes blink {
   50% { opacity: 0; }
 }
@@ -287,6 +291,12 @@ body {
       animation: word-up linear both;
       animation-timeline: view();
       animation-range: entry calc(var(--w, 0) * 10%) entry calc(70% + var(--w, 0) * 10%);
+    }
+    @media (min-width: 768px) {
+      .drift {
+        animation: drift linear both;
+        animation-timeline: view();
+      }
     }
     .timeline-line {
       transform-origin: top;

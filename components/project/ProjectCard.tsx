@@ -25,19 +25,20 @@ interface Props {
 
 const MAX_TAGS = 4;
 
-/** Laptop with a browser window showing the project. The lid opens on scroll; the page scrolls on hover. */
+/** A pixel-cornered device showing the project in a browser window. The page inside scrolls while the card is hovered. */
 function Laptop({ project, sizes }: { project: CardProject; sizes: string }) {
   const { meta } = project;
   // Address bar shows the real host when there is one, never an invented URL.
   const address = meta.link ? new URL(meta.link).host : meta.title;
   return (
-    <div aria-hidden className="mx-auto w-full max-w-xl [perspective:1400px]">
-      <div className="laptop-lid border-[6px] border-b-0 border-zinc-700 bg-zinc-900">
-        <div className="flex h-6 items-center gap-1.5 bg-zinc-800 px-2">
-          <span className="h-1.5 w-1.5 bg-zinc-500" />
-          <span className="h-1.5 w-1.5 bg-zinc-500" />
-          <span className="h-1.5 w-1.5 bg-sky-400" />
-          <span className="ml-2 min-w-0 flex-1 truncate bg-zinc-900 px-2 font-mono text-[11px] leading-4 text-zinc-300">{address}</span>
+    <div aria-hidden className="mx-auto w-full max-w-xl p-2">
+      {/* Four offset shadows leave the corner pixels empty: a stepped, pixel-art bezel. */}
+      <div className="bg-black [box-shadow:0_-8px_0_0_#000,0_8px_0_0_#000,-8px_0_0_0_#000,8px_0_0_0_#000]">
+        <div className="flex h-6 items-center gap-1.5 px-2">
+          <span className="h-2 w-2 bg-action" />
+          <span className="h-2 w-2 bg-primary" />
+          <span className="h-2 w-2 bg-white" />
+          <span className="ml-2 min-w-0 flex-1 truncate bg-white px-2 font-mono text-[11px] leading-4 text-black">{address}</span>
         </div>
         <div className="dither overflow-hidden">
           {meta.image ? (
@@ -50,14 +51,13 @@ function Laptop({ project, sizes }: { project: CardProject; sizes: string }) {
               className="aspect-[16/10] w-full object-cover object-top transition-[object-position] duration-[5000ms] ease-linear group-hover:object-bottom group-focus-within:object-bottom"
             />
           ) : (
-            <div className="flex aspect-[16/10] items-end bg-zinc-950 p-5 font-pixel text-lg text-sky-400">~/{project.slug}</div>
+            <div className="flex aspect-[16/10] items-end bg-deep p-5 font-pixel text-lg text-action">~/{project.slug}</div>
           )}
         </div>
       </div>
-      {/* Base: wider than the lid, with a notch. */}
-      <div className="relative -mx-[4%] h-3 bg-zinc-600">
-        <span className="absolute left-1/2 top-0 h-1.5 w-20 -translate-x-1/2 bg-zinc-800" />
-      </div>
+      {/* Stand: two stacked blocks. */}
+      <div className="mx-auto mt-2 h-2 w-1/4 bg-black" />
+      <div className="mx-auto h-2 w-2/5 bg-black" />
     </div>
   );
 }
