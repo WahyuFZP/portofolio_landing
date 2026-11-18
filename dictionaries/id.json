@@ -182,7 +182,10 @@
         "body": "Test case yang jelas, bug report yang bisa direproduksi, dan rencana tertulis yang bisa ditinjau tim."
       }
     ],
-    "whoTitle": "Siapa saya"
+    "whoTitle": "Siapa saya",
+    "short": "QA engineer dengan latar fullstack. Saya mengotomasi tes end-to-end dengan Playwright, menguji REST API dengan Postman, dan mencari celah keamanan sebelum rilis.",
+    "scan": "Bug ditemukan",
+    "scanHint": "Gerakkan kaca pembesar di atas peta untuk mencarinya."
   },
   "contact": {
     "title": "Kontak",

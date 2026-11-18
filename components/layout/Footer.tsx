@@ -16,7 +16,7 @@ export default function Footer({ locale, dict, nav }: Props) {
   const heading = "mb-4 font-pixel text-sm text-accent";
   const link = "inline-flex min-h-9 items-center text-muted transition-colors hover:text-text";
   return (
-    <footer className="mt-24 border-t-2 border-border">
+    <footer className="band-night mt-24">
       <div className="mx-auto max-w-5xl px-4 py-14 sm:px-6">
         <div className="grid gap-10 sm:grid-cols-[1.4fr_1fr_1fr_1fr]">
           <div>

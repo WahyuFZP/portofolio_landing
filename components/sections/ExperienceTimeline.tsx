@@ -1,5 +1,12 @@
 import type { Dictionary } from "@/lib/dictionary";
 import { tag } from "@/components/ui/styles";
+import { skillLogo, skills } from "@/content/skills";
+
+// Tag text -> logo, for the tags that name a skill with a logo.
+const logoOf = (name: string) => {
+  const s = skills.find((k) => k.name === name);
+  return s && skillLogo(s.id);
+};
 
 type Job = Dictionary["experience"]["list"][number];
 
@@ -40,7 +47,15 @@ export default function ExperienceTimeline({ jobs, label }: { jobs: Job[]; label
               {j.tags.length > 0 && (
                 <ul className="mt-5 flex flex-wrap gap-2">
                   {j.tags.map((t) => (
-                    <li key={t} className={tag}>{t}</li>
+                    <li key={t} className={`${tag} gap-1.5 !py-1`}>
+                      {logoOf(t) ? (
+                        // eslint-disable-next-line @next/next/no-img-element -- tiny local SVG
+                        <img src={logoOf(t)} alt="" width={16} height={16} loading="lazy" decoding="async" className="h-4 w-4 rounded-sm bg-white" />
+                      ) : (
+                        <span aria-hidden className="h-2 w-2 bg-accent" />
+                      )}
+                      {t}
+                    </li>
                   ))}
                 </ul>
               )}

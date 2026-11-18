@@ -1,6 +1,6 @@
 import type { Dictionary } from "@/lib/dictionary";
-import { skillById, skills } from "@/content/skills";
-import { tag } from "@/components/ui/styles";
+import { skillById, skillLogo, skills } from "@/content/skills";
+import SkillCloud from "@/components/skills/SkillCloud";
 import SectionHeading from "@/components/ui/SectionHeading";
 import PixelIcon, { type PixelIconName } from "@/components/ui/PixelIcon";
 import { Tilt } from "@/components/motion/Pointer";
@@ -62,13 +62,7 @@ export default function Skills({ dict, usage }: { dict: Dictionary["skills"]; us
       </ul>
 
       <h3 className="mb-4 mt-14 text-sm uppercase text-accent">[{dict.inventory}]</h3>
-      <ul className="flex flex-wrap gap-2">
-        {skills
-          .filter((s) => !featured.has(s.id))
-          .map((s) => (
-            <li key={s.id} className={tag}>{s.name}</li>
-          ))}
-      </ul>
+      <SkillCloud items={skills.filter((s) => !featured.has(s.id)).map((s) => ({ id: s.id, name: s.name, logo: skillLogo(s.id) }))} />
     </section>
   );
 }

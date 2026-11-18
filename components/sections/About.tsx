@@ -1,50 +1,45 @@
 import type { Dictionary } from "@/lib/dictionary";
 import SectionHeading from "@/components/ui/SectionHeading";
-import PixelIcon from "@/components/ui/PixelIcon";
+import PixelIcon, { type PixelIconName } from "@/components/ui/PixelIcon";
+import BugScan from "@/components/about/BugScan";
 
-/** Two short blocks (who I am, how I work) beside one pixel illustration: a magnifier over a bug. */
+// One icon per "how I work" card, in the order of dictionaries/*.json about.how.
+const ICONS: PixelIconName[] = ["check", "shield", "doc"];
+
+/** A short introduction and the facts on the left, the bug-finding game on the right, then three cards on how I work. */
 export default function About({ dict }: { dict: Dictionary["about"] }) {
   return (
     <section id="about" className="py-20">
       <SectionHeading title={dict.title} />
 
-      <div className="grid items-center gap-12 md:grid-cols-[1.3fr_1fr]">
-        <div className="space-y-10">
-          <div>
-            <h3 className="font-display text-4xl text-primary">{dict.whoTitle}</h3>
-            <div className="mt-4 max-w-[62ch] space-y-4 leading-relaxed text-muted">
-              {dict.bio.split("\n\n").map((p) => (
-                <p key={p}>{p}</p>
-              ))}
-            </div>
-          </div>
-          <div>
-            <h3 className="font-display text-4xl text-primary">{dict.howTitle}</h3>
-            <ul className="mt-4 max-w-[62ch] space-y-3">
-              {dict.how.map((h) => (
-                <li key={h.title} className="leading-relaxed text-muted">
-                  <strong className="text-text">{h.title}.</strong> {h.body}
-                </li>
-              ))}
-            </ul>
-          </div>
+      <div className="grid items-start gap-12 md:grid-cols-[1.1fr_1fr]">
+        <div>
+          <h3 className="font-display text-4xl text-primary">{dict.whoTitle}</h3>
+          <p className="mt-4 max-w-[46ch] text-lg leading-relaxed">{dict.short}</p>
+          <dl className="mt-8 space-y-4">
+            {dict.facts.map((f) => (
+              <div key={f.label} className="grid gap-1 sm:grid-cols-[8.5rem_1fr] sm:gap-4">
+                <dt className="text-sm uppercase text-accent">[{f.label}]</dt>
+                <dd className="text-sm">{f.value}</dd>
+              </div>
+            ))}
+          </dl>
         </div>
-
-        {/* Decorative. The bug sits inside the lens; the whole piece floats slowly. */}
-        <div aria-hidden className="bob relative mx-auto h-64 w-64 text-primary sm:h-80 sm:w-80">
-          <PixelIcon name="search" className="h-full w-full" />
-          <PixelIcon name="bug" className="absolute left-[19%] top-[19%] h-[30%] w-[30%] text-pink" />
-        </div>
+        <BugScan label={dict.scan} hint={dict.scanHint} />
       </div>
 
-      <dl className="mt-14 grid gap-6 sm:grid-cols-3">
-        {dict.facts.map((f) => (
-          <div key={f.label}>
-            <dt className="text-sm uppercase text-accent">[{f.label}]</dt>
-            <dd className="mt-1 font-medium">{f.value}</dd>
-          </div>
+      <h3 className="mb-6 mt-16 font-display text-4xl text-primary">{dict.howTitle}</h3>
+      <ol data-stagger className="grid gap-7 md:grid-cols-3">
+        {dict.how.map((h, i) => (
+          <li key={h.title} className="corners bg-surface p-5 pixel-border" style={{ "--shadow-color": ["var(--pink)", "var(--primary)", "var(--action)"][i % 3] } as React.CSSProperties}>
+            <span aria-hidden className="flex h-11 w-11 items-center justify-center rounded-md bg-action text-black pixel-border">
+              <PixelIcon name={ICONS[i] ?? "check"} className="h-6 w-6" />
+            </span>
+            <h4 className="mt-4 text-lg font-semibold">{h.title}</h4>
+            <p className="mt-2 text-sm leading-relaxed text-muted">{h.body}</p>
+          </li>
         ))}
-      </dl>
+      </ol>
     </section>
   );
 }

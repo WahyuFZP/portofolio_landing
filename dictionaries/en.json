@@ -182,7 +182,10 @@
         "body": "Clear test cases, reproducible bug reports, and written plans that a team can review."
       }
     ],
-    "whoTitle": "Who I am"
+    "whoTitle": "Who I am",
+    "short": "QA engineer with a fullstack background. I automate end-to-end tests with Playwright, test REST APIs with Postman, and hunt for security flaws before release.",
+    "scan": "Bugs found",
+    "scanHint": "Move the lens over the map to find them."
   },
   "contact": {
     "title": "Contact",
