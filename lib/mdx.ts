@@ -64,7 +64,9 @@ export function getProjectSlugs(locale: Locale): string[] {
   return fs
     .readdirSync(dir(locale))
     .filter((f) => f.endsWith(".mdx"))
-    .map((f) => f.replace(/\.mdx$/, ""));
+    .map((f) => f.replace(/\.mdx$/, ""))
+    // A slug becomes part of a URL: only plain names are accepted, so a file name can never carry markup or a scheme.
+    .filter((slug) => /^[a-z0-9-]+$/.test(slug));
 }
 
 export function getAllProjects(locale: Locale): Project[] {

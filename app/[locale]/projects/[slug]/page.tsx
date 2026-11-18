@@ -130,7 +130,7 @@ export default async function CaseStudy({ params }: PageProps<"/[locale]/project
 
       {next && next.slug !== project.slug && (
         <Link
-          href={`/${locale}/projects/${next.slug}`}
+          href={`/${locale}/projects/${encodeURIComponent(next.slug)}`}
           className="corners mt-16 flex items-center justify-between bg-surface p-6 pixel-border transition-transform hover:-translate-y-0.5 hover:[--pb:var(--accent)]"
         >
           <span>
