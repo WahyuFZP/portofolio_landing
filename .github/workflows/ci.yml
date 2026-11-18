@@ -56,9 +56,7 @@ jobs:
     name: Dependency audit
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    # Report only for now: known advisories in next/sharp/postcss need a Next.js upgrade.
-    # Remove this line once `npm audit --omit=dev --audit-level=high` is clean, so new ones block the merge.
-    continue-on-error: true
+    # Shipped dependencies only: dev tooling (eslint's picomatch) has an open advisory with no fixed release yet.
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
