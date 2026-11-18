@@ -8,6 +8,7 @@ import { Parallax } from "@/components/motion/Pointer";
 import { Words } from "@/components/ui/SectionHeading";
 import { Seaweed } from "@/components/ui/Reef";
 import Bubbles from "@/components/motion/Bubbles";
+import HeroFish from "@/components/hero/HeroFish";
 
 interface Props {
   dict: Dictionary["hero"];
@@ -92,11 +93,15 @@ export default function Hero({ dict, proofDict, caseStudies }: Props) {
 
           {/* The mascot rises from below on load, bobs gently, and shifts with the mouse. Its size follows the screen height. */}
           <Parallax strength={18} className="mx-auto w-full max-w-[min(392px,52svh,62vw)]">
-            <div className="boot" style={i(1)}>
+            {/* #octo: where a clicked fish swims to (HeroFish); it squashes from the bottom when it chews. */}
+            <div id="octo" className="boot origin-bottom" style={i(1)}>
               <Octopus className="bob w-full" />
             </div>
           </Parallax>
         </div>
+
+        {/* After the content, so the buttons come first in the tab order. */}
+        <HeroFish label={dict.feed} burps={dict.burps} />
 
         {/* Pixel edge: a row of squares where the blue meets the page. */}
         <div aria-hidden className="h-6 bg-[linear-gradient(90deg,var(--paper)_50%,transparent_50%)] bg-[length:48px_100%]" />

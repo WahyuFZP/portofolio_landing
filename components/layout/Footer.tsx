@@ -2,7 +2,7 @@ import type { Dictionary } from "@/lib/dictionary";
 import type { Locale } from "@/lib/i18n";
 import { profile } from "@/content/profile";
 import { proof } from "@/content/proof";
-import { Pixels, Seaweed } from "@/components/ui/Reef";
+import { Fish, Pixels, Seaweed } from "@/components/ui/Reef";
 
 interface Props {
   locale: Locale;
@@ -85,9 +85,12 @@ export default function Footer({ locale, dict, nav }: Props) {
         </div>
       </div>
 
-      {/* Sea floor: coral and seaweed on a strip of sand, and one fish passing by. */}
-      <div aria-hidden className="relative h-24 overflow-clip">
-        <Pixels shape="fish" color="var(--action)" className="swim absolute left-0 top-2 h-5 w-8" />
+      {/* Sea floor: coral and seaweed on a strip of sand, and a few fish passing by. */}
+      <div aria-hidden className="relative h-28 overflow-clip">
+        <Fish shape="fish" color="var(--action)" top="6%" time="28s" delay="-6s" className="h-5 w-8" />
+        <Fish shape="angel" color="var(--paper)" top="24%" time="40s" delay="-25s" rev className="h-7 w-8" />
+        <Fish shape="long" color="var(--pink)" top="14%" time="21s" delay="-14s" className="h-3 w-12" />
+        <Fish shape="puffer" color="var(--primary)" top="36%" time="50s" delay="-38s" rev className="h-6 w-9" />
         <div className="absolute inset-x-0 bottom-2 mx-auto flex max-w-5xl items-end justify-between px-4 sm:px-6">
           <Pixels shape="branch" color="var(--pink)" className="h-16 w-20" />
           <Seaweed colors={["var(--action)", "var(--primary)"]} fronds={3} className="h-20 w-12" />

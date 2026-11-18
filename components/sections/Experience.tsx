@@ -4,7 +4,7 @@ import { certificates } from "@/content/certificates";
 import SectionHeading from "@/components/ui/SectionHeading";
 import ExperienceTimeline from "./ExperienceTimeline";
 import Bubbles from "@/components/motion/Bubbles";
-import { Seaweed } from "@/components/ui/Reef";
+import { Fish, Seaweed } from "@/components/ui/Reef";
 
 interface Props {
   locale: Locale;
@@ -19,6 +19,10 @@ export default function Experience({ locale, dict }: Props) {
     // Full-bleed: wider than <main>, content re-centred inside. overflow-hidden clips the lines that run off the left edge.
     <section id="experience" className="band-night relative left-1/2 isolate w-screen -translate-x-1/2 overflow-hidden py-24">
       <Bubbles color="--action" className="-z-10" />
+      <Fish shape="angel" color="var(--primary)" top="7%" time="38s" delay="-9s" className="-z-10 h-9 w-10" />
+      <Fish shape="long" color="var(--action)" top="33%" time="24s" delay="-17s" rev className="-z-10 h-4 w-14" />
+      <Fish shape="puffer" color="var(--pink)" top="58%" time="46s" delay="-31s" className="-z-10 h-7 w-10" />
+      <Fish shape="fish" color="var(--action)" top="84%" time="30s" delay="-3s" rev className="-z-10 h-6 w-10" />
       <Seaweed colors={["var(--action)", "var(--primary)"]} className="absolute bottom-0 left-0 -z-10 h-28 w-24 sm:h-48 sm:w-40" />
       <Seaweed colors={["var(--primary)", "var(--action)"]} fronds={4} className="absolute bottom-0 right-0 -z-10 h-24 w-20 -scale-x-100 sm:h-40 sm:w-32" />
       <div className="mx-auto w-full max-w-5xl px-4 sm:px-6">

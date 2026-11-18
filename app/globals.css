@@ -272,9 +272,20 @@ body {
   from { transform: skewX(-7deg); }
   to { transform: skewX(7deg); }
 }
+/* --x is the element's own left offset, so every fish crosses the whole screen wherever it is placed. */
 @keyframes swim {
-  from { transform: translateX(105vw); }
-  to { transform: translateX(-60px); }
+  from { transform: translateX(calc(105vw - var(--x, 0px))); }
+  to { transform: translateX(calc(-90px - var(--x, 0px))); }
+}
+@keyframes burp-up {
+  from { opacity: 0; transform: translate(-50%, 0) scale(0.6); }
+  20% { opacity: 1; transform: translate(-50%, -14px) scale(1); }
+  70% { opacity: 1; }
+  to { opacity: 0; transform: translate(-50%, -64px) scale(1); }
+}
+/* Floating text above the octopus after a meal; without motion it simply shows, then is removed. */
+.burp {
+  transform: translate(-50%, -14px);
 }
 
 /* Typewriter letters: each one is a box, so its caret can sit at its right edge. */
@@ -335,7 +346,13 @@ body {
     animation-delay: calc(var(--n, 0) * -0.9s);
   }
   .swim {
-    animation: swim 28s linear infinite;
+    animation: swim var(--swim-time, 28s) linear var(--swim-delay, 0s) infinite;
+  }
+  .swim-rev {
+    animation-direction: reverse;
+  }
+  .burp {
+    animation: burp-up 1.8s var(--ease) forwards;
   }
   /* Swell: each row eases up and back down; a negative delay starts it part-way through its cycle. */
   .wave {

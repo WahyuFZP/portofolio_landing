@@ -23,7 +23,14 @@
     "ctaCv": "Unduh CV",
     "sceneHint": "Seret untuk memutar. Klik skill untuk melihat proyeknya.",
     "roleTag": "Peran",
-    "baseTag": "Domisili"
+    "baseTag": "Domisili",
+    "feed": "Beri ikan ini ke gurita",
+    "burps": [
+      "Burp!",
+      "Nyam!",
+      "Enak!",
+      "Tambah lagi!"
+    ]
   },
   "proof": {
     "label": "Ringkasan test run",

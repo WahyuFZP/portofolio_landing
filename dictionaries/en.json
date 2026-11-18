@@ -23,7 +23,14 @@
     "ctaCv": "Download CV",
     "sceneHint": "Drag to rotate. Click a skill to see its projects.",
     "roleTag": "Role",
-    "baseTag": "Based in"
+    "baseTag": "Based in",
+    "feed": "Feed this fish to the octopus",
+    "burps": [
+      "Burp!",
+      "Yum!",
+      "Tasty!",
+      "One more!"
+    ]
   },
   "proof": {
     "label": "Test run summary",

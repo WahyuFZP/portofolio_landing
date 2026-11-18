@@ -56,6 +56,18 @@ test.describe("hero", () => {
     await expect(hero.getByRole("link", { name: /Download CV/ })).toBeInViewport();
   });
 
+  test("a clicked fish is eaten and the octopus burps", async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" }); // fish hold still, so the click is not a moving target
+    await page.goto("/en");
+    const fish = page.getByRole("button", { name: "Feed this fish to the octopus" });
+    await expect(fish).toHaveCount(4);
+    const first = page.locator("#home button.swim").first(); // by position: the role query skips a fish once it is hidden
+    await first.click();
+    await expect(page.locator("#home").getByRole("status")).toHaveText("Burp!");
+    await expect(first).toBeHidden();
+    await expect(fish).toHaveCount(3);
+  });
+
   test("the CV link serves a PDF", async ({ page, request }) => {
     await page.goto("/en");
     const href = await page.locator("#home a[download]").getAttribute("href");
