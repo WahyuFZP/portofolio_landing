@@ -21,17 +21,17 @@ export default function Skills({ dict, usage }: { dict: Dictionary["skills"]; us
     <section id="skills" className="py-20">
       <SectionHeading index="02" title={dict.title} subtitle={dict.subtitle} />
 
-      <ul data-stagger className="grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
+      <ul data-stagger className="grid grid-cols-2 gap-5 sm:gap-7 lg:grid-cols-3">
         {FEATURED.map(([id, icon]) => {
           const s = skillById.get(id);
           if (!s) return null;
           const count = usage.get(id) ?? 0;
           const body = (
             <>
-              <span aria-hidden className="flex h-14 w-14 items-center justify-center rounded-md bg-action text-black pixel-border">
-                <PixelIcon name={icon} className="h-8 w-8" />
+              <span aria-hidden className="flex h-11 w-11 items-center justify-center rounded-md bg-action text-black pixel-border sm:h-14 sm:w-14">
+                <PixelIcon name={icon} className="h-6 w-6 sm:h-8 sm:w-8" />
               </span>
-              <span className="mt-5 block text-xl font-semibold">{s.name}</span>
+              <span className="mt-4 block text-base font-semibold sm:mt-5 sm:text-xl">{s.name}</span>
               <span className="mt-2 block text-sm uppercase text-accent">[{dict.levels[s.level]}]</span>
               {count > 0 && (
                 <span className="mt-1 block text-sm text-muted">
@@ -40,7 +40,7 @@ export default function Skills({ dict, usage }: { dict: Dictionary["skills"]; us
               )}
             </>
           );
-          const card = "corners block h-full bg-surface p-6 pixel-border";
+          const card = "corners block h-full bg-surface p-4 pixel-border sm:p-6";
           return (
             <li key={id}>
               <Tilt className="h-full">

@@ -39,7 +39,7 @@ export default function Experience({ locale, dict }: Props) {
                   </p>
                 )}
                 {c.verifyUrl && (
-                  <a href={c.verifyUrl} target="_blank" rel="noopener noreferrer" className="mt-2 inline-block font-pixel text-sm text-accent underline underline-offset-4">
+                  <a href={c.verifyUrl} target="_blank" rel="noopener noreferrer" className="mt-1 inline-block py-2 font-pixel text-sm text-accent underline underline-offset-4">
                     {dict.verify} ↗
                   </a>
                 )}

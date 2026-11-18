@@ -53,7 +53,7 @@ export default function ExperienceTimeline({ jobs, label, showAll }: { jobs: Job
                 )}
                 {rest.length > 0 && (
                   <details className="mt-2 text-sm">
-                    <summary className="cursor-pointer text-accent underline underline-offset-4">
+                    <summary className="cursor-pointer py-2 text-accent underline underline-offset-4">
                       {showAll} (+{rest.length})
                     </summary>
                     <ul className="mt-2 list-disc space-y-1 pl-5 leading-relaxed text-muted marker:text-accent">

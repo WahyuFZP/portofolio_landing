@@ -9,7 +9,7 @@ interface Props {
   nav: Dictionary["nav"];
 }
 
-const sections = ["projects", "skills", "experience", "about", "contact"] as const;
+const sections = ["about", "skills", "process", "projects", "experience", "contact"] as const;
 const ext = { target: "_blank", rel: "noopener noreferrer" };
 
 export default function Footer({ locale, dict, nav }: Props) {

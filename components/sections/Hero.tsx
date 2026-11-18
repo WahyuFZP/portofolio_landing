@@ -73,7 +73,7 @@ export default function Hero({ dict, proofDict, caseStudies }: Props) {
           </div>
 
           {/* The mascot rises from below on load, bobs gently, and shifts with the mouse. Its size follows the screen height. */}
-          <Parallax strength={18} className="mx-auto w-full max-w-[min(392px,52svh)]">
+          <Parallax strength={18} className="mx-auto w-full max-w-[min(392px,52svh,62vw)]">
             <div className="boot" style={i(1)}>
               <Octopus className="bob w-full" />
             </div>
