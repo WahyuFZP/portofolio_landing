@@ -51,9 +51,10 @@ export default async function CaseStudy({ params }: PageProps<"/[locale]/project
 
   return (
     <article className="mx-auto max-w-3xl py-12">
-      <Link href={`/${locale}#projects`} className="inline-flex items-center gap-2 text-sm text-muted hover:text-text">
+      {/* Plain link, not next/link: after a visit to /en#projects the client router returns to "/en#projects#projects" and the page does not scroll. */}
+      <a href={`/${locale}#projects`} className="inline-flex items-center gap-2 text-sm text-muted hover:text-text">
         <ArrowLeft className="h-4 w-4" aria-hidden /> {dict.caseStudy.back}
-      </Link>
+      </a>
 
       <header className="mt-8">
         <h1 className="text-3xl font-semibold tracking-tight sm:text-5xl">{meta.title}</h1>

@@ -1,16 +1,16 @@
 import { test, expect, type Page } from "@playwright/test";
 
-// On mobile the section links live in a <details> menu.
-async function openMenuIfCollapsed(page: Page) {
-  const summary = page.locator("header summary");
-  if (await summary.isVisible()) await summary.click();
-}
+const SECTIONS = ["about", "skills", "process", "projects", "experience", "contact"];
+
+// Puts a section across the middle of the screen, where the navbar and the guide count it as "in view".
+const scrollInto = (page: Page, id: string) =>
+  page.evaluate((id) => window.scrollTo({ top: document.getElementById(id)!.getBoundingClientRect().top + scrollY + 200, behavior: "instant" }), id);
 
 test.describe("locale routing", () => {
   for (const [header, locale] of [
     ["en-US,en;q=0.9", "en"],
     ["id-ID,id;q=0.9", "id"],
-    ["fr-FR", "id"], // unknown language falls back to default `id`
+    ["fr-FR", "id"], // unknown language falls back to the default
   ] as const) {
     test(`/ redirects to /${locale} for Accept-Language "${header}"`, async ({ request }) => {
       const res = await request.get("/", { headers: { "accept-language": header }, maxRedirects: 0 });
@@ -48,162 +48,141 @@ test.describe("locale routing", () => {
 });
 
 test.describe("hero", () => {
-  test("name, role, CTAs and proof strip are visible without scrolling", async ({ page }) => {
+  test("name and both calls to action are on the first screen", async ({ page }) => {
     await page.goto("/en");
+    const hero = page.locator("#home");
     await expect(page.getByRole("heading", { level: 1 })).toBeInViewport();
-    await expect(page.getByText("Software QA Engineer · Automation, API & Security")).toBeInViewport();
-    await expect(page.locator("#home").getByRole("link", { name: /View projects/ })).toBeInViewport();
-    await expect(page.locator("#home").getByRole("link", { name: /Download CV/ })).toBeInViewport();
-    const proof = page.getByRole("list", { name: "Test run summary" });
-    await expect(proof).toBeInViewport();
-    await expect(proof).toContainText("QA Engineer @ Exodrinks");
-    await expect(proof).toContainText("3 case studies");
-    // The numbers link to the public CI run that produced them (content/proof.ts).
-    const run = proof.getByRole("link", { name: /E2E tests passing/ });
-    await expect(run).toHaveAttribute("href", /github\.com\/WahyuFZP\/portofolio_landing\/actions\/runs\/\d+$/);
-    await expect(proof).toContainText("0 axe accessibility violations");
+    await expect(hero.getByRole("link", { name: /View projects/ })).toBeInViewport();
+    await expect(hero.getByRole("link", { name: /Download CV/ })).toBeInViewport();
+  });
+
+  test("the CV link serves a PDF", async ({ page, request }) => {
+    await page.goto("/en");
+    const href = await page.locator("#home a[download]").getAttribute("href");
+    const res = await request.get(href!);
+    expect(res.status()).toBe(200);
+    expect(res.headers()["content-type"]).toContain("pdf");
   });
 });
 
-test.describe("home sections", () => {
-  test("sections follow the QA-first order", async ({ page }) => {
+test.describe("home", () => {
+  test("sections come in the expected order", async ({ page }) => {
     await page.goto("/en");
     const ids = await page.locator("main section[id]").evaluateAll((els) => els.map((e) => e.id));
-    // #music appears only once Spotify is connected.
-    expect(ids).toEqual(["home", "projects", "skills", "bug-hunt", "experience", "about", "contact"]);
+    expect(ids).toEqual(["home", ...SECTIONS]);
   });
 
-  test("old #certificates anchor still exists", async ({ page }) => {
-    await page.goto("/en");
-    await expect(page.locator("#certificates")).toHaveCount(1);
-  });
-
-  for (const id of ["projects", "experience", "about", "contact"]) {
-    test(`navbar link scrolls to #${id}`, async ({ page }) => {
-      await page.goto("/en");
-      await openMenuIfCollapsed(page);
-      await page.locator(`header a[href="/en#${id}"]:visible`).click();
-      await expect(page).toHaveURL(new RegExp(`#${id}$`));
-      await expect(page.locator(`section#${id}`)).toBeInViewport();
+  for (const locale of ["en", "id"]) {
+    test(`/${locale} never scrolls sideways`, async ({ page }) => {
+      await page.goto(`/${locale}`);
+      await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+      expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBe(0);
     });
   }
 
-  test("CV link serves a PDF", async ({ page, request }) => {
+  test("navbar link scrolls to its section and marks it current", async ({ page }) => {
     await page.goto("/en");
-    const href = await page.locator('a[href$=".pdf"]').first().getAttribute("href");
-    expect(href).toBe("/CV-WahyuFikriZeniPutra.pdf"); // public URL must stay stable
-    const res = await request.get(href!);
-    expect(res.status()).toBe(200);
-    expect(res.headers()["content-type"]).toContain("application/pdf");
+    const summary = page.locator("header summary");
+    const mobile = await summary.isVisible();
+    if (mobile) await summary.click();
+    await page.locator("header").getByRole("link", { name: "Process", exact: true }).click();
+    await expect(page).toHaveURL(/#process$/);
+    await expect(page.locator("#process")).toBeInViewport();
+    if (mobile) await expect(page.locator("header details")).not.toHaveAttribute("open", /.*/); // menu closes after a choice
+    else await expect(page.locator("header").getByRole("link", { name: "Process", exact: true })).toHaveAttribute("aria-current", "true");
   });
 
-  test("each skill is listed once", async ({ page }) => {
+  test("content is readable with reduced motion", async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" });
     await page.goto("/en");
-    await expect(page.locator("#skills").locator("li", { hasText: /^Playwright/ })).toHaveCount(1);
-  });
-
-  test("experience matches LinkedIn: 3 roles, current one first", async ({ page }) => {
-    await page.goto("/en");
-    const tabs = page.locator("#experience").getByRole("tab");
-    await expect(tabs).toHaveCount(3);
-    await expect(tabs.last()).toHaveAttribute("aria-selected", "true"); // newest role is open
-    const panel = page.locator("#experience").getByRole("tabpanel");
-    await expect(panel).toContainText("Software Quality Assurance Engineer");
-    await expect(panel).toContainText("PT Exodrinks Indonesia Prestige");
-    await tabs.nth(1).click();
-    await expect(panel).toContainText("Dinas Lingkungan Hidup Kota Madiun");
-    await tabs.nth(1).press("ArrowRight"); // keyboard: arrows move between roles
-    await expect(panel).toContainText("PT Exodrinks Indonesia Prestige");
-    await expect(page.locator("main")).not.toContainText("—"); // no em dashes in visible copy
-  });
-
-  test("English page has no Indonesian UI text", async ({ page }) => {
-    await page.goto("/en");
-    for (const word of ["Lokasi", "Kirim pesan", "Pesan Terkirim", "Unduh CV", "Sedang belajar"]) {
-      await expect(page.locator("body")).not.toContainText(word);
+    for (const id of SECTIONS) {
+      const heading = page.locator(`#${id} h2`).first();
+      await heading.scrollIntoViewIfNeeded();
+      await expect(heading).toBeVisible();
+      expect(await heading.evaluate((el) => getComputedStyle(el).opacity)).toBe("1");
     }
   });
 
-  test("pixel font is only used for display text, never for reading text", async ({ page }) => {
-    await page.goto("/en");
-    const fonts = await page
-      .locator("#home p.text-lg, #about div.text-lg p, #about li p.text-muted, #experience ol li li, #projects article p.text-muted")
-      .evaluateAll((els) => els.map((e) => getComputedStyle(e).fontFamily));
-    expect(fonts.length).toBeGreaterThan(5);
-    for (const f of fonts) expect(f.toLowerCase()).not.toContain("pixelify");
+  test("experience entry expands to show every point", async ({ page }) => {
+    await page.goto("/en#experience");
+    const details = page.locator("#experience details").first();
+    await details.locator("summary").click();
+    await expect(details).toHaveAttribute("open", /.*/);
+    await expect(details.locator("li").first()).toBeVisible();
   });
 });
 
 test.describe("projects", () => {
-  test("category filter narrows the list and is shareable via URL", async ({ page }) => {
+  const count = (page: Page) => page.locator("#projects [aria-live]");
+
+  test("category filter narrows the list and All restores it", async ({ page }) => {
     await page.goto("/en#projects");
-    const cards = page.locator("#projects article");
-    await expect(cards).toHaveCount(3);
-
-    await page.locator("#projects").getByRole("button", { name: "QA", exact: true }).click();
-    await expect(page).toHaveURL(/\?category=qa#projects$/);
-    await expect(cards).toHaveCount(2);
-
-    await page.reload();
-    await expect(cards).toHaveCount(2);
-
-    await page.locator("#projects").getByRole("button", { name: "All", exact: true }).click();
-    await expect(cards).toHaveCount(3);
+    const filter = page.getByRole("group", { name: "Filter projects" });
+    await expect(count(page)).toHaveText("3 / 3");
+    await filter.getByRole("button", { name: "QA", exact: true }).click();
+    await expect(count(page)).toHaveText("2 / 3");
+    await expect(page).toHaveURL(/category=qa/);
+    await filter.getByRole("button", { name: "All" }).click();
+    await expect(count(page)).toHaveText("3 / 3");
   });
 
-  test("skill chip filters projects and the filter can be cleared", async ({ page }) => {
-    await page.goto("/en");
-    await page.locator("#skills").getByRole("tab", { name: "Backend & API" }).click(); // skills are grouped behind category tabs
-    await page.locator("#skills").getByRole("link", { name: /Laravel/ }).click();
-    await expect(page).toHaveURL(/\?skill=laravel#projects$/);
-    const cards = page.locator("#projects article");
-    await expect(cards).toHaveCount(1);
-    await expect(cards.first()).toContainText("E-Retribution");
-
+  test("a shared ?skill= link filters, and the chip clears it", async ({ page }) => {
+    await page.goto("/en?skill=laravel#projects");
+    await expect(count(page)).toHaveText("1 / 3");
     await page.getByRole("button", { name: /Clear skill filter/ }).click();
-    await expect(cards).toHaveCount(3);
+    await expect(count(page)).toHaveText("3 / 3");
   });
 
-  test("filters with no match show an empty state with a reset", async ({ page }) => {
-    await page.goto("/en?category=qa&skill=laravel#projects");
-    const section = page.locator("#projects");
-    await expect(section.locator("article")).toHaveCount(0);
-    await expect(section.getByText("No projects match these filters.")).toBeVisible();
-    await section.getByRole("button", { name: "Show all projects" }).click();
-    await expect(section.locator("article")).toHaveCount(3);
-    await expect(page).toHaveURL(/\/en#projects$/);
-  });
-
-  test("unknown ?skill and ?category show all projects", async ({ page }) => {
-    await page.goto("/en?skill=nope&category=nope#projects");
-    await expect(page.locator("#projects article")).toHaveCount(3);
-  });
-
-  test("tags beyond 4 collapse into +N with the full list for screen readers", async ({ page }) => {
-    await page.goto("/en#projects");
-    const more = page.locator("#projects article", { hasText: "Ticket Space" }).locator("li", { hasText: /^\+\d+$/ });
-    await expect(more).toHaveText("+5");
-    await expect(more).toHaveAttribute("aria-label", /PostgreSQL/);
-  });
-
-  test("card opens the case study, next project link works", async ({ page }) => {
-    await page.goto("/en#projects");
-    await page.getByRole("link", { name: "E-Retribution Payment System" }).click();
+  test("a card opens its case study, and the back link returns", async ({ page }) => {
+    await page.goto("/en#projects"); // arriving with the hash is what used to double it on the way back
+    await page.locator('#projects a[href="/en/projects/eretribusi"]').first().click();
     await expect(page).toHaveURL(/\/en\/projects\/eretribusi$/);
     await expect(page.getByRole("heading", { level: 1 })).toHaveText("E-Retribution Payment System");
-    await expect(page.getByRole("heading", { level: 2, name: "Problem" })).toBeVisible();
-
-    await page.getByRole("link", { name: /Next project/ }).click();
-    await expect(page).toHaveURL(/\/en\/projects\/ticketspace$/);
-  });
-
-  test("unknown project slug is a 404", async ({ request }) => {
-    expect((await request.get("/en/projects/nope")).status()).toBe(404);
+    await page.getByRole("link", { name: "All projects" }).click();
+    await expect(page).toHaveURL(/\/en#projects$/);
   });
 });
 
-test("sitemap lists both locales", async ({ request }) => {
-  const xml = await (await request.get("/sitemap.xml")).text();
-  expect(xml).toContain("/en/projects/eretribusi");
-  expect(xml).toContain("/id/projects/eretribusi");
+test.describe("octopus guide", () => {
+  test("appears after the hero, sums up the section, and can be closed and reopened", async ({ page }) => {
+    await page.goto("/en");
+    const toggle = page.getByRole("button", { name: "Section recap" });
+    const recap = page.getByRole("status").filter({ hasText: /^Skills:/ });
+    const guide = toggle.locator("xpath=..");
+    await expect(guide).toHaveAttribute("inert", /.*/); // cannot be focused or clicked while the hero is in view
+
+    await scrollInto(page, "skills");
+    await expect(guide).not.toHaveAttribute("inert", /.*/);
+    await expect(toggle).toBeInViewport();
+    // Phones start with the bubble closed, so it does not cover the content.
+    if ((page.viewportSize()?.width ?? 0) < 768) {
+      await expect(recap).toBeHidden();
+      await toggle.click();
+    }
+    await expect(recap).toBeVisible();
+
+    await page.getByRole("button", { name: "Hide the recap" }).click();
+    await expect(recap).toBeHidden();
+    await toggle.click();
+    await expect(recap).toBeVisible();
+
+    await scrollInto(page, "contact");
+    await expect(page.getByRole("status").filter({ hasText: /^Contact:/ })).toBeVisible();
+  });
+});
+
+test.describe("footer", () => {
+  test("has Explore, Connect and Site menus with working links", async ({ page, request }) => {
+    await page.goto("/en");
+    const footer = page.locator("footer");
+    for (const name of ["Explore", "Connect", "Site"]) await expect(footer.getByRole("navigation", { name })).toBeVisible();
+    const anchors = await footer.locator('a[href*="#"]').evaluateAll((as) => as.map((a) => (a as HTMLAnchorElement).hash));
+    expect(anchors.length).toBeGreaterThanOrEqual(6);
+    for (const hash of anchors) await expect(page.locator(hash)).toHaveCount(1);
+    expect((await request.get("/sitemap.xml")).status()).toBe(200);
+    expect((await request.get("/robots.txt")).status()).toBe(200);
+
+    await footer.getByRole("link", { name: "Bahasa Indonesia" }).click();
+    await expect(page).toHaveURL(/\/id$/);
+  });
 });

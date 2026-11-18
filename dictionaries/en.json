@@ -206,7 +206,7 @@
     "explore": "Explore",
     "connect": "Connect",
     "site": "Site",
-    "built": "Built with Next.js and Three.js, tested with Playwright.",
+    "built": "Built with Next.js, tested with Playwright.",
     "source": "Source code",
     "ci": "Test runs",
     "sitemap": "Sitemap",
