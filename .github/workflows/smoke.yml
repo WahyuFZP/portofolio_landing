@@ -1,0 +1,43 @@
+name: Post-deploy smoke test
+
+# Vercel deploys on its own (Git integration) and reports each deployment to GitHub.
+# When a production deployment succeeds, the E2E suite runs once against the live site.
+on:
+  deployment_status:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: smoke
+  cancel-in-progress: true
+
+jobs:
+  smoke:
+    name: E2E against production
+    if: ${{ github.event_name == 'workflow_dispatch' || (github.event.deployment_status.state == 'success' && github.event.deployment.environment == 'Production') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      # The public address, not the per-deployment URL (that one can sit behind Vercel's login).
+      # Override with a repository variable named SITE_URL.
+      PW_BASE_URL: ${{ vars.SITE_URL || 'https://wahyufikri.vercel.app' }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Test the code that was deployed, not whatever is newest on the branch.
+          ref: ${{ github.event.deployment.sha || github.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npx playwright test --project=desktop
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: smoke-report
+          path: playwright-report/
+          retention-days: 14

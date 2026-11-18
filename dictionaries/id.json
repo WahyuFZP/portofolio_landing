@@ -1,83 +1,285 @@
 {
-  "navbar": {
-    "home": "Beranda",
+  "meta": {
+    "title": "Wahyu Fikri | Software QA Engineer: Automation, API & Security",
+    "description": "Wahyu Fikri Zeni Putra adalah software QA engineer di Bandung, Indonesia, yang berfokus pada test automation dengan Playwright, API testing, dan security testing, dengan latar belakang web fullstack.",
+    "ogLocale": "id_ID"
+  },
+  "nav": {
+    "projects": "Proyek",
+    "skills": "Keahlian",
+    "experience": "Pengalaman",
     "about": "Tentang",
-    "projects": "Proyek"
+    "contact": "Kontak",
+    "skip": "Langsung ke konten",
+    "menu": "Menu",
+    "switchLanguage": "Switch to English",
+    "theme": "Ganti tema terang dan gelap",
+    "process": "Proses"
   },
   "hero": {
-    "greeting": "Halo, saya",
-    "role": "Software Engineer",
-    "tagline": "Terus belajar, membangun, dan menyempurnakan aplikasi web dengan standar kualitas yang ketat dan keamanan yang andal.",
-    "ctaProjects": "Lihat Proyek",
-    "ctaContact": "Hubungi Saya"
-  },
-  "about": {
-    "sectionTitle": "TENTANG SAYA",
-    "greeting": "SAYA",
-    "name": "Wahyu Fikri",
-    "role": "Software Engineer",
-    "bio": "Sebagai mahasiswa Teknik Informatika dan Software Engineer, saya memiliki semangat yang tak pernah padam untuk terus belajar dan merealisasikan ide menjadi solusi digital yang nyata.\n\nBagi saya, keberhasilan sebuah proyek tidak hanya diukur dari fungsinya, tetapi juga dari keamanannya. Oleh karena itu, saya selalu mengedepankan standar pengembangan perangkat lunak yang baik dan proses pengujian (QA) yang teliti untuk menghasilkan aplikasi yang fungsional, terukur, dan berkualitas tinggi.",
-    "downloadCv": "UNDUH CV"
-  },
-  "skills": {
-    "title": "Keahlian",
-    "accent": "Teknis"
-  },
-  "experience": {
-    "title": "Pengalaman",
-    "accent": "Kerja",
-    "technologiesLabel": "Teknologi yang Digunakan",
-    "list": [
-      {
-        "company": "CV. Maju Sukses Perkasa",
-        "role": "Helper Gudang",
-        "period": "Nov 2021 - Jul 2022",
-        "location": "Madiun, Indonesia",
-        "description": [
-          "Mencatat, menyortir, dan melakukan pengecekan berkala barang-barang di gudang.",
-          "Menyiapkan barang-barang yang akan didistribusikan."
-        ],
-        "technologies": ["Excel"]
-      },
-      {
-        "company": "Dinas Lingkungan Hidup Kota Madiun",
-        "role": "IT Staff (Magang)",
-        "period": "Mei 2025 – Juni 2025",
-        "location": "Madiun, Indonesia",
-        "description": [
-          "Melakukan Redesign UI/UX website Dinas Lingkungan Hidup Kota Madiun untuk meningkatkan tampilan dan pengalaman pengguna.",
-          "Menangani Troubleshooting perangkat komputer dan software guna memastikan sistem berjalan optimal.",
-          "Bertugas sebagai administrator website, termasuk melakukan pembaruan konten dan informasi terbaru di situs resmi instansi."
-        ],
-        "technologies": ["Excel", "HTML", "CSS", "JavaScript", "PHP", "WordPress"]
-      }
+    "eyebrow": "Software QA Engineer · Automation, API & Security",
+    "tagline": "Saya menemukan bug sebelum pengguna Anda menemukannya: otomasi end-to-end dengan Playwright, API testing dengan Postman, dan pola pikir keamanan berbasis OWASP Top 10.",
+    "ctaProjects": "Lihat proyek",
+    "ctaCv": "Unduh CV",
+    "sceneHint": "Seret untuk memutar. Klik skill untuk melihat proyeknya.",
+    "roleTag": "Peran",
+    "baseTag": "Domisili",
+    "feed": "Beri ikan ini ke gurita",
+    "burps": [
+      "Burp!",
+      "Nyam!",
+      "Enak!",
+      "Tambah lagi!"
     ]
   },
-  "certificates": {
-    "title": "Sertifikat &",
-    "accent": "Penghargaan"
+  "proof": {
+    "label": "Ringkasan test run",
+    "tests": "tes E2E lulus",
+    "a11y": "pelanggaran aksesibilitas axe",
+    "caseStudies": "studi kasus",
+    "status": "QA Engineer @ Exodrinks"
   },
   "projects": {
     "title": "Proyek",
-    "accent": "Pilihan",
-    "subtitle": "Kumpulan proyek yang telah saya bangun, mulai dari antarmuka pengguna hingga sistem backend yang kompleks.",
-    "drawer": {
-      "close": "Tutup",
-      "techStack": "Teknologi yang Digunakan",
-      "viewLive": "Lihat Proyek Langsung",
-      "sourceCode": "Kode Sumber"
-    }
+    "subtitle": "Studi kasus dari sistem yang sudah rilis, pekerjaan QA, dan situs ini.",
+    "filterLabel": "Filter proyek",
+    "all": "Semua",
+    "categories": {
+      "fullstack": "Fullstack",
+      "qa": "QA"
+    },
+    "status": {
+      "shipped": "rilis",
+      "qa-project": "proyek QA",
+      "this-site": "situs ini"
+    },
+    "showing": "Menampilkan",
+    "clearSkill": "Hapus filter skill",
+    "more": "lainnya",
+    "readCaseStudy": "Baca studi kasus",
+    "caseStudy": {
+      "back": "Semua proyek",
+      "year": "Tahun",
+      "role": "Peran",
+      "stack": "Stack",
+      "demo": "Demo langsung",
+      "source": "Kode sumber",
+      "report": "Laporan pengujian",
+      "next": "Proyek berikutnya"
+    },
+    "empty": "Tidak ada proyek yang cocok dengan filter ini.",
+    "reset": "Tampilkan semua proyek",
+    "objective": "Tujuan",
+    "tools": "Alat"
+  },
+  "skills": {
+    "title": "Keahlian",
+    "subtitle": "QA lebih dulu. Pilih kategori, lalu skill untuk melihat proyek yang memakainya.",
+    "levels": {
+      "proficient": "Mahir",
+      "familiar": "Terbiasa",
+      "learning": "Sedang belajar"
+    },
+    "categories": {
+      "qa": "QA & Testing",
+      "security": "Keamanan",
+      "frontend": "Frontend",
+      "backend": "Backend & API",
+      "database": "Database",
+      "devops": "Cloud, DevOps & Monitoring",
+      "ai": "AI Tooling",
+      "design": "Desain"
+    },
+    "projectCount": "proyek",
+    "stats": "Per kategori",
+    "inventory": "Alat dan keahlian"
+  },
+  "experience": {
+    "title": "Pengalaman",
+    "credentialsTitle": "Kredensial",
+    "issued": "Terbit",
+    "credentialId": "ID Kredensial",
+    "verify": "Verifikasi",
+    "list": [
+      {
+        "role": "Software Quality Assurance Engineer",
+        "company": "PT Exodrinks Indonesia Prestige",
+        "type": "Kontrak",
+        "period": "Jul 2026 – Sekarang",
+        "location": "Bandung, Jawa Barat · On-site",
+        "kind": "tech",
+        "description": [
+          "Menguji kualitas, keandalan, dan keamanan sistem internal: POS, Backoffice, dan Inventory Management.",
+          "Menjalankan pengujian manual end-to-end pada transaksi POS, termasuk dynamic pricing online/offline, kode promo, dan validasi pembayaran.",
+          "Membangun dan memelihara suite UI automation Playwright untuk regression test di setiap rilis.",
+          "Menguji API dengan Postman: payload, status code, dan business rule.",
+          "Menemukan celah Cross-Site Scripting (XSS) pada input pencarian WebView yang dapat menyebabkan client-side DoS.",
+          "Menelusuri akar masalah defect lewat log dan metrik backend di Grafana, serta merancang load test untuk race condition dan bottleneck database."
+        ],
+        "tags": [
+          "Playwright",
+          "Postman",
+          "Grafana",
+          "Jira",
+          "Notion",
+          "Security Testing",
+          "Load Testing"
+        ]
+      },
+      {
+        "role": "IT Staff",
+        "company": "Dinas Lingkungan Hidup Kota Madiun",
+        "type": "Magang",
+        "period": "Mei 2025 – Jun 2025",
+        "location": "Madiun, Jawa Timur · On-site",
+        "kind": "tech",
+        "description": [
+          "Mendesain ulang UI/UX website WordPress instansi agar visual konsisten dan navigasi lebih mudah.",
+          "Menerbitkan dan memperbarui konten, pengumuman, dan informasi publik.",
+          "Menangani masalah perangkat keras dan lunak di komputer staf."
+        ],
+        "tags": [
+          "WordPress",
+          "HTML",
+          "CSS",
+          "Web Development"
+        ]
+      },
+      {
+        "role": "Helper Gudang",
+        "company": "CV. Maju Sukses Perkasa",
+        "type": "Penuh waktu",
+        "period": "Nov 2021 – Jul 2022",
+        "location": "Madiun, Jawa Timur · On-site",
+        "kind": "other",
+        "description": [],
+        "tags": []
+      }
+    ],
+    "showAll": "Tampilkan semua"
+  },
+  "about": {
+    "title": "Tentang",
+    "photoAlt": "Foto Wahyu Fikri Zeni Putra",
+    "bio": "Saya software QA engineer dan lulusan baru Teknologi Informasi. Saya membangun tes end-to-end dengan Playwright, memvalidasi REST API dari sisi fungsi, integritas data, dan penanganan error dengan Postman, serta menguji celah autentikasi, kontrol akses, dan validasi input.\n\nSebelum QA, saya membangun aplikasi web dengan Laravel dan Next.js. Latar fullstack ini membantu saya membaca kode, berdiskusi dengan developer, dan menulis bug report yang cepat ditindaklanjuti. Saya sedang memperdalam cybersecurity dan menjajaki cara AI mempercepat pengujian.",
+    "facts": [
+      {
+        "label": "Domisili",
+        "value": "Bandung · asal Madiun, Indonesia"
+      },
+      {
+        "label": "Pendidikan",
+        "value": "Sarjana Teknologi Informasi, Universitas Darul Ulum Jombang, 2026 · IPK 3.80"
+      },
+      {
+        "label": "Fokus",
+        "value": "QA automation, API & security testing"
+      }
+    ],
+    "howTitle": "Cara saya bekerja",
+    "how": [
+      {
+        "title": "Tes sebelum rilis",
+        "body": "Setiap fitur punya pengecekan otomatis sebelum rilis, sehingga regresi tertangkap oleh CI, bukan oleh pengguna."
+      },
+      {
+        "title": "Pengujian berwawasan keamanan",
+        "body": "Saya menguji input, sesi, dan aturan akses berdasarkan OWASP Top 10, bukan hanya happy path."
+      },
+      {
+        "title": "Mendokumentasikan keputusan",
+        "body": "Test case yang jelas, bug report yang bisa direproduksi, dan rencana tertulis yang bisa ditinjau tim."
+      }
+    ],
+    "whoTitle": "Siapa saya",
+    "short": "QA engineer dengan latar fullstack. Saya mengotomasi tes end-to-end dengan Playwright, menguji REST API dengan Postman, dan mencari celah keamanan sebelum rilis.",
+    "scan": "Bug ditemukan",
+    "scanHint": "Gerakkan kaca pembesar di atas peta untuk mencarinya."
   },
   "contact": {
-    "title": "Hubungi",
-    "accent": "Saya",
-    "subtitle": "Punya ide proyek, pertanyaan, atau sekadar ingin menyapa? Jangan ragu untuk mengirim pesan. Saya selalu terbuka untuk peluang kolaborasi baru.",
-    "name": "Nama Lengkap",
-    "namePlaceholder": "Masukkan nama Anda",
-    "email": "Alamat Email",
-    "emailPlaceholder": "nama@email.com",
+    "title": "Kontak",
+    "subtitle": "Punya lowongan, proyek, atau pertanyaan? Kirim pesan dan saya akan membalas lewat email.",
+    "emailLabel": "Email",
+    "locationLabel": "Lokasi",
+    "name": "Nama lengkap",
+    "email": "Alamat email",
     "message": "Pesan",
-    "messagePlaceholder": "Ceritakan tentang proyek atau ide Anda...",
-    "send": "Kirim Pesan"
+    "send": "Kirim pesan",
+    "sending": "Mengirim…",
+    "success": "Pesan terkirim. Terima kasih, saya akan segera membalas.",
+    "error": "Gagal mengirim pesan. Silakan coba lagi atau kirim email langsung."
+  },
+  "footer": {
+    "explore": "Jelajahi",
+    "connect": "Terhubung",
+    "site": "Situs",
+    "built": "Dibangun dengan Next.js, dites dengan Playwright.",
+    "source": "Kode sumber",
+    "ci": "Hasil tes",
+    "sitemap": "Sitemap",
+    "cv": "Unduh CV",
+    "top": "Kembali ke atas"
+  },
+  "marquee": {
+    "pause": "Jeda gerakan",
+    "play": "Lanjutkan gerakan"
+  },
+  "bugHunt": {
+    "title": "Bug Hunt",
+    "subtitle": "Pekerjaan saya dalam 20 detik: tangkap setiap bug sebelum lolos ke production.",
+    "idle": "Bug muncul acak dan kabur setelah sesaat. Klik, ketuk, atau Tab + Enter untuk menangkapnya.",
+    "start": "Mulai berburu",
+    "again": "Ulangi",
+    "time": "Sisa waktu",
+    "caught": "Tertangkap",
+    "bug": "Tangkap bug ini",
+    "reportTitle": "Laporan tes",
+    "found": "Ditemukan",
+    "missed": "Lolos",
+    "accuracy": "Tingkat tangkap",
+    "verdicts": {
+      "high": "Siap dirilis.",
+      "mid": "Beberapa bug lolos ke production.",
+      "low": "Rilis ditahan. Berburu lagi?"
+    }
+  },
+  "music": {
+    "title": "Sedang sering diputar",
+    "subtitle": "Playlist yang menemani saya saat menguji.",
+    "load": "Muat pemutar Spotify",
+    "note": "Pemutar ini berasal dari Spotify. Tidak ada yang dimuat dari Spotify sebelum Anda menekan tombol.",
+    "open": "Buka di Spotify",
+    "frameTitle": "Pemutar Spotify: playlist"
+  },
+  "process": {
+    "title": "Proses QA",
+    "steps": [
+      {
+        "title": "Plan",
+        "body": "Membaca kebutuhan, memetakan risiko, dan menulis test case sebelum pengujian dimulai."
+      },
+      {
+        "title": "Test",
+        "body": "Menjalankan pengujian manual dan otomatis pada UI, API, dan keamanan."
+      },
+      {
+        "title": "Report",
+        "body": "Melaporkan bug yang bisa direproduksi: langkah, bukti, dan tingkat keparahan."
+      },
+      {
+        "title": "Verify",
+        "body": "Menguji ulang setiap perbaikan dan menambah regression test agar tidak terulang."
+      }
+    ]
+  },
+  "guide": {
+    "about": "Tentang: QA engineer dengan latar fullstack. Gerakkan kaca pembesar untuk mencari bug.",
+    "skills": "Keahlian: enam skill inti QA, lalu alat yang saya pakai sehari-hari.",
+    "process": "Proses: plan, test, report, verify. Setiap fitur melewati empat langkah ini.",
+    "projects": "Proyek: studi kasus. Sorot kartu untuk menggulir layar di dalamnya.",
+    "experience": "Pengalaman: tempat saya bekerja, dari yang terbaru.",
+    "contact": "Kontak: email, LinkedIn, GitHub, atau kirim pesan dari sini.",
+    "close": "Sembunyikan rekap",
+    "toggle": "Rekap section"
   }
 }

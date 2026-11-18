@@ -1,22 +1,472 @@
 @import "tailwindcss";
 
-html {
-  scroll-behavior: smooth;
+/* Design tokens (PRD "Portofolio Bertema Pixel"): six palette colors, one theme.
+   Color use follows 60 / 30 / 10:
+   60% white (page and cards), 30% blue (hero, the deep band, footer, headings, card shadows),
+   10% lime (buttons, active and hover states, small highlights). Pink is not a UI color: only the mascot wears it. */
+:root {
+  color-scheme: light;
+  --primary: #0079e4; /* hero background, big headings. 4:1 on white and under white: large text only */
+  --action: #d7ff3f; /* buttons, highlights, active state. Text on it is black; as text only on blue or deep */
+  --pink: #ff5fa2; /* small accents and card shadows */
+  --ink: #000000; /* text and lines */
+  --paper: #ffffff; /* light sections */
+  --deep: #0a0a9e; /* dark sections; also small accent text on paper (13:1) */
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Roles used by the components */
+  --bg: var(--paper);
+  --surface: var(--paper);
+  --text: var(--ink);
+  --muted: color-mix(in srgb, var(--ink) 68%, var(--paper)); /* 8:1 on paper */
+  --border: var(--ink);
+  --accent: var(--deep);
+  --accent-soft: color-mix(in srgb, var(--primary) 12%, var(--paper));
+  --accent-fg: var(--paper);
+  --danger: #b3261e;
+  --line: var(--primary);
+  /* Names kept from the previous theme, pointed at the new palette */
+  --sun: var(--action);
+  --blue: var(--primary);
+  --navy: var(--deep);
+  --peach: var(--pink);
+  --node-1: var(--primary);
+  --node-2: var(--pink);
+  --node-3: var(--ink);
+  --edge: var(--border);
+  --warm: var(--action);
+  --star: var(--primary);
+  --field-alpha: 0.45;
 }
 
-@theme {
-  --color-brand-bg: #f8fafc;
-  --color-brand-blue: #2563eb;
-  --color-brand-purple: #14b8a6;
-  --color-brand-pink: #0ea5e9;
-  --color-brand-mint: #06b6d4;
-  --color-brand-amber: #f59e0b;
-  --color-brand-text: #1e293b;
+/* Deep ink: the same components, re-inked through the role variables. .band-night also paints the deep background. */
+.band-night,
+.ink-night {
+  --bg: var(--deep);
+  --surface: color-mix(in srgb, var(--deep) 84%, white);
+  --text: var(--paper); /* 15:1 on deep */
+  --muted: color-mix(in srgb, var(--paper) 84%, var(--deep));
+  --border: var(--paper);
+  --accent: var(--action); /* 13:1 on deep */
+  --accent-soft: color-mix(in srgb, var(--action) 14%, var(--deep));
+  --accent-fg: var(--deep);
+  --heading: var(--action); /* primary blue is too dark to read on deep */
+  --shadow-color: var(--action); /* a blue shadow would vanish on deep */
+  color: var(--text);
+}
+.band-night {
+  background-color: var(--bg);
+}
+
+/* Contour-map pattern: two sets of thin blue rings, like the lines of a topographic map. */
+.topo {
+  background-image:
+    repeating-radial-gradient(circle at 18% 30%, transparent 0 26px, color-mix(in srgb, var(--primary) 26%, transparent) 26px 27.5px),
+    repeating-radial-gradient(circle at 82% 72%, transparent 0 34px, color-mix(in srgb, var(--primary) 20%, transparent) 34px 35.5px);
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-text: var(--text);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-fg: var(--accent-fg);
+  --color-danger: var(--danger);
+  --color-line: var(--line);
+  --color-primary: var(--primary);
+  --color-action: var(--action);
+  --color-pink: var(--pink);
+  --color-paper: var(--paper);
+  --color-deep: var(--deep);
+
+  --font-sans: var(--font-plex-mono), ui-monospace, monospace; /* all running text is monospace */
+  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
+  --font-pixel: var(--font-plex-mono), ui-monospace, monospace; /* small labels (class name kept from the pixel theme) */
+  --font-display: var(--font-array), var(--font-plex-mono), monospace; /* dot-matrix: headings of 32px and up only */ /* headings */ /* small labels: mono, like the bracket labels */
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem; /* sticky header height */
+  overflow-x: clip; /* full-bleed bands (w-screen) must not add a horizontal scrollbar */
 }
 
 body {
-  background-color: var(--color-brand-bg);
-  color: var(--color-brand-text);
-  font-family: Arial, Helvetica, sans-serif;
-  overflow-x: hidden;
+  background-color: var(--bg);
+  color: var(--text);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* ---------- Pixel utilities ---------- */
+
+/* Outline: a 2px black ring drawn with box-shadow, so it never changes layout. */
+/* In the components layer on purpose: utilities such as hover:[--pb:...] or target:[--pb:...] must be
+   able to override the border color. Unlayered rules always beat Tailwind's utility layer. */
+@layer components {
+  .pixel-border {
+    --pb: var(--border);
+    border-radius: 10px;
+    box-shadow: 0 0 0 2px var(--pb);
+  }
+  .pixel-border-accent {
+    --pb: var(--accent);
+  }
+
+  /* Pointy-top hexagon: the frame of the logo "gems" that circle a crystal. */
+  .hex {
+    clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+  }
+
+  /* Cards (.corners): outline plus a hard, colored offset shadow (--shadow-color picks the color).
+     Buttons (.lift): black offset shadow; pressing moves the button into its shadow.
+     Only transform is animated: the shadow changes in one step. */
+  .corners,
+  .lift {
+    border-radius: 10px;
+    transition: transform 200ms var(--ease);
+  }
+  .corners {
+    box-shadow: 0 0 0 2px var(--pb, var(--border)), 7px 7px 0 2px var(--shadow-color, var(--primary));
+  }
+  .lift {
+    box-shadow: 0 0 0 2px var(--ink), 4px 4px 0 2px var(--ink);
+  }
+  @media (hover: hover) {
+    .lift:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 0 0 0 2px var(--ink), 6px 6px 0 2px var(--ink);
+    }
+  }
+  .lift:active {
+    transform: translate(4px, 4px);
+    box-shadow: 0 0 0 2px var(--ink);
+  }
+}
+
+/* Speckles: two layers of small dots (yellow and the current accent), like flecks in paper or stars at night. */
+.stars {
+  /* Three layers with unrelated tile sizes, so the repeat is hard to spot. */
+  background-image: radial-gradient(circle, var(--sun) 2.5px, transparent 3px), radial-gradient(circle, var(--sun) 1.5px, transparent 2px), radial-gradient(circle, var(--accent) 1px, transparent 1.5px);
+  background-size: 311px 263px, 173px 229px, 237px 151px;
+  background-position: 40px 30px, 120px 170px, 90px 80px;
+  opacity: 0.8;
+}
+/* Dotted pattern for the numbered tiles of the timeline. */
+.dots {
+  background-image: radial-gradient(circle, var(--bg) 1px, transparent 1.5px);
+  background-size: 9px 9px;
+}
+
+/* Ordered (Bayer 4x4) dither overlay, shown on hover only. */
+.dither {
+  position: relative;
+}
+.dither::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' shape-rendering='crispEdges'%3E%3Crect width='1' height='1' fill='%23000'/%3E%3Crect x='2' y='2' width='1' height='1' fill='%23000'/%3E%3Crect x='1' y='3' width='1' height='1' fill='%23000' fill-opacity='.5'/%3E%3Crect x='3' y='1' width='1' height='1' fill='%23000' fill-opacity='.5'/%3E%3C/svg%3E");
+  background-size: 8px 8px;
+  image-rendering: pixelated;
+  transition: opacity 200ms;
+}
+.group:hover .dither::after {
+  opacity: 0.14;
+}
+
+/* Headline words slide up out of a clip. `clip`, not `hidden`: hidden would become the view() scroller. */
+.blink-eye {
+  transform: scaleY(0);
+}
+.step-on {
+  opacity: 0;
+}
+
+.hl-word {
+  display: inline-block;
+  overflow: clip;
+  vertical-align: bottom;
+  padding-bottom: 0.12em; /* room for descenders */
+}
+.hl-word > span {
+  display: inline-block;
+}
+
+/* ---------- Motion ----------
+   Scroll-linked and CSS-only: no JS, and nothing is hidden where the feature is unsupported.
+   No opacity fades or clip-paths on text, so contrast and click targets hold mid-animation. */
+
+/* Transform only: clip-path broke hit-testing on links inside animated blocks, and opacity breaks contrast. */
+@keyframes rise {
+  from { transform: translateY(48px) scale(0.97); }
+  to { transform: none; }
+}
+@keyframes word-up {
+  from { transform: translateY(115%); }
+  to { transform: none; }
+}
+@keyframes grow-x {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+@keyframes grow-y {
+  from { transform: scaleY(0); }
+  to { transform: scaleY(1); }
+}
+@keyframes boot {
+  from { transform: translateY(14px); }
+  to { transform: none; }
+}
+@keyframes lid-open {
+  from { transform: rotateX(-55deg); }
+  to { transform: none; }
+}
+@keyframes marquee {
+  to { transform: translateX(-50%); }
+}
+@keyframes bob {
+  50% { transform: translateY(-5px); }
+}
+@keyframes orbit {
+  to { transform: rotate(360deg); }
+}
+@keyframes wave-bob {
+  from { transform: translateY(var(--wave-amp, 10px)); }
+  to { transform: translateY(0); }
+}
+@keyframes blink-eye {
+  0%, 93%, 100% { transform: scaleY(0); }
+  95%, 98% { transform: scaleY(1); }
+}
+@keyframes march {
+  to { stroke-dashoffset: -20; }
+}
+@keyframes step-on {
+  0%, 22% { opacity: 1; }
+  25%, 100% { opacity: 0; }
+}
+@keyframes blink {
+  50% { opacity: 0; }
+}
+@keyframes type-in {
+  to { opacity: 1; }
+}
+@keyframes type-caret {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+@keyframes type-caret-last {
+  0% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+@keyframes sway {
+  from { transform: skewX(-7deg); }
+  to { transform: skewX(7deg); }
+}
+/* --x is the element's own left offset, so every fish crosses the whole screen wherever it is placed. */
+@keyframes swim {
+  from { transform: translateX(calc(105vw - var(--x, 0px))); }
+  to { transform: translateX(calc(-90px - var(--x, 0px))); }
+}
+@keyframes burp-up {
+  from { opacity: 0; transform: translate(-50%, 0) scale(0.6); }
+  20% { opacity: 1; transform: translate(-50%, -14px) scale(1); }
+  70% { opacity: 1; }
+  to { opacity: 0; transform: translate(-50%, -64px) scale(1); }
+}
+/* Floating text above the octopus after a meal; without motion it simply shows, then is removed. */
+.burp {
+  transform: translate(-50%, -14px);
+}
+
+/* Typewriter letters: each one is a box, so its caret can sit at its right edge. */
+.type-char {
+  position: relative;
+  display: inline-block;
+}
+
+.scroll-progress {
+  transform-origin: left;
+  transform: scaleX(0);
+}
+.marquee {
+  display: flex;
+  width: max-content;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Hero items appear on load (time-based). */
+  .boot {
+    animation: boot 500ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: calc(var(--i, 0) * 80ms + 100ms);
+  }
+  .cursor {
+    animation: blink 1.1s steps(1) infinite;
+  }
+  /* Typewriter: letter --c switches on after c steps; its caret shows for one step, the last one blinks a few times. */
+  .type-char {
+    --at: calc(var(--c, 0) * 95ms + 250ms);
+    opacity: 0;
+    animation: type-in 1ms linear var(--at) forwards;
+  }
+  .type-char::after {
+    content: "";
+    position: absolute;
+    left: 100%;
+    bottom: 0.12em;
+    width: 0.1em;
+    height: 0.6em;
+    background: currentColor;
+    opacity: 0;
+    animation: type-caret 95ms steps(1) var(--at) forwards;
+  }
+  .type-last::after {
+    animation: type-caret-last 900ms steps(1) var(--at) 4;
+  }
+  /* Words rise out of their mask on load (not on scroll), --d after the page appears. */
+  .words-load .hl-word > span {
+    animation: word-up 700ms var(--ease) both;
+    animation-timeline: auto;
+    animation-delay: calc(var(--d, 0.1s) + var(--w, 0) * 35ms);
+  }
+  /* Seaweed leans left and right in a few steps, like frames; a fish crosses the sea floor. */
+  .sway {
+    transform-box: fill-box;
+    transform-origin: bottom;
+    animation: sway 3.8s steps(5) infinite alternate;
+    animation-delay: calc(var(--n, 0) * -0.9s);
+  }
+  .swim {
+    animation: swim var(--swim-time, 28s) linear var(--swim-delay, 0s) infinite;
+  }
+  .swim-rev {
+    animation-direction: reverse;
+  }
+  .burp {
+    animation: burp-up 1.8s var(--ease) forwards;
+  }
+  /* Swell: each row eases up and back down; a negative delay starts it part-way through its cycle. */
+  .wave {
+    animation: wave-bob var(--wave-time, 4s) ease-in-out infinite alternate;
+    animation-delay: calc(var(--wave-time, 4s) * var(--wave-phase, 0));
+  }
+  /* Frame effects: the eyelid snaps shut and open, the route's dashes march. */
+  .blink-eye {
+    transform-box: fill-box;
+    transform-origin: top;
+    animation: blink-eye 4.6s steps(1) infinite;
+  }
+  .march {
+    animation: march 1.1s linear infinite;
+  }
+  /* The lime bar on a process card: each card's turn comes round every 8s, 2s apart. */
+  .step-on {
+    animation: step-on 8s linear infinite;
+    animation-delay: calc(var(--n, 0) * 2s);
+  }
+  .bob {
+    animation: bob 4.5s ease-in-out infinite;
+    animation-delay: calc(var(--n, 0) * -0.37s); /* each tile is at a different point of the same wave */
+  }
+  .orbit {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: orbit var(--orbit-time, 40s) linear infinite;
+  }
+  .orbit-rev {
+    animation-direction: reverse;
+  }
+  .marquee {
+    animation: marquee var(--marquee-time, 50s) linear infinite;
+  }
+  .marquee-rev {
+    animation-direction: reverse;
+  }
+  .marquee-band:hover .marquee,
+  [data-paused="true"] .marquee {
+    animation-play-state: paused;
+  }
+
+  @supports (animation-timeline: view()) {
+    .reveal {
+      animation: rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 80%;
+    }
+    .hl-word > span {
+      animation: word-up linear both;
+      animation-timeline: view();
+      animation-range: entry calc(var(--w, 0) * 10%) entry calc(70% + var(--w, 0) * 10%);
+    }
+    .timeline-line {
+      transform-origin: top;
+      animation: grow-y linear both;
+      animation-timeline: view();
+      animation-range: entry 10% cover 70%;
+    }
+    .heading-rule {
+      transform-origin: left;
+      animation: grow-x linear both;
+      animation-timeline: view();
+      animation-range: entry 20% entry 100%;
+    }
+    .laptop-lid {
+      transform-origin: bottom;
+      animation: lid-open linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 90%;
+    }
+    .scroll-progress {
+      animation: grow-x linear both;
+      animation-timeline: scroll(root);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+/* ---------- Case study body rendered from MDX ---------- */
+.prose-case h2 {
+  margin-top: 2.5rem;
+  margin-bottom: 0.75rem;
+  font-size: 1.375rem;
+  font-weight: 600;
+}
+.prose-case p,
+.prose-case ul {
+  margin-bottom: 1rem;
+  line-height: 1.75;
+  color: var(--muted);
+}
+.prose-case ul {
+  list-style: square;
+  padding-left: 1.25rem;
+}
+.prose-case li + li {
+  margin-top: 0.25rem;
+}
+.prose-case a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }

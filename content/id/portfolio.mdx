@@ -1,0 +1,28 @@
+---
+title: "Portofolio Ini: Dites Seperti Produk"
+description: "Situs pribadi saya, dibangun ulang dengan Next.js 16 dan dilindungi suite end-to-end Playwright."
+image: "/images/projects/portfolio.jpg"
+tags: ["playwright", "github-actions", "nextjs", "typescript", "threejs", "tailwind", "vercel", "claude-code"]
+year: "2026"
+role: "Desain, pengembangan & QA"
+order: "3"
+categories: ["fullstack", "qa"]
+status: "this-site"
+github: "https://github.com/WahyuFZP/portofolio_landing"
+---
+
+## Masalah
+
+Versi pertama terlihat baik, tetapi punya defect nyata: halaman detail proyek tidak berfungsi, halaman bahasa Inggris menampilkan teks bahasa Indonesia, dan preloader menunda konten di setiap kunjungan. Skor Lighthouse Performance mobile 56.
+
+## Pendekatan
+
+Sebelum mendesain ulang, saya menulis suite end-to-end untuk situs lama. Bug yang sudah diketahui dicatat sebagai expected failure, sehingga setiap perbaikan mengubah tes menjadi hijau.
+
+- Tes Playwright di desktop dan emulasi Pixel 7.
+- Pemindaian aksesibilitas axe-core sebagai bagian dari suite.
+- Workflow GitHub Actions disiapkan untuk menjalankan lint, type checking, build, dan E2E di setiap push.
+
+## Hasil
+
+Redesign memakai suite yang sama sebagai pengaman regresi. Setiap bug yang diketahui kini menjadi tes yang lulus.

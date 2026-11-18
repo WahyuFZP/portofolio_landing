@@ -1,13 +1,12 @@
 import "server-only";
+import type en from "@/dictionaries/en.json";
+import type { Locale } from "@/lib/i18n";
 
-const dictionaries = {
-  id: () => import("@/dictionaries/id.json").then((module) => module.default),
-  en: () => import("@/dictionaries/en.json").then((module) => module.default),
+export type Dictionary = typeof en;
+
+const dictionaries: Record<Locale, () => Promise<Dictionary>> = {
+  id: () => import("@/dictionaries/id.json").then((m) => m.default),
+  en: () => import("@/dictionaries/en.json").then((m) => m.default),
 };
 
-export type Locale = "id" | "en";
-
-export const getDictionary = async (locale: Locale) => {
-  // Jika locale tidak dikenali, default ke bahasa Indonesia
-  return dictionaries[locale] ? dictionaries[locale]() : dictionaries["id"]();
-};
+export const getDictionary = (locale: Locale) => dictionaries[locale]();

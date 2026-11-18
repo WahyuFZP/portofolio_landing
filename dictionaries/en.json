@@ -1,83 +1,285 @@
 {
-  "navbar": {
-    "home": "Home",
+  "meta": {
+    "title": "Wahyu Fikri | Software QA Engineer: Automation, API & Security",
+    "description": "Wahyu Fikri Zeni Putra is a software QA engineer in Bandung, Indonesia, focused on Playwright test automation, API testing, and security testing, with a fullstack web background.",
+    "ogLocale": "en_US"
+  },
+  "nav": {
+    "projects": "Projects",
+    "skills": "Skills",
+    "experience": "Experience",
     "about": "About",
-    "projects": "Projects"
+    "contact": "Contact",
+    "skip": "Skip to content",
+    "menu": "Menu",
+    "switchLanguage": "Ganti ke Bahasa Indonesia",
+    "theme": "Switch between light and dark theme",
+    "process": "Process"
   },
   "hero": {
-    "greeting": "Hello, I am",
-    "role": "Software Engineer",
-    "tagline": "Continuously learning, building, and refining web applications with strict quality standards and reliable security.",
-    "ctaProjects": "View Projects",
-    "ctaContact": "Contact Me"
+    "eyebrow": "Software QA Engineer · Automation, API & Security",
+    "tagline": "I break software before your users do: end-to-end automation with Playwright, API testing with Postman, and a security mindset mapped to the OWASP Top 10.",
+    "ctaProjects": "View projects",
+    "ctaCv": "Download CV",
+    "sceneHint": "Drag to rotate. Click a skill to see its projects.",
+    "roleTag": "Role",
+    "baseTag": "Based in",
+    "feed": "Feed this fish to the octopus",
+    "burps": [
+      "Burp!",
+      "Yum!",
+      "Tasty!",
+      "One more!"
+    ]
   },
-  "about": {
-    "sectionTitle": "ABOUT ME",
-    "greeting": "I AM",
-    "name": "Wahyu Fikri",
-    "role": "Software Engineer",
-    "bio": "As an Informatics Engineering student and Software Engineer, I have an endless drive to continuously learn and turn ideas into tangible digital solutions.\n\nTo me, the success of a project is measured not just by its functionality, but by its security and reliability. Therefore, I always prioritize strong software development standards and meticulous quality testing (QA) to deliver functional, scalable, and high-quality applications.",
-    "downloadCv": "DOWNLOAD CV"
+  "proof": {
+    "label": "Test run summary",
+    "tests": "E2E tests passing",
+    "a11y": "axe accessibility violations",
+    "caseStudies": "case studies",
+    "status": "QA Engineer @ Exodrinks"
+  },
+  "projects": {
+    "title": "Projects",
+    "subtitle": "Case studies from shipped systems, QA work, and this site.",
+    "filterLabel": "Filter projects",
+    "all": "All",
+    "categories": {
+      "fullstack": "Fullstack",
+      "qa": "QA"
+    },
+    "status": {
+      "shipped": "shipped",
+      "qa-project": "QA project",
+      "this-site": "this site"
+    },
+    "showing": "Showing",
+    "clearSkill": "Clear skill filter",
+    "more": "more",
+    "readCaseStudy": "Read case study",
+    "caseStudy": {
+      "back": "All projects",
+      "year": "Year",
+      "role": "Role",
+      "stack": "Stack",
+      "demo": "Live demo",
+      "source": "Source code",
+      "report": "Test report",
+      "next": "Next project"
+    },
+    "empty": "No projects match these filters.",
+    "reset": "Show all projects",
+    "objective": "Objective",
+    "tools": "Tools"
   },
   "skills": {
-    "title": "Tech",
-    "accent": "Skills"
+    "title": "Skills",
+    "subtitle": "QA first. Pick a category, then a skill to see the projects that use it.",
+    "levels": {
+      "proficient": "Proficient",
+      "familiar": "Familiar",
+      "learning": "Learning"
+    },
+    "categories": {
+      "qa": "QA & Testing",
+      "security": "Security",
+      "frontend": "Frontend",
+      "backend": "Backend & API",
+      "database": "Database",
+      "devops": "Cloud, DevOps & Monitoring",
+      "ai": "AI Tooling",
+      "design": "Design"
+    },
+    "projectCount": "projects",
+    "stats": "By category",
+    "inventory": "Tools and skills"
   },
   "experience": {
-    "title": "Work",
-    "accent": "Experience",
-    "technologiesLabel": "Technologies Used",
+    "title": "Experience",
+    "credentialsTitle": "Credentials",
+    "issued": "Issued",
+    "credentialId": "Credential ID",
+    "verify": "Verify",
     "list": [
       {
-        "company": "CV. Maju Sukses Perkasa",
-        "role": "Warehouse Assistant",
-        "period": "Nov 2021 - Jul 2022",
-        "location": "Madiun, Indonesia",
+        "role": "Software Quality Assurance Engineer",
+        "company": "PT Exodrinks Indonesia Prestige",
+        "type": "Contract",
+        "period": "Jul 2026 – Present",
+        "location": "Bandung, West Java · On-site",
+        "kind": "tech",
         "description": [
-          "Recorded, sorted, and conducted periodic inspections of warehouse inventory.",
-          "Prepared and assembled goods for outgoing distribution"
+          "Test the quality, reliability, and security of internal systems: POS, Backoffice, and Inventory Management.",
+          "Run end-to-end manual tests on POS transactions, including dynamic online/offline pricing, promo codes, and payment validation.",
+          "Build and maintain Playwright UI automation suites for regression testing on every release.",
+          "Test APIs with Postman: payloads, status codes, and business rules.",
+          "Found a Cross-Site Scripting (XSS) flaw in a WebView search input that could cause a client-side DoS.",
+          "Trace defect root causes through backend logs and metrics in Grafana, and design load tests for race conditions and database bottlenecks."
         ],
-        "technologies": ["Excel"]
+        "tags": [
+          "Playwright",
+          "Postman",
+          "Grafana",
+          "Jira",
+          "Notion",
+          "Security Testing",
+          "Load Testing"
+        ]
       },
       {
+        "role": "IT Staff",
         "company": "Dinas Lingkungan Hidup Kota Madiun",
-        "role": "IT Staff (Internship)",
-        "period": "May 2025 – June 2025",
-        "location": "Madiun, Indonesia",
+        "type": "Apprenticeship",
+        "period": "May 2025 – Jun 2025",
+        "location": "Madiun, East Java · On-site",
+        "kind": "tech",
         "description": [
-          "Redesigned the UI/UX of the official website to enhance visual aesthetics and improve user experience.",
-          "Troubleshot hardware and software issues to ensure optimal and reliable system performance.",
-          "Managed website administration, including updating content and publishing the latest agency information."
+          "Redesigned the UI/UX of the agency's WordPress website for consistent visuals and easier navigation.",
+          "Published and updated content, announcements, and public information.",
+          "Troubleshot hardware and software issues on staff workstations."
         ],
-        "technologies": ["Excel", "HTML", "CSS", "JavaScript", "PHP", "WordPress"]
+        "tags": [
+          "WordPress",
+          "HTML",
+          "CSS",
+          "Web Development"
+        ]
+      },
+      {
+        "role": "Warehouse Assistant",
+        "company": "CV. Maju Sukses Perkasa",
+        "type": "Full-time",
+        "period": "Nov 2021 – Jul 2022",
+        "location": "Madiun, East Java · On-site",
+        "kind": "other",
+        "description": [],
+        "tags": []
+      }
+    ],
+    "showAll": "Show all"
+  },
+  "about": {
+    "title": "About",
+    "photoAlt": "Portrait of Wahyu Fikri Zeni Putra",
+    "bio": "I am a software QA engineer and a recent Information Technology graduate. I build end-to-end tests with Playwright, validate REST APIs for functionality, data integrity, and error handling with Postman, and test for broken authentication, access control, and input-validation flaws.\n\nBefore QA, I built web apps with Laravel and Next.js. That fullstack background helps me read code, talk with developers, and write bug reports they can act on quickly. I am growing my cybersecurity skills and exploring how AI can make testing faster.",
+    "facts": [
+      {
+        "label": "Based in",
+        "value": "Bandung · from Madiun, Indonesia"
+      },
+      {
+        "label": "Education",
+        "value": "B.Tech Information Technology, Universitas Darul Ulum Jombang, 2026 · GPA 3.80"
+      },
+      {
+        "label": "Focus",
+        "value": "QA automation, API & security testing"
+      }
+    ],
+    "howTitle": "How I work",
+    "how": [
+      {
+        "title": "Test before ship",
+        "body": "Every feature gets an automated check before release, so regressions are caught by CI, not by users."
+      },
+      {
+        "title": "Security-minded testing",
+        "body": "I test inputs, sessions, and access rules against the OWASP Top 10, not only the happy path."
+      },
+      {
+        "title": "Document decisions",
+        "body": "Clear test cases, reproducible bug reports, and written plans that a team can review."
+      }
+    ],
+    "whoTitle": "Who I am",
+    "short": "QA engineer with a fullstack background. I automate end-to-end tests with Playwright, test REST APIs with Postman, and hunt for security flaws before release.",
+    "scan": "Bugs found",
+    "scanHint": "Move the lens over the map to find them."
+  },
+  "contact": {
+    "title": "Contact",
+    "subtitle": "Have a role, a project, or a question? Send a message and I will reply by email.",
+    "emailLabel": "Email",
+    "locationLabel": "Location",
+    "name": "Full name",
+    "email": "Email address",
+    "message": "Message",
+    "send": "Send message",
+    "sending": "Sending…",
+    "success": "Message sent. Thank you, I will reply soon.",
+    "error": "Failed to send the message. Please try again or email me directly."
+  },
+  "footer": {
+    "explore": "Explore",
+    "connect": "Connect",
+    "site": "Site",
+    "built": "Built with Next.js, tested with Playwright.",
+    "source": "Source code",
+    "ci": "Test runs",
+    "sitemap": "Sitemap",
+    "cv": "Download CV",
+    "top": "Back to top"
+  },
+  "marquee": {
+    "pause": "Pause motion",
+    "play": "Resume motion"
+  },
+  "bugHunt": {
+    "title": "Bug Hunt",
+    "subtitle": "My day job in 20 seconds: catch every bug before it escapes to production.",
+    "idle": "Bugs appear at random and escape after a moment. Click, tap, or Tab + Enter to catch them.",
+    "start": "Start the hunt",
+    "again": "Run again",
+    "time": "Time left",
+    "caught": "Caught",
+    "bug": "Catch this bug",
+    "reportTitle": "Test report",
+    "found": "Found",
+    "missed": "Escaped",
+    "accuracy": "Catch rate",
+    "verdicts": {
+      "high": "Ready to ship.",
+      "mid": "A few bugs reached production.",
+      "low": "Release blocked. Hunt again?"
+    }
+  },
+  "music": {
+    "title": "On repeat",
+    "subtitle": "The playlist I test to.",
+    "load": "Load Spotify player",
+    "note": "The player comes from Spotify. Nothing is loaded from Spotify until you press the button.",
+    "open": "Open in Spotify",
+    "frameTitle": "Spotify player: playlist"
+  },
+  "process": {
+    "title": "QA process",
+    "steps": [
+      {
+        "title": "Plan",
+        "body": "Read the requirements, map the risks, and write the test cases before testing starts."
+      },
+      {
+        "title": "Test",
+        "body": "Run manual and automated checks across the UI, the API, and security."
+      },
+      {
+        "title": "Report",
+        "body": "File bugs that can be reproduced: steps, evidence, and severity."
+      },
+      {
+        "title": "Verify",
+        "body": "Retest every fix and add a regression check so it stays fixed."
       }
     ]
   },
-  "certificates": {
-    "title": "Certificates &",
-    "accent": "Awards"
-  },
-  "projects": {
-    "title": "Featured",
-    "accent": "Works",
-    "subtitle": "A collection of projects I've built, ranging from user interfaces to complex backend systems.",
-    "drawer": {
-      "close": "Close",
-      "techStack": "Technologies Used",
-      "viewLive": "View Live Project",
-      "sourceCode": "Source Code"
-    }
-  },
-  "contact": {
-    "title": "Get In",
-    "accent": "Touch",
-    "subtitle": "Have a project idea, a question, or just want to say hi? Feel free to drop a message. I'm always open to new collaborative opportunities.",
-    "name": "Full Name",
-    "namePlaceholder": "Enter your name",
-    "email": "Email Address",
-    "emailPlaceholder": "name@email.com",
-    "message": "Message",
-    "messagePlaceholder": "Tell me about your project or idea...",
-    "send": "Send Message"
+  "guide": {
+    "about": "About: a QA engineer with a fullstack background. Move the lens to find the bugs.",
+    "skills": "Skills: six core QA skills, then the tools I use day to day.",
+    "process": "Process: plan, test, report, verify. Every feature goes through these four steps.",
+    "projects": "Projects: case studies. Hover a card to scroll the screen inside it.",
+    "experience": "Experience: where I have worked, newest first.",
+    "contact": "Contact: email, LinkedIn, GitHub, or send a message from here.",
+    "close": "Hide the recap",
+    "toggle": "Section recap"
   }
 }

@@ -1,0 +1,66 @@
+import type { Dictionary } from "@/lib/dictionary";
+import { skillById, skillLogo, skills } from "@/content/skills";
+import SkillCloud from "@/components/skills/SkillCloud";
+import SectionHeading from "@/components/ui/SectionHeading";
+import PixelIcon, { type PixelIconName } from "@/components/ui/PixelIcon";
+import { Tilt } from "@/components/motion/Pointer";
+
+// The six "inventory" cards, in order, each with its pixel icon. Everything else is listed as tags below.
+const FEATURED: [id: string, icon: PixelIconName][] = [
+  ["manual-testing", "cursor"],
+  ["playwright", "play"],
+  ["api-testing", "api"],
+  ["unit-testing", "cube"],
+  ["security-testing", "shield"],
+  ["grafana", "chart"],
+];
+
+export default function Skills({ dict, usage }: { dict: Dictionary["skills"]; usage: Map<string, number> }) {
+  const featured = new Set(FEATURED.map(([id]) => id));
+  return (
+    <section id="skills" className="py-20">
+      <SectionHeading index="02" title={dict.title} subtitle={dict.subtitle} />
+
+      <ul data-stagger className="grid grid-cols-2 gap-5 sm:gap-7 lg:grid-cols-3">
+        {FEATURED.map(([id, icon]) => {
+          const s = skillById.get(id);
+          if (!s) return null;
+          const count = usage.get(id) ?? 0;
+          const body = (
+            <>
+              <span aria-hidden className="flex h-11 w-11 items-center justify-center rounded-md bg-action text-black pixel-border sm:h-14 sm:w-14">
+                <PixelIcon name={icon} className="h-6 w-6 sm:h-8 sm:w-8" />
+              </span>
+              <span className="mt-4 block text-base font-semibold sm:mt-5 sm:text-xl">{s.name}</span>
+              <span className="mt-2 block text-sm uppercase text-accent">[{dict.levels[s.level]}]</span>
+              {count > 0 && (
+                <span className="mt-1 block text-sm text-muted">
+                  {count} {dict.projectCount}
+                </span>
+              )}
+            </>
+          );
+          const card = "corners block h-full bg-surface p-4 pixel-border sm:p-6";
+          return (
+            <li key={id}>
+              <Tilt className="h-full">
+                {count > 0 ? (
+                  <a href={`?skill=${id}#projects`} className={card}>
+                    {body}
+                  </a>
+                ) : (
+                  <div className={card}>
+                    {body}
+                  </div>
+                )}
+              </Tilt>
+            </li>
+          );
+        })}
+      </ul>
+
+      <h3 className="mb-4 mt-14 text-sm uppercase text-accent">[{dict.inventory}]</h3>
+      <SkillCloud items={skills.filter((s) => !featured.has(s.id)).map((s) => ({ id: s.id, name: s.name, logo: skillLogo(s.id) }))} />
+    </section>
+  );
+}
