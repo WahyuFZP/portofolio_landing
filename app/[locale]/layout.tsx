@@ -1,24 +1,22 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
+import { IBM_Plex_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import "@/app/globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import MotionProvider from "@/components/motion/MotionProvider";
 import DeepField from "@/components/background/DeepField";
 import Reveal from "@/components/motion/Reveal";
-import Backdrop from "@/components/scene/Backdrop";
 import { EXTRA_SCENES } from "@/lib/scene";
 import { getDictionary } from "@/lib/dictionary";
 import { isLocale, locales } from "@/lib/i18n";
 import { profile } from "@/content/profile";
 
-// display "optional": no late font swap, so the text LCP is not pushed back on slow networks.
-const sans = Geist({ subsets: ["latin"], variable: "--font-geist-sans", display: "optional" });
-// swap, not optional: mono is only used for small labels, and "optional" left them on the Arial-based fallback.
-const mono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono", display: "swap", preload: false });
-// Headings only. Body text and labels stay in the sans.
-const display = Instrument_Serif({ subsets: ["latin"], weight: "400", variable: "--font-serif-display", display: "swap" });
+// Running text and labels. "swap": the fallback monospace has nearly the same metrics, so the swap barely moves anything.
+const mono = IBM_Plex_Mono({ subsets: ["latin"], weight: ["400", "500", "600"], variable: "--font-plex-mono", display: "swap" });
+// Headings: Array Bold from Fontshare (free for personal and commercial use), self-hosted.
+const display = localFont({ src: "../fonts/Array-Bold.woff2", weight: "700", variable: "--font-array", display: "swap" });
 
 export const dynamicParams = false;
 export const generateStaticParams = () => locales.map((locale) => ({ locale }));
@@ -68,7 +66,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
   };
 
   return (
-    <html lang={locale} className={`${sans.variable} ${mono.variable} ${display.variable}`}>
+    <html lang={locale} className={`${mono.variable} ${display.variable}`}>
       <body className="font-sans antialiased">
         <a
           href="#main"
@@ -77,8 +75,6 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
           {dict.nav.skip}
         </a>
         {EXTRA_SCENES && <DeepField />}
-        <div aria-hidden className="page-dawn" />
-        <Backdrop />
         <Reveal />
         <MotionProvider>
           <Navbar locale={locale} dict={dict.nav} />

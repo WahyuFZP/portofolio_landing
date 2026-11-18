@@ -25,7 +25,7 @@ export default function Experience({ locale, dict }: Props) {
 
         {/* Keep the old #certificates anchor working. */}
         <div id="certificates" className="scroll-mt-24">
-          <h3 className="mb-6 font-display text-4xl text-accent">{dict.credentialsTitle}</h3>
+          <h3 className="mb-6 font-display text-4xl uppercase text-accent">{dict.credentialsTitle}</h3>
           <ul data-stagger className="grid gap-4 md:grid-cols-2">
             {certificates.map((c) => (
               <li key={c.name} className="corners bg-surface p-4 pixel-border">

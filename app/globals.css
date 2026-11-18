@@ -1,63 +1,64 @@
 @import "tailwindcss";
 
-/* Design tokens: paper theme. Cream paper, blue ink, yellow dots; one deep-blue band (.band-night). */
+/* Design tokens (PRD "Portofolio Bertema Pixel"): six palette colors, one theme. */
 :root {
   color-scheme: light;
-  --paper: #fbecc8;
-  --blue: #2b4396; /* headings, links, buttons: 7.4:1 on paper */
-  --navy: #17227a; /* the night band */
-  --sun: #f6d60a; /* dots and small highlights only: too light for text on paper */
-  --peach: #f4a44c;
-  --ink: #1c2456; /* body text: 12:1 on paper */
-  --ink-black: #14151a; /* the dark patches of the hero landscape */
+  --primary: #0079e4; /* hero background, big headings. 4:1 on white and under white: large text only */
+  --action: #d7ff3f; /* buttons, highlights, active state. Text on it is black; as text only on blue or deep */
+  --pink: #ff5fa2; /* small accents and card shadows */
+  --ink: #000000; /* text and lines */
+  --paper: #ffffff; /* light sections */
+  --deep: #0a0a9e; /* dark sections; also small accent text on paper (13:1) */
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
 
   /* Roles used by the components */
   --bg: var(--paper);
-  --surface: #fff5db;
+  --surface: var(--paper);
   --text: var(--ink);
-  --muted: color-mix(in srgb, var(--ink) 76%, var(--paper)); /* 6.5:1 on paper */
-  --border: color-mix(in srgb, var(--blue) 32%, var(--paper));
-  --accent: var(--blue);
-  --accent-soft: color-mix(in srgb, var(--blue) 12%, var(--paper));
+  --muted: color-mix(in srgb, var(--ink) 68%, var(--paper)); /* 8:1 on paper */
+  --border: var(--ink);
+  --accent: var(--deep);
+  --accent-soft: color-mix(in srgb, var(--primary) 12%, var(--paper));
   --accent-fg: var(--paper);
   --danger: #b3261e;
-  --line: var(--blue);
-  /* Read by the older WebGL scenes (switched off) */
-  --node-1: var(--blue);
-  --node-2: var(--peach);
+  --line: var(--primary);
+  /* Names kept from the previous theme, pointed at the new palette */
+  --sun: var(--action);
+  --blue: var(--primary);
+  --navy: var(--deep);
+  --peach: var(--pink);
+  --node-1: var(--primary);
+  --node-2: var(--pink);
   --node-3: var(--ink);
   --edge: var(--border);
-  --warm: var(--sun);
-  --star: var(--blue);
+  --warm: var(--action);
+  --star: var(--primary);
   --field-alpha: 0.45;
 }
 
-/* Night ink: the same components, re-inked through the role variables. .band-night also paints the night itself. */
+/* Deep ink: the same components, re-inked through the role variables. .band-night also paints the deep background. */
 .band-night,
 .ink-night {
-  --bg: var(--navy);
-  --surface: color-mix(in srgb, var(--navy) 86%, white);
-  --text: var(--paper); /* 11:1 on navy */
-  --muted: color-mix(in srgb, var(--paper) 80%, var(--navy)); /* 7.5:1 on navy */
-  --border: color-mix(in srgb, var(--paper) 30%, var(--navy));
-  --accent: var(--sun);
-  --accent-soft: color-mix(in srgb, var(--sun) 14%, var(--navy));
-  --accent-fg: var(--navy);
+  --bg: var(--deep);
+  --surface: color-mix(in srgb, var(--deep) 84%, white);
+  --text: var(--paper); /* 15:1 on deep */
+  --muted: color-mix(in srgb, var(--paper) 84%, var(--deep));
+  --border: var(--paper);
+  --accent: var(--action); /* 13:1 on deep */
+  --accent-soft: color-mix(in srgb, var(--action) 14%, var(--deep));
+  --accent-fg: var(--deep);
+  --heading: var(--action); /* primary blue is too dark to read on deep */
   color: var(--text);
 }
 .band-night {
   background-color: var(--bg);
 }
 
-/* The top of the page: night blue that fades into the paper color as the hero scrolls away.
-   A plain layer (z -20) under the stars canvas (z -10), so stars show in front of the sky. */
-.page-dawn {
-  position: absolute;
-  inset: 0 0 auto;
-  height: 118svh;
-  z-index: -20;
-  background: linear-gradient(var(--navy) 0 70%, var(--paper) 100%);
+/* Contour-map pattern: two sets of thin blue rings, like the lines of a topographic map. */
+.topo {
+  background-image:
+    repeating-radial-gradient(circle at 18% 30%, transparent 0 26px, color-mix(in srgb, var(--primary) 26%, transparent) 26px 27.5px),
+    repeating-radial-gradient(circle at 82% 72%, transparent 0 34px, color-mix(in srgb, var(--primary) 20%, transparent) 34px 35.5px);
 }
 
 @theme inline {
@@ -71,11 +72,16 @@
   --color-accent-fg: var(--accent-fg);
   --color-danger: var(--danger);
   --color-line: var(--line);
+  --color-primary: var(--primary);
+  --color-action: var(--action);
+  --color-pink: var(--pink);
+  --color-paper: var(--paper);
+  --color-deep: var(--deep);
 
-  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
-  --font-pixel: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif; /* small labels (class name kept from the pixel theme) */
-  --font-display: var(--font-serif-display), Georgia, serif; /* headings */ /* small labels: mono, like the bracket labels */
+  --font-sans: var(--font-plex-mono), ui-monospace, monospace; /* all running text is monospace */
+  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
+  --font-pixel: var(--font-plex-mono), ui-monospace, monospace; /* small labels (class name kept from the pixel theme) */
+  --font-display: var(--font-array), var(--font-plex-mono), monospace; /* dot-matrix: headings of 32px and up only */ /* headings */ /* small labels: mono, like the bracket labels */
 }
 
 html {
@@ -86,8 +92,6 @@ html {
 
 body {
   background-color: var(--bg);
-  /* Paper grain: fine blue-grey noise at about 7% strength, tiled. */
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .11 0 0 0 0 .14 0 0 0 0 .34 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   color: var(--text);
 }
 
@@ -98,14 +102,14 @@ body {
 
 /* ---------- Pixel utilities ---------- */
 
-/* Outline: a thin rounded ring drawn with box-shadow, so it never changes layout. (Class name kept from the pixel theme.) */
+/* Outline: a 2px black ring drawn with box-shadow, so it never changes layout. */
 /* In the components layer on purpose: utilities such as hover:[--pb:...] or target:[--pb:...] must be
    able to override the border color. Unlayered rules always beat Tailwind's utility layer. */
 @layer components {
   .pixel-border {
     --pb: var(--border);
-    border-radius: 14px;
-    box-shadow: 0 0 0 1.5px var(--pb);
+    border-radius: 10px;
+    box-shadow: 0 0 0 2px var(--pb);
   }
   .pixel-border-accent {
     --pb: var(--accent);
@@ -116,21 +120,29 @@ body {
     clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
   }
 
-  /* Cards (.corners) and buttons (.lift): rounded, and they rise 2px on hover. Only transform is animated. */
+  /* Cards (.corners): outline plus a hard, colored offset shadow (--shadow-color picks the color).
+     Buttons (.lift): black offset shadow; pressing moves the button into its shadow.
+     Only transform is animated: the shadow changes in one step. */
   .corners,
   .lift {
-    border-radius: 14px;
+    border-radius: 10px;
     transition: transform 200ms var(--ease);
   }
+  .corners {
+    box-shadow: 0 0 0 2px var(--pb, var(--border)), 7px 7px 0 2px var(--shadow-color, var(--pink));
+  }
   .lift {
-    border-radius: 999px;
-    box-shadow: 0 0 0 1.5px var(--pb, var(--accent));
+    box-shadow: 0 0 0 2px var(--ink), 4px 4px 0 2px var(--ink);
   }
   @media (hover: hover) {
-    .corners:hover,
     .lift:hover {
-      transform: translateY(-2px);
+      transform: translate(-2px, -2px);
+      box-shadow: 0 0 0 2px var(--ink), 6px 6px 0 2px var(--ink);
     }
+  }
+  .lift:active {
+    transform: translate(4px, 4px);
+    box-shadow: 0 0 0 2px var(--ink);
   }
 }
 

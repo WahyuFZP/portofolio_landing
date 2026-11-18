@@ -20,7 +20,9 @@
     "tagline": "I break software before your users do: end-to-end automation with Playwright, API testing with Postman, and a security mindset mapped to the OWASP Top 10.",
     "ctaProjects": "View projects",
     "ctaCv": "Download CV",
-    "sceneHint": "Drag to rotate. Click a skill to see its projects."
+    "sceneHint": "Drag to rotate. Click a skill to see its projects.",
+    "roleTag": "Role",
+    "baseTag": "Based in"
   },
   "proof": {
     "label": "Test run summary",
@@ -179,7 +181,8 @@
         "title": "Document decisions",
         "body": "Clear test cases, reproducible bug reports, and written plans that a team can review."
       }
-    ]
+    ],
+    "whoTitle": "Who I am"
   },
   "contact": {
     "title": "Contact",
@@ -235,5 +238,26 @@
     "note": "The player comes from Spotify. Nothing is loaded from Spotify until you press the button.",
     "open": "Open in Spotify",
     "frameTitle": "Spotify player: playlist"
+  },
+  "process": {
+    "title": "QA process",
+    "steps": [
+      {
+        "title": "Plan",
+        "body": "Read the requirements, map the risks, and write the test cases before testing starts."
+      },
+      {
+        "title": "Test",
+        "body": "Run manual and automated checks across the UI, the API, and security."
+      },
+      {
+        "title": "Report",
+        "body": "File bugs that can be reproduced: steps, evidence, and severity."
+      },
+      {
+        "title": "Verify",
+        "body": "Retest every fix and add a regression check so it stays fixed."
+      }
+    ]
   }
 }

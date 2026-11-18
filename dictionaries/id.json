@@ -20,7 +20,9 @@
     "tagline": "Saya menemukan bug sebelum pengguna Anda menemukannya: otomasi end-to-end dengan Playwright, API testing dengan Postman, dan pola pikir keamanan berbasis OWASP Top 10.",
     "ctaProjects": "Lihat proyek",
     "ctaCv": "Unduh CV",
-    "sceneHint": "Seret untuk memutar. Klik skill untuk melihat proyeknya."
+    "sceneHint": "Seret untuk memutar. Klik skill untuk melihat proyeknya.",
+    "roleTag": "Peran",
+    "baseTag": "Domisili"
   },
   "proof": {
     "label": "Ringkasan test run",
@@ -179,7 +181,8 @@
         "title": "Mendokumentasikan keputusan",
         "body": "Test case yang jelas, bug report yang bisa direproduksi, dan rencana tertulis yang bisa ditinjau tim."
       }
-    ]
+    ],
+    "whoTitle": "Siapa saya"
   },
   "contact": {
     "title": "Kontak",
@@ -235,5 +238,26 @@
     "note": "Pemutar ini berasal dari Spotify. Tidak ada yang dimuat dari Spotify sebelum Anda menekan tombol.",
     "open": "Buka di Spotify",
     "frameTitle": "Pemutar Spotify: playlist"
+  },
+  "process": {
+    "title": "Proses QA",
+    "steps": [
+      {
+        "title": "Plan",
+        "body": "Membaca kebutuhan, memetakan risiko, dan menulis test case sebelum pengujian dimulai."
+      },
+      {
+        "title": "Test",
+        "body": "Menjalankan pengujian manual dan otomatis pada UI, API, dan keamanan."
+      },
+      {
+        "title": "Report",
+        "body": "Melaporkan bug yang bisa direproduksi: langkah, bukti, dan tingkat keparahan."
+      },
+      {
+        "title": "Verify",
+        "body": "Menguji ulang setiap perbaikan dan menambah regression test agar tidak terulang."
+      }
+    ]
   }
 }

@@ -1,9 +1,8 @@
 import { notFound } from "next/navigation";
 import Hero from "@/components/sections/Hero";
+import Process from "@/components/sections/Process";
 import Projects from "@/components/sections/Projects";
 import Skills from "@/components/sections/Skills";
-import BugHunt from "@/components/sections/BugHunt";
-import Music from "@/components/sections/Music";
 import Experience from "@/components/sections/Experience";
 import About from "@/components/sections/About";
 import Contact from "@/components/sections/Contact";
@@ -26,12 +25,11 @@ export default async function Home({ params }: PageProps<"/[locale]">) {
   return (
     <>
       <Hero dict={dict.hero} proofDict={dict.proof} caseStudies={projects.length} />
-      <Projects locale={locale} projects={projects} dict={dict.projects} />
-      <Skills dict={dict.skills} usage={usage} />
-      <BugHunt dict={dict.bugHunt} />
-      <Experience locale={locale} dict={dict.experience} />
       <About dict={dict.about} />
-      <Music dict={dict.music} />
+      <Skills dict={dict.skills} usage={usage} />
+      <Process dict={dict.process} />
+      <Projects locale={locale} projects={projects} dict={dict.projects} />
+      <Experience locale={locale} dict={dict.experience} />
       <Contact dict={dict.contact} />
     </>
   );
