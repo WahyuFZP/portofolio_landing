@@ -21,7 +21,7 @@ export default function Experience({ locale, dict }: Props) {
       <SectionHeading index="03" title={dict.title} />
 
       <div className="space-y-20">
-        <ExperienceTimeline jobs={dict.list} label={dict.title} />
+        <ExperienceTimeline jobs={dict.list} label={dict.title} showAll={dict.showAll} />
 
         {/* Keep the old #certificates anchor working. */}
         <div id="certificates" className="scroll-mt-24">

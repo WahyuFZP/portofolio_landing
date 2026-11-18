@@ -14,8 +14,6 @@ const FEATURED: [id: string, icon: PixelIconName][] = [
   ["security-testing", "shield"],
   ["grafana", "chart"],
 ];
-// Offset shadow color per card, cycling through the three accents.
-const SHADOWS = ["var(--pink)", "var(--primary)", "var(--action)"];
 
 export default function Skills({ dict, usage }: { dict: Dictionary["skills"]; usage: Map<string, number> }) {
   const featured = new Set(FEATURED.map(([id]) => id));
@@ -24,7 +22,7 @@ export default function Skills({ dict, usage }: { dict: Dictionary["skills"]; us
       <SectionHeading index="02" title={dict.title} subtitle={dict.subtitle} />
 
       <ul data-stagger className="grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
-        {FEATURED.map(([id, icon], n) => {
+        {FEATURED.map(([id, icon]) => {
           const s = skillById.get(id);
           if (!s) return null;
           const count = usage.get(id) ?? 0;
@@ -47,11 +45,11 @@ export default function Skills({ dict, usage }: { dict: Dictionary["skills"]; us
             <li key={id}>
               <Tilt className="h-full">
                 {count > 0 ? (
-                  <a href={`?skill=${id}#projects`} className={card} style={{ "--shadow-color": SHADOWS[n % 3] } as React.CSSProperties}>
+                  <a href={`?skill=${id}#projects`} className={card}>
                     {body}
                   </a>
                 ) : (
-                  <div className={card} style={{ "--shadow-color": SHADOWS[n % 3] } as React.CSSProperties}>
+                  <div className={card}>
                     {body}
                   </div>
                 )}

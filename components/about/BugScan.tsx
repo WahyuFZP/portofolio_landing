@@ -29,13 +29,13 @@ export default function BugScan({ label, hint }: { label: string; hint: string }
     <figure>
       <div onPointerMove={scan} onPointerDown={scan} className="topo relative h-72 touch-pan-y overflow-hidden bg-surface pixel-border sm:h-80 md:cursor-none">
         {BUGS.map(([x, y], i) => (
-          <span key={i} aria-hidden style={{ left: `${x}%`, top: `${y}%` }} className={`absolute -ml-4 -mt-4 transition-[color,transform] duration-300 ${found[i] ? "scale-125 text-pink" : "text-black/15"}`}>
+          <span key={i} aria-hidden style={{ left: `${x}%`, top: `${y}%` }} className={`absolute -ml-4 -mt-4 transition-[color,transform] duration-300 ${found[i] ? "scale-125 text-primary" : "text-black/15"}`}>
             <PixelIcon name="bug" className="h-8 w-8" />
           </span>
         ))}
         {/* The lens: its glass (upper left of the icon) is centred on the pointer. Starts in the middle of the panel. */}
         <div ref={lens} aria-hidden style={{ transform: "translate(170px, 130px)" }} className="pointer-events-none absolute left-0 top-0 transition-transform duration-150 ease-out">
-          <PixelIcon name="search" className="-ml-10 -mt-10 h-28 w-28 text-primary" />
+          <PixelIcon name="search" className="-ml-10 -mt-10 h-28 w-28 text-deep" />
         </div>
       </div>
       <figcaption className="mt-4 flex flex-wrap items-center justify-between gap-3 text-sm">

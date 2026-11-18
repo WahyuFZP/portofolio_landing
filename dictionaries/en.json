@@ -147,7 +147,8 @@
         "description": [],
         "tags": []
       }
-    ]
+    ],
+    "showAll": "Show all"
   },
   "about": {
     "title": "About",

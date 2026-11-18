@@ -5,6 +5,7 @@ import PixelIcon, { type PixelIconName } from "@/components/ui/PixelIcon";
 import ProofStrip from "@/components/hero/ProofStrip";
 import Octopus from "@/components/hero/Octopus";
 import { Parallax } from "@/components/motion/Pointer";
+import Typed from "@/components/motion/Typed";
 
 interface Props {
   dict: Dictionary["hero"];
@@ -21,7 +22,7 @@ export default function Hero({ dict, proofDict, caseStudies }: Props) {
   const i = (n: number) => ({ "--i": n }) as React.CSSProperties;
   const cards: [icon: PixelIconName, label: string, value: string, shadow: string][] = [
     ["bug", dict.roleTag, dict.eyebrow, "var(--action)"],
-    ["pin", dict.baseTag, profile.location, "var(--pink)"],
+    ["pin", dict.baseTag, profile.location, "var(--action)"],
   ];
   return (
     <>
@@ -29,7 +30,7 @@ export default function Hero({ dict, proofDict, caseStudies }: Props) {
         {/* Ornaments drift a little with the mouse. */}
         <Parallax strength={10} className="pointer-events-none absolute inset-0 hidden font-mono text-3xl font-bold md:block">
           <span aria-hidden className="absolute left-[5%] top-[40%] text-action">+</span>
-          <span aria-hidden className="absolute left-[52%] top-[12%] text-pink">+</span>
+          <span aria-hidden className="absolute left-[52%] top-[12%] text-white">+</span>
           <span aria-hidden className="absolute right-[5%] top-[62%] text-action">+</span>
         </Parallax>
 
@@ -58,7 +59,9 @@ export default function Hero({ dict, proofDict, caseStudies }: Props) {
               ))}
             </ul>
 
-            <p className="mt-6 max-w-xl text-[clamp(1.2rem,2.8svh,1.5rem)] font-semibold leading-snug">{dict.tagline}</p>
+            <p className="mt-6 max-w-xl text-[clamp(1.2rem,2.8svh,1.5rem)] font-semibold leading-snug">
+              <Typed text={dict.tagline} />
+            </p>
             <div className="boot mt-6 flex flex-wrap gap-4" style={i(3)}>
               <a href="#projects" className={btnPrimary}>
                 {dict.ctaProjects} <PixelIcon name="arrowDown" className="h-3.5 w-3.5" />

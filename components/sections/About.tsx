@@ -31,7 +31,7 @@ export default function About({ dict }: { dict: Dictionary["about"] }) {
       <h3 className="mb-6 mt-16 font-display text-4xl text-primary">{dict.howTitle}</h3>
       <ol data-stagger className="grid gap-7 md:grid-cols-3">
         {dict.how.map((h, i) => (
-          <li key={h.title} className="corners bg-surface p-5 pixel-border" style={{ "--shadow-color": ["var(--pink)", "var(--primary)", "var(--action)"][i % 3] } as React.CSSProperties}>
+          <li key={h.title} className="corners bg-surface p-5 pixel-border">
             <span aria-hidden className="flex h-11 w-11 items-center justify-center rounded-md bg-action text-black pixel-border">
               <PixelIcon name={ICONS[i] ?? "check"} className="h-6 w-6" />
             </span>

@@ -1,6 +1,9 @@
 @import "tailwindcss";
 
-/* Design tokens (PRD "Portofolio Bertema Pixel"): six palette colors, one theme. */
+/* Design tokens (PRD "Portofolio Bertema Pixel"): six palette colors, one theme.
+   Color use follows 60 / 30 / 10:
+   60% white (page and cards), 30% blue (hero, the deep band, footer, headings, card shadows),
+   10% lime (buttons, active and hover states, small highlights). Pink is not a UI color: only the mascot wears it. */
 :root {
   color-scheme: light;
   --primary: #0079e4; /* hero background, big headings. 4:1 on white and under white: large text only */
@@ -48,6 +51,7 @@
   --accent-soft: color-mix(in srgb, var(--action) 14%, var(--deep));
   --accent-fg: var(--deep);
   --heading: var(--action); /* primary blue is too dark to read on deep */
+  --shadow-color: var(--action); /* a blue shadow would vanish on deep */
   color: var(--text);
 }
 .band-night {
@@ -129,7 +133,7 @@ body {
     transition: transform 200ms var(--ease);
   }
   .corners {
-    box-shadow: 0 0 0 2px var(--pb, var(--border)), 7px 7px 0 2px var(--shadow-color, var(--pink));
+    box-shadow: 0 0 0 2px var(--pb, var(--border)), 7px 7px 0 2px var(--shadow-color, var(--primary));
   }
   .lift {
     box-shadow: 0 0 0 2px var(--ink), 4px 4px 0 2px var(--ink);

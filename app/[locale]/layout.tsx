@@ -8,6 +8,7 @@ import Footer from "@/components/layout/Footer";
 import MotionProvider from "@/components/motion/MotionProvider";
 import DeepField from "@/components/background/DeepField";
 import Reveal from "@/components/motion/Reveal";
+import PixelField from "@/components/motion/PixelField";
 import { EXTRA_SCENES } from "@/lib/scene";
 import { getDictionary } from "@/lib/dictionary";
 import { isLocale, locales } from "@/lib/i18n";
@@ -75,6 +76,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
           {dict.nav.skip}
         </a>
         {EXTRA_SCENES && <DeepField />}
+        <PixelField />
         <Reveal />
         <MotionProvider>
           <Navbar locale={locale} dict={dict.nav} />
