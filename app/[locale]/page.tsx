@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import Hero from "@/components/sections/Hero";
+import OctoGuide from "@/components/hero/OctoGuide";
 import Process from "@/components/sections/Process";
 import Projects from "@/components/sections/Projects";
 import Skills from "@/components/sections/Skills";
@@ -31,6 +32,7 @@ export default async function Home({ params }: PageProps<"/[locale]">) {
       <Projects locale={locale} projects={projects} dict={dict.projects} />
       <Experience locale={locale} dict={dict.experience} />
       <Contact dict={dict.contact} />
+      <OctoGuide dict={dict.guide} />
     </>
   );
 }

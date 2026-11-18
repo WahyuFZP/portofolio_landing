@@ -264,5 +264,15 @@
         "body": "Retest every fix and add a regression check so it stays fixed."
       }
     ]
+  },
+  "guide": {
+    "about": "About: a QA engineer with a fullstack background. Move the lens to find the bugs.",
+    "skills": "Skills: six core QA skills, then the tools I use day to day.",
+    "process": "Process: plan, test, report, verify. Every feature goes through these four steps.",
+    "projects": "Projects: case studies. Hover a card to scroll the screen inside it.",
+    "experience": "Experience: where I have worked, newest first.",
+    "contact": "Contact: email, LinkedIn, GitHub, or send a message from here.",
+    "close": "Hide the recap",
+    "toggle": "Section recap"
   }
 }

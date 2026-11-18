@@ -264,5 +264,15 @@
         "body": "Menguji ulang setiap perbaikan dan menambah regression test agar tidak terulang."
       }
     ]
+  },
+  "guide": {
+    "about": "Tentang: QA engineer dengan latar fullstack. Gerakkan kaca pembesar untuk mencari bug.",
+    "skills": "Keahlian: enam skill inti QA, lalu alat yang saya pakai sehari-hari.",
+    "process": "Proses: plan, test, report, verify. Setiap fitur melewati empat langkah ini.",
+    "projects": "Proyek: studi kasus. Sorot kartu untuk menggulir layar di dalamnya.",
+    "experience": "Pengalaman: tempat saya bekerja, dari yang terbaru.",
+    "contact": "Kontak: email, LinkedIn, GitHub, atau kirim pesan dari sini.",
+    "close": "Sembunyikan rekap",
+    "toggle": "Rekap section"
   }
 }
