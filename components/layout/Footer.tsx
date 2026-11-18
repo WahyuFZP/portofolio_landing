@@ -11,12 +11,12 @@ interface Props {
 
 const sections = ["about", "skills", "process", "projects", "experience", "contact"] as const;
 const ext = { target: "_blank", rel: "noopener noreferrer" };
-// One row of waves: 80 columns (two identical halves of 40), heights from a sine with a whole number of crests per half.
-const row = (base: number, amp: number, crests: number, shift: number) => Array.from({ length: 80 }, (_, i) => Math.round(base + amp * Math.sin((i / 40) * Math.PI * 2 * crests + shift)));
+// One row of waves: 40 columns, heights from a sine.
+const row = (base: number, amp: number, crests: number, shift: number) => Array.from({ length: 40 }, (_, i) => Math.round(base + amp * Math.sin((i / 40) * Math.PI * 2 * crests + shift)));
 const WAVES = [
-  { fill: "var(--primary)", heights: row(19, 5, 2, 0), time: "16s", reverse: false, foam: true },
-  { fill: "color-mix(in srgb, var(--primary) 45%, var(--deep))", heights: row(13, 4, 3, 1.2), time: "11s", reverse: true, foam: false },
-  { fill: "var(--deep)", heights: row(7, 3, 2, 2.4), time: "8s", reverse: false, foam: false },
+  { fill: "var(--primary)", heights: row(22, 5, 2, 0), time: "5.2s", amp: "18px", phase: "0", foam: true },
+  { fill: "color-mix(in srgb, var(--primary) 45%, var(--deep))", heights: row(15, 4, 3, 1.2), time: "4.1s", amp: "13px", phase: "-0.4", foam: false },
+  { fill: "var(--deep)", heights: row(8, 3, 2, 2.4), time: "3.3s", amp: "8px", phase: "-0.75", foam: false },
 ];
 
 export default function Footer({ locale, dict, nav }: Props) {
@@ -24,13 +24,14 @@ export default function Footer({ locale, dict, nav }: Props) {
   const link = "inline-flex min-h-9 items-center text-muted transition-colors hover:text-text";
   return (
     <footer className="band-night relative mt-36">
-      {/* Sea: three rows of pixel waves sliding sideways at different speeds (.wave). Each row is drawn twice as wide
-          as the screen and repeats after half its width, so the loop has no seam. The front row is footer-colored. */}
-      <div aria-hidden className="absolute inset-x-0 bottom-full h-28 overflow-clip">
+      {/* Sea: three rows of pixel waves that rise and fall (.wave), each at its own pace, height and phase,
+          so the crests never move together. Columns run past the bottom edge, so a rising row leaves no gap.
+          The front row is footer-colored. */}
+      <div aria-hidden className="absolute inset-x-0 bottom-full h-32 overflow-clip">
         {WAVES.map((wave) => (
-          <svg key={wave.fill} viewBox="0 0 320 28" preserveAspectRatio="none" shapeRendering="crispEdges" className={`wave absolute bottom-0 left-0 h-full w-[200%] ${wave.reverse ? "wave-rev" : ""}`} style={{ "--wave-time": wave.time } as React.CSSProperties}>
+          <svg key={wave.fill} viewBox="0 0 160 28" preserveAspectRatio="none" shapeRendering="crispEdges" className="wave absolute bottom-0 left-0 h-full w-full overflow-visible" style={{ "--wave-time": wave.time, "--wave-amp": wave.amp, "--wave-phase": wave.phase } as React.CSSProperties}>
             {wave.heights.map((h, i) => (
-              <rect key={i} x={i * 4} y={28 - h} width={4.2} height={h} fill={wave.fill} />
+              <rect key={i} x={i * 4} y={28 - h} width={4.2} height={h + 8} fill={wave.fill} />
             ))}
             {wave.foam && wave.heights.map((h, i) => <rect key={`f${i}`} x={i * 4} y={28 - h} width={4.2} height={1.5} fill="var(--paper)" />)}
           </svg>

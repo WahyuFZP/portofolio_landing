@@ -6,6 +6,7 @@ import ProofStrip from "@/components/hero/ProofStrip";
 import Octopus from "@/components/hero/Octopus";
 import { Parallax } from "@/components/motion/Pointer";
 import Typed from "@/components/motion/Typed";
+import Bubbles from "@/components/motion/Bubbles";
 
 interface Props {
   dict: Dictionary["hero"];
@@ -27,6 +28,7 @@ export default function Hero({ dict, proofDict, caseStudies }: Props) {
   return (
     <>
       <section id="home" className="relative left-1/2 w-screen -translate-x-1/2 overflow-hidden bg-primary text-white">
+        <Bubbles color="--paper" />
         {/* Ornaments drift a little with the mouse. */}
         <Parallax strength={10} className="pointer-events-none absolute inset-0 hidden font-mono text-3xl font-bold md:block">
           <span aria-hidden className="absolute left-[5%] top-[40%] text-action">+</span>

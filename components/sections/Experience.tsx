@@ -3,6 +3,7 @@ import type { Locale } from "@/lib/i18n";
 import { certificates } from "@/content/certificates";
 import SectionHeading from "@/components/ui/SectionHeading";
 import ExperienceTimeline from "./ExperienceTimeline";
+import Bubbles from "@/components/motion/Bubbles";
 
 interface Props {
   locale: Locale;
@@ -16,7 +17,7 @@ export default function Experience({ locale, dict }: Props) {
   return (
     // Full-bleed: wider than <main>, content re-centred inside. overflow-hidden clips the lines that run off the left edge.
     <section id="experience" className="band-night relative left-1/2 isolate w-screen -translate-x-1/2 overflow-hidden py-24">
-      <div aria-hidden className="stars absolute inset-0 -z-10" />
+      <Bubbles color="--action" className="-z-10" />
       <div className="mx-auto w-full max-w-5xl px-4 sm:px-6">
       <SectionHeading index="03" title={dict.title} />
 
