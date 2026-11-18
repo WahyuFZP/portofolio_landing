@@ -24,7 +24,7 @@ jobs:
       # Override with a repository variable named SITE_URL.
       PW_BASE_URL: ${{ vars.SITE_URL || 'https://wahyufikri.vercel.app' }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           # Test the code that was deployed, not whatever is newest on the branch.
           ref: ${{ github.event.deployment.sha || github.sha }}
